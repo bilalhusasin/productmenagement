@@ -1,0 +1,33 @@
+.box.box-clear {
+    border-top: none;
+    background: none;
+    box-shadow: none;
+}
+
+#paid_amount {
+	width: 110px;
+}
+
+.content-header > h1 a {
+    color: #444;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.page-center {
+	display: block;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.right {
+    text-align: right;
+}
+
+.left {
+    text-align: left;
+}
+
+.center {
+    text-align: center;
+}

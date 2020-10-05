@@ -105,10 +105,11 @@ $userId = $user->id; ?>
                                                 <?php }?> 
                                                 
                                                 <a class="btn btn-xs green" href="index.php/users/editregstu?reg_num=<?php echo $reg_number; ?>" title="Edit Student Info"><i class="fa fa-pencil-square-o"></i> </a>
-
-                                                <a class="btn btn-xs btn-danger" href="index.php/users/reg_delete?reg_num=<?php echo $reg_number; ?>" onclick="javascript:return confirm('ARE YOU SURE YOU WANT TO DELETE THIS RECORD ')" title="Delete"><i class="fa fa-trash-o"></i> </a>
-                                                <!-- <a class="btn btn-xs default tableActionButtonMargin" href="index.php/users/editregstu?id=<?php // echo $row['id']; ?>&class_id=<?php // echo $class_id; ?>"> <i class="fa fa-pencil-square"></i> <?php // echo lang('stu_clas_Edit'); ?> </a>
-                                                <a class="btn btn-xs red tableActionButtonMargin" href="index.php/users/reg_delete?id=<?php // echo $row['id']; ?>" onClick="javascript:return confirm('Are you sure you want to delete this student?')"> <i class="fa fa-trash-o"></i> <?php  //echo lang('stu_clas_Delete'); ?> </a> -->
+                                                <?php
+                                            if($status=='Unpaid'){
+                                               echo' <a class="btn btn-xs btn-danger" href="index.php/users/reg_delete?reg_num=<?php echo $reg_number; ?>" onclick="javascript:return confirm('.'ARE YOU SURE YOU WANT TO DELETE THIS RECORD '.')" title="Delete"><i class="fa fa-trash-o"></i> </a>';
+                                            } else{ echo "";}
+                                             ?>
                                             <?php  //} ?>
                                         </td>
                                     </tr>

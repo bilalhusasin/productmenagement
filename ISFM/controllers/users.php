@@ -2046,8 +2046,9 @@ class Users extends CI_Controller {
             }
             //This will delete Registered User
             public function reg_delete(){
-                $id = $this->input->get('id');
-               $this->db->delete('registration', array('id' => $id)); 
+                $reg_num = $this->input->get('reg_num');
+               $this->db->delete('registered', array('reg_number' => $reg_num));
+               $this->db->delete('registration', array('reg_number' => $reg_num)); 
                redirect('users/reg_stu', 'refresh');
             }
 
@@ -2159,10 +2160,13 @@ class Users extends CI_Controller {
                 'phone' => $this->db->escape_like_str($phone),
                );
                 //This array information's are sending to "student_info" table.
-                $studata = array(
-                    'year' => date('Y'),     
+                $studata = array(  
+                    'year' =>  $this->db->escape_like_str($this->input->post('session', TRUE)),     
                     'class_id' => $this->db->escape_like_str($this->input->post('class_id', TRUE)),
                     'student_nam' => $this->db->escape_like_str($username),
+                    'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
+                    'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
+                    'phone' => $this->db->escape_like_str($phone),
                     'previous_info1' => $this->db->escape_like_str($bs_1),
                     'previous_info2' => $this->db->escape_like_str($bs_2),
                     'previous_info3' => $this->db->escape_like_str($bs_3), 
@@ -2193,13 +2197,16 @@ class Users extends CI_Controller {
                     'heard_from3' => $this->db->escape_like_str($this->input->post('strem', TRUE)),
                     'heard_from4' => $this->db->escape_like_str($this->input->post('flyer', TRUE)),
                     'heard_from5' => $this->db->escape_like_str($this->input->post('mouth', TRUE)),
-                    'heard_from6' => $this->db->escape_like_str($this->input->post('other', TRUE)),    
-                ); 
+                    'heard_from6' => $this->db->escape_like_str($this->input->post('other', TRUE))    
+                );  
+  
                 $this->db->where('reg_number', $reg_number);
-                $this->db->update('registration', $studata, $additional_data);
+                $this->db->update('registration', $studata); 
                 $reg_dat = array(
                     'class_id' => $this->db->escape_like_str($this->input->post('class_id', TRUE)), 
-                );
+                    'session' =>  $this->db->escape_like_str($this->input->post('session', TRUE)),      
+                    'student_nam' => $this->db->escape_like_str($username),
+                ); 
                 $this->db->where('reg_number', $reg_number);
                 $this->db->update('registered', $reg_dat);
                 $data['success'] = '<div class="alert alert-info alert-dismissable admisionSucceassMessageFont">

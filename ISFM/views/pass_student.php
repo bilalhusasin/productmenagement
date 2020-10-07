@@ -4,19 +4,19 @@
 <link rel="stylesheet" type="text/css" href="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
 <link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-datepicker/css/datepicker3.css"/> 
 <link rel="stylesheet" type="text/css" href="assets/global/jquery_ui_css/jquery-ui.css" />
-
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>  
-<script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/scroller/2.0.2/js/dataTables.scroller.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js" type="text/javascript"></script>
-<link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
+              
+<script src="assets/global/plugins/dataTable/js/canvasjs.min.js"></script>
+<script src="assets/global/plugins/dataTable/js/jquery-1.11.3.min.js" type="text/javascript"></script>  
+<script src="assets/global/plugins/dataTable/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/dataTable/js/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/dataTable/js/dataTables.scroller.min.js"></script>
+<script src="assets/global/plugins/dataTable/js/buttons.flash.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/dataTable/js/jszip.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/dataTable/js/pdfmake.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/dataTable/js/vfs_fonts.js" type="text/javascript"></script>
+<script src="assets/global/plugins/dataTable/js/buttons.html5.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/dataTable/js/buttons.print.min.js" type="text/javascript"></script>
+<link href="assets/global/plugins/dataTable/css/jquery.dataTables.min.css" rel="stylesheet" />
 
 <!-- END PAGE LEVEL STYLES -->
 <?php $user = $this->ion_auth->user()->row();

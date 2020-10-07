@@ -394,6 +394,45 @@ class Account extends MX_Controller {
                 </tr>';
         }  
     }
+    // This Function fetch previous Pass Students Info
+    public function ajaxPreiousPassStudents(){
+        $year = $this->input->get('q', TRUE); 
+        $query = $this->db->query("SELECT * FROM register_pass WHERE status ='pass' AND year=$year");
+        $yearData = $query->result_array(); 
+        if(!empty($yearData)){ 
+            
+            $count = 1;
+            foreach ($yearData as $row){   
+                echo'<tr>                    
+                        <td> '. $count++ .'</td>
+                        <td> '. $this->common->class_title($row["class_id"]) .' </td> 
+                        <td class="text-uppercase"> '. $row["student_nam"].' </td>
+                        <td class="text-uppercase">'. $row["father_name"] .' </td>
+                        <td> '.$row["reg_number"] .' </td>
+                        <td> '. $row["voucher_number"] .' </td>
+                        <td> '; if($row["admission_status"]=="Admitted"){
+                                    echo'<span class="label label-sm label-success">'.$row["admission_status"].'</span>';
+                                } elseif($row["admission_status"]=="Not Admitted"){
+                                    echo'<span class="label label-sm label-danger">'.$row["admission_status"].'</span>';
+                                } 
+                   echo'</td>
+                        <td>'.$row["status"] .' </td>
+                        <td> '. $row["actual_tot"] .' </td>
+                        <td> '. $row["total"] .' </td>
+                        <td> '. $row["disc_tot"] .' </td>
+                        <td> '; if($row["paid_status"]=='unpaid'){
+                                    echo '<span class="label label-sm label-danger">'. $row["paid_status"] .'</span>';
+                                } else {
+                                    echo '<span class="label label-sm label-success">'. $row["paid_status"] .'</span>';
+                                } 
+                    echo'</td>
+                    </tr>';
+            }
+        } else{
+             echo'<tr> <td colspan="15" class="text-center text-danger">This Year Data Note Available </td> </tr>';
+        }
+ 
+    }
        
     //This function will load single students name and id 
     public function ajaxSnameSid() { 

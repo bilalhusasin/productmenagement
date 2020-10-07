@@ -1736,9 +1736,9 @@ public function student_chalan1()
 
     public function pass_student() {
 
-      
+        $year= date('Y');
 
-        $query = $this->db->query("SELECT * FROM register_pass WHERE status ='pass' ");
+        $query = $this->db->query("SELECT * FROM register_pass WHERE status ='pass' AND year=$year");
 
         foreach ($query->result_array() as $row){
 

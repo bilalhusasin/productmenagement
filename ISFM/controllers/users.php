@@ -2584,7 +2584,7 @@ class Users extends CI_Controller {
             $this->load->view('temp/header');
             $this->load->view('pass_student', $data);
             $this->load->view('temp/footer');
-        }
+        } 
     // this function ajax  call for display pay methods
     public function ajaxBankResult() { 
         $pay_method = $this->input->get('q');  

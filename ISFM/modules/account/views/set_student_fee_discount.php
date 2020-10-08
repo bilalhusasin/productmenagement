@@ -137,16 +137,18 @@ $userId = $user->id; ?>
                                         <td><?php echo $row1['admission_discount']; ?></td> 
                                         <td><?php echo $row1['tution_discount']; ?></td> 
                                         <td>
-                                         <?php /*if($row1['status']=='deactive'){
-                                            echo '<span class="label label-sm label-danger">'. $row1['status'] .'</span>';
-                                        } elseif ($row1['status']=='active'){ 
-                                            echo '<span class="label label-sm label-success">'. $row1['status'] .'</span>';
-                                        }*/ ?> 
+                                  <?php if($row1['discount_status']=='Deactive'){
+                                            echo '<span class="label label-sm label-danger">'. $row1['discount_status'] .'</span>';
+                                        } elseif ($row1['discount_status']=='Active'){ 
+                                            echo '<span class="label label-sm label-success">'. $row1['discount_status'] .'</span>';
+                                        } else{
+                                            echo '<span class="label label-sm label-danger">'."Please Update Student Discount Status".'</span>';
+                                        } ?> 
                                         </td>
-                                        <td> 
-                                            <!-- <a class="btn btn-xs default" href="index.php/account/edit_dis_reason?id=<?php echo $row1['id'];?>" title="Edit Discount Reason"> <i class="fa fa-pencil-square-o"></i> <?php // echo lang('edit'); ?> </a>
+                                        <td width="150px"> 
+                                             <a class="btn btn-xs default" href="index.php/account/editStudentDiscount?reg_num=<?php echo $row1['reg_number'];?>" title="Edit Discount Reason"> <i class="fa fa-pencil-square-o"></i> <?php //echo lang('edit'); ?> </a>
                                              
-                                            <a class="btn btn-xs red" href="index.php/account/delete_discount_per?id=<?php echo $row1['id'];?>" onclick="javascript:return confirm('ARE YOU SURE YOU WANT TO DELETE THIS RECORD ')" title="Delete Discount Persentage"> <i class="fa fa-trash-o"></i> <?php // echo lang('delete'); ?> </a>  -->
+                                            <!-- <a class="btn btn-xs red" href="index.php/account/delete_discount_per?id=<?php echo $row1['id'];?>" onclick="javascript:return confirm('ARE YOU SURE YOU WANT TO DELETE THIS RECORD ')" title="Delete Discount Persentage"> <i class="fa fa-trash-o"></i> <?php //echo lang('delete'); ?> </a>  --> 
                                         </td>
                                     </tr>
                                 <?php $i++;} ?> 

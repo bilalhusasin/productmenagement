@@ -1685,7 +1685,7 @@ class Account extends MX_Controller {
             );   
             if ($this->db->insert('student_fee_discount', $fee_discount)) { 
                 $data['stu_fee_dis'] = $this->common->getAllData('student_fee_discount');
-                $query=$this->db->query("SELECT * FROM fee_discount WHERE session_discount='$year' AND status='active'");
+                $query=$this->db->query("SELECT * FROM fee_discount WHERE status='active'");
                 $data['fee_discount']=$query->result_array();
                 $data['message'] = '<div class="alert alert-success alert-dismissable">
                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
@@ -1743,6 +1743,71 @@ class Account extends MX_Controller {
         }
          
     }
+    //this function will use edit student discount  
+    public function editStudentDiscount(){  
+        if($this->input->post('submit', TRUE)){ 
+            $reg_number = $this->input->post('reg_number', TRUE);  
+            $editReason = array(  
+                'reg_number' => $this->db->escape_like_str($this->input->post('reg_number', TRUE)),
+                'discount_id' => $this->db->escape_like_str($this->input->post('reason_id', TRUE)),
+                'discount_reason' => $this->db->escape_like_str($this->input->post('reason', TRUE)),
+                'admission_discount' => $this->db->escape_like_str($this->input->post('admi_dis', TRUE)), 
+                'tution_discount' => $this->db->escape_like_str($this->input->post('tu_dis', TRUE)), 
+                'discount_status' => $this->db->escape_like_str($this->input->post('discount_status', TRUE)), 
+                'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE))
+            );  
+            $this->db->where('reg_number', $reg_number);
+            if ($this->db->update('student_fee_discount', $editReason)) {  
+                $data['stu_fee_dis'] = $this->common->getAllData('student_fee_discount');
+                $query=$this->db->query("SELECT * FROM fee_discount WHERE status='active'");
+                $data['fee_discount']=$query->result_array();
+                $data['message'] = '<div class="alert alert-success alert-dismissable text-capitalize">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                                <strong>Success ! </strong> Student discount Updated Successfully. 
+                            </div>';    
+                $this->load->view('temp/header');
+                $this->load->view('set_student_fee_discount', $data);
+                $this->load->view('temp/footer'); 
+            }
+            //redirect('account/addfeediscount', 'refresh');
+        }
+        else{
+            $reg_num = $this->input->get('reg_num');
+            $data['fee_discount'] = $this->common->getAllData('fee_discount');
+            $data['student_dis'] = $this->common->getWhere('student_fee_discount', 'reg_number', $reg_num); 
+            $this->load->view('temp/header');
+            $this->load->view('editStudentDiscount', $data);
+            $this->load->view('temp/footer'); 
+        }
+    }
+
+// this function return ajaxcall discount and roll number
+    public function ajaxSelectReason(){
+        $disReason = $this->input->get('q'); 
+       // $reason=$this->input->post('dis_reason', TRUE);
+        $reason = substr($disReason, strpos($disReason, "_") + 1);   
+        //Extract the numbers using the preg_match_all function.
+        preg_match_all('!\d+!', $disReason, $num); 
+                        //find the array in 0 0 index
+        $reason_id=$num[0][0]; 
+        $query=$this->db->query("SELECT * FROM fee_discount WHERE id='$reason_id'"); 
+            $data=$query->result_array();
+        echo'<div class="form-group">
+                <input type="hidden" name="reason_id" value="'.$reason_id.'">
+                <input type="hidden" name="reason" value="'.$reason.'">
+                <label class="col-md-5 control-label">Admission Discount</label>
+                <div class="col-md-7">
+                    <input type="text" name="admi_dis" value="'.$data[0]["admission_discount"].'" class="form-control" readonly="">
+                </div>
+            </div> 
+            <div class="form-group">
+                <label class="col-md-5 control-label">Tution Discount</label>
+                <div class="col-md-7">
+                    <input type="text" name="tu_dis" value="'.$data[0]["tution_discount"].'" class="form-control" readonly="">
+                </div>
+            </div> ';   
+    }
+
     //this function will use edit discount reason 
     public function edit_dis_reason(){
         $year= date('Y');

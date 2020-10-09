@@ -18,7 +18,7 @@ $userId = $user->id; ?>
                 }?>
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h3 class="page-title">
-                    Edit Fee Discount  <small></small>
+                    Edit Student Fee Discount  <small></small>
                 </h3>
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
@@ -29,7 +29,7 @@ $userId = $user->id; ?>
                         Accounts
                     </li>
                     <li>
-                    Edit Fee Discount <?php // echo lang('con_set_st_fee'); ?>
+                    Edit Student Fee Discount <?php // echo lang('con_set_st_fee'); ?>
                     </li>
                     <li id="result" class="pull-right topClock"></li>
                 </ul>
@@ -55,70 +55,56 @@ $userId = $user->id; ?>
                            Edit Fee Discount
                         </div>
                     </div> 
-                    <?php foreach($fee_discount as $row){
-                        $session_dis= $row['session_discount'];
+                    <?php foreach($student_dis as $row){
+                        $session_dis= $row['year'];
+                        $reg_number= $row['reg_number'];
+                        $dis_id= $row['discount_id'];
                         $dis_reason= $row['discount_reason'];
                         $admission_dis= $row['admission_discount']; 
-                        $tution_dis= $row['tution_discount']; 
-                        $status= $row['status'];
-                        $id= $row['id'];
+                        $tution_dis= $row['tution_discount'];
+                        $dis_status= $row['discount_status'];  
+                        $stu_id= $row['student_id'];
                     }?>
                     <div class="portlet-body form">
                         <?php
                         $form_attributs = array('class' => 'form-horizontal', 'role' => 'form');
-                        echo form_open('account/edit_dis_reason', $form_attributs);
+                        echo form_open('account/editStudentDiscount', $form_attributs);
                         ?>
                         <div class="form-body">
-                            <input type="hidden" name="created_by" value="<?php echo $userId; ?>">
-                            <input type="hidden" name="id" value="<?php echo $id; ?>">
-                            <div class="col-md-8"> 
-                                <!--<div class="form-group">
-                                    <label class="col-md-4 control-label"> Discount Session <span class="requiredStar"> * </span></label>
-                                    <div class="col-md-8">
-                                        <input class="form-control" name="dis_session" id="dis_session" value="<?php echo $session_dis; ?>" type="text" data-validation="required" data-validation-error-msg="Please Select Discount Session.">
-                                    </div>
-                                </div>    -->                         
+                            <input type="hidden" name="created_by" value="<?php echo $userId; ?>"> 
+                            <div class="col-md-8">
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label"> Discount Reason </label>
-                                    <div class="col-md-8">
-                                        <input class="form-control" name="dis_reason" type="text" value="<?php echo $dis_reason; ?>" data-validation="required" data-validation-error-msg="<?php echo 'Add fee Discount Reason';?>">
-                                    </div>
-                                </div> 
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Admission Discount</label>
-                                    <div class="col-md-8">
-                                        <input type="text" name="admi_dis" value="<?php echo $admission_dis; ?>" class="form-control">
-                                    </div>
-                                </div>
-                                <!-- <div class="form-group">
-                                    <label class="col-md-4 control-label">Annual Discount</label>
-                                    <div class="col-md-8">
-                                        <input type="text" name="ann_dis" value="<?php echo $annual_dis; ?>" class="form-control"  >
-                                    </div>
-                                </div> -->
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Tution Discount</label>
-                                    <div class="col-md-8">
-                                        <input type="text" name="tu_dis" value="<?php echo $tution_dis; ?>" class="form-control" >
-                                    </div>
-                                </div>
-                                <!-- <div class="form-group">
-                                    <label class="col-md-4 control-label">A/C Discount</label>
-                                    <div class="col-md-8">
-                                        <input type="text" name="ac_dis" value="<?php echo $ac_dis; ?>" class="form-control" >
-                                    </div>
-                                </div> -->
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Discount Status</label>
-                                    <div class="col-md-8">
-                                        <select name="status" id="status" class="form-control">
-                                            <option value="<?php echo $status; ?>"><?php echo $status;?></option>
-                                            <option value="">Select...</option> 
-                                            <option value="active">Active</option>
-                                            <option value="deactive">Deactive</option>
-                                        </select>
+                                    <label class="col-md-5 control-label">Student Registration Number<span class="requiredStar"> * </span></label>
+                                    <div class="col-md-7">
+                                        <input type="text" name="reg_number" value="<?php echo $reg_number; ?>" class="form-control" readonly="">
                                     </div>
                                 </div>  
+                                <div class="form-group">
+                                    <label class="col-md-5 control-label"> Discount Reason  <span class="requiredStar"> * </span></label>
+                                    <div class="col-md-7">
+                                        <select name="" class="form-control" data-validation="required" data-validation-error-msg="<?php echo 'Select Discount Reason';?>" onchange="selectReason(this.value)">
+                                            <option value="<?php echo $dis_id.'_'.$dis_reason; ?>"><?php echo $dis_reason; ?></option>
+                                            <option value=""><?php echo lang('select');?></option>
+                                        <?php foreach($fee_discount as $reason) { ?>   
+                                            <option value="<?php echo $reason['id'].'_'.$reason['discount_reason']; ?>"><?php echo $reason['discount_reason'];?></option> 
+                                          <?php   }
+                                        ?>   
+                                        </select> 
+                                    </div>
+                                </div>                         
+                                <div id="ajaxResult"></div>
+                                <div class="form-group">
+                                    <label class="col-md-5 control-label"> Discount Status <span class="requiredStar"> * </span></label>
+                                    <div class="col-md-7">
+                                        <select name="discount_status" class="form-control" data-validation="required" data-validation-error-msg="<?php echo 'Select Discount Reason';?>">
+                                            <option value="<?php echo $dis_status; ?>"><?php echo $dis_status; ?></option>
+                                            <option value=""><?php echo lang('select');?></option>
+                                            <option value="Active">Active</option> 
+                                            <option value="Deactive">Deactive</option> 
+                                        ?>   
+                                        </select> 
+                                    </div>
+                                </div>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -164,6 +150,30 @@ $userId = $user->id; ?>
     format      :   "YYYY",
     viewMode    :   "years", 
 });
+</script>
+<script> 
+function selectReason(str) {
+   // alert("hi");
+   var xmlhttp;
+    if (str.length === 0) {
+        document.getElementById("ajaxResult").innerHTML = "";
+        return;
+    }
+    if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else {
+    // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+        xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        document.getElementById("ajaxResult").innerHTML = xmlhttp.responseText;
+    }
+    };
+        xmlhttp.open("GET", "index.php/account/ajaxSelectReason?q=" + str, true);
+        xmlhttp.send(); 
+}
 </script>
 
  

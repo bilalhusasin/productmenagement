@@ -50,7 +50,7 @@
             <div id="infoMessage"><?php echo $message; ?></div>
 
             <!-- BEGIN FORGOT PASSWORD FORM -->
-            <?php $attributes = array('class' => 'forget-form');
+        <?php $attributes = array('class' => 'forget-form');
             echo form_open("auth/forgot_password", $attributes); ?>
             <h3>Forget Password ?</h3>
             <p>

@@ -71,7 +71,7 @@ $userId = $user->id; ?>
                         echo form_open('account/editStudentDiscount', $form_attributs);
                         ?>
                         <div class="form-body">
-                            <input type="hidden" name="created_by" value="<?php echo $userId; ?>"> 
+                            <input type="hidden" name="created_by" value="<?php echo $userId; ?>" readonly=""> 
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="col-md-5 control-label">Student Registration Number<span class="requiredStar"> * </span></label>
@@ -92,7 +92,23 @@ $userId = $user->id; ?>
                                         </select> 
                                     </div>
                                 </div>                         
-                                <div id="ajaxResult"></div>
+                                <div id="ajaxResult">
+                                    <div class="form-group">
+                                        <input type="hidden" name="reason_id" value="<?php echo $dis_id; ?>" readonly="">
+                                        <input type="hidden" name="reason" value="<?php echo $dis_reason; ?>" readonly="">
+                                        <label class="col-md-5 control-label">Admission Discount</label>
+                                        <div class="col-md-7">
+                                            <input type="text" name="admi_dis" value="<?php echo $admission_dis; ?>" class="form-control" readonly="">
+                                        </div>
+                                    </div> 
+                                    <div class="form-group">
+                                        <label class="col-md-5 control-label">Tution Discount</label>
+                                        <div class="col-md-7">
+                                            <input type="text" name="tu_dis" value="<?php echo $tution_dis; ?>" class="form-control" readonly="">
+                                        </div>
+                                    </div> 
+                                    
+                                </div>
                                 <div class="form-group">
                                     <label class="col-md-5 control-label"> Discount Status <span class="requiredStar"> * </span></label>
                                     <div class="col-md-7">

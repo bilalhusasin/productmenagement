@@ -407,29 +407,29 @@ $value2 = $this->input->post('val2');
 //        $this->load->view('dashboard', $data);
 //        $this->load->view('temp/footer');
 //    }
-//
-public function profileView() {
-$user = $this->ion_auth->user()->row();
-$data['userprofile'] = $this->common->getWhere('users', 'id', $user->id);
-if ($this->input->post('submit', TRUE)) {
-$data_up = array(
-'first_name' => $this->db->escape_like_str($this->input->post('firstName', TRUE)),
-'last_name' => $this->db->escape_like_str($this->input->post('lastName', TRUE)),
-'username' => $this->db->escape_like_str($this->input->post('userName', TRUE)),
-'phone' => $this->db->escape_like_str($this->input->post('mobileNumber', TRUE)),
-'email' => $this->db->escape_like_str($this->input->post('email', TRUE)),
-'password' => $this->db->escape_like_str($this->input->post('new_confirm', TRUE)),
-);
-$this->db->where('id', $user->id);
-if ($this->db->update('users', $data_up)) {
-redirect('home/profileView', 'refresh');
-}
-} else {
-$this->load->view('temp/header');
-$this->load->view('profileView', $data);
-$this->load->view('temp/footer');
-}
-}
+    //
+    public function profileView() {
+        $user = $this->ion_auth->user()->row();
+        $data['userprofile'] = $this->common->getWhere('users', 'id', $user->id);
+        if ($this->input->post('submit', TRUE)) {
+            $data_up = array(
+            'first_name' => $this->db->escape_like_str($this->input->post('firstName', TRUE)),
+            'last_name' => $this->db->escape_like_str($this->input->post('lastName', TRUE)),
+            'username' => $this->db->escape_like_str($this->input->post('userName', TRUE)),
+            'phone' => $this->db->escape_like_str($this->input->post('mobileNumber', TRUE)),
+            'email' => $this->db->escape_like_str($this->input->post('email', TRUE)),
+            //'password' => $this->db->escape_like_str($this->input->post('new_confirm', TRUE)),
+        );
+            $this->db->where('id', $user->id);
+            if ($this->db->update('users', $data_up)) {
+                redirect('home/profileView', 'refresh');
+            }
+        } else {
+            $this->load->view('temp/header');
+            $this->load->view('profileView', $data);
+            $this->load->view('temp/footer');
+        }
+    }
 public function profileImage() {
 $user = $this->ion_auth->user()->row();
 if ($this->ion_auth->is_admin()) {

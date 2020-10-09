@@ -158,8 +158,7 @@ class Auth extends CI_Controller
         }
 
     //forgot password
-    function forgot_password()
-        {
+    public function forgot_password() {
         $this->form_validation->set_rules('email', $this->lang->line('forgot_password_validation_email_label'), 'required|valid_email');
 
         if ($this->form_validation->run() == false) {
@@ -202,7 +201,7 @@ class Auth extends CI_Controller
                 redirect("auth/forgot_password", 'refresh');
             }
         }
-        }
+    }
 
     //reset password - final step for forgotten password
     public function reset_password($code = NULL)

@@ -107,7 +107,7 @@ $userId = $user->id; ?>
                                                 <a class="btn btn-xs green" href="index.php/users/editregstu?reg_num=<?php echo $reg_number; ?>" title="Edit Student Info"><i class="fa fa-pencil-square-o"></i> </a>
                                                 <?php
                                             if($status=='Unpaid'){
-                                               echo' <a class="btn btn-xs btn-danger" href="index.php/users/reg_delete?reg_num=<?php echo $reg_number; ?>" onclick="javascript:return confirm('.'ARE YOU SURE YOU WANT TO DELETE THIS RECORD '.')" title="Delete"><i class="fa fa-trash-o"></i> </a>';
+                                               echo' <a class="btn btn-xs btn-danger" href="index.php/users/reg_delete?reg_num='. $reg_number.'" onclick="javascript:return confirm('.'ARE YOU SURE YOU WANT TO DELETE THIS RECORD '.')" title="Delete"><i class="fa fa-trash-o"></i> </a>';
                                             } else{ echo "";}
                                              ?>
                                             <?php  //} ?>

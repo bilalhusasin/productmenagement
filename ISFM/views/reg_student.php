@@ -143,9 +143,9 @@ $userId = $user->id; ?>
                                     
                                     <td width="150px"> 
                                         
-                                        <a class="btn btn-xs green" href="index.php/users/editregstu?id=<?php echo $row['id']; ?>&class_id=<?php echo $class_id; ?>" title="Student Info Edit"><i class="fa fa-pencil-square-o"></i> </a>
+                                        <a class="btn btn-xs green" href="index.php/users/editregstu?reg_num=<?php echo $row['reg_number']; ?>" title="Student Info Edit"><i class="fa fa-pencil-square-o"></i> </a>
 
-                                        <a class="btn btn-xs btn-danger" href="index.php/users/reg_delete?id=<?php echo $row['id']; ?>&class_id=<?php echo $class_id; ?>" onclick="javascript:return confirm('ARE YOU SURE YOU WANT TO DELETE THIS RECORD ')" title="Delete"><i class="fa fa-trash-o"></i> </a> 
+                                        <!-- <a class="btn btn-xs btn-danger" href="index.php/users/reg_delete?reg_num=<?php echo $row['reg_number']; ?>" onclick="javascript:return confirm('ARE YOU SURE YOU WANT TO DELETE THIS RECORD ')" title="Delete"><i class="fa fa-trash-o"></i> </a>  -->
                                     </td>  
 <input type="hidden" name="present_address_<?php echo $i; ?>" value="<?php echo $row['present_address'];?>" readonly="">
 <input type="hidden" name="vouch_num_<?php echo $i; ?>" value="<?php echo date('m').date('y').$row['reg_number']; ?>">

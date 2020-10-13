@@ -988,7 +988,9 @@ public function student_chalanz()
 
     $stu_data = array();
 
-        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id                                  
+        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,class.class_title, student_info.section, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip 
+            INNER JOIN student_info ON slip.student_id = student_info.student_id 
+            INNER JOIN class ON slip.class_id = class.id
 
                                     ");
 

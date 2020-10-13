@@ -886,7 +886,7 @@ public function fee_struct()
 
         $query = $this->db->query("
 
-                        SELECT  slip.year,slip.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name,slip.payment_status,slip.month, slip.dis_total  
+                        SELECT  slip.year,slip.student_id,class.class_title, student_info.section, student_info.student_nam,student_info.farther_name,slip.payment_status,slip.month, slip.dis_total  
 
               
 
@@ -895,6 +895,7 @@ public function fee_struct()
                                    INNER JOIN student_info ON slip.student_id = student_info.student_id
 
                                    LEFT JOIN student_fee_discount ON slip.student_id = student_fee_discount.student_id
+                                   INNER JOIN class ON slip.class_id = class.id
 
                                     ");
 

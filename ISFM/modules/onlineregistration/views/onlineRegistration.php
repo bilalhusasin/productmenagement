@@ -86,10 +86,10 @@
                     <input type="hidden" name="created_by" value="<?php echo $userId; ?>">
                         <div class="row" style="margin-left: 5%">
                             <div class="col-md-4"> 
-                              <div class="form-group">
+                              <div class="form-group" hidden>
                                 <div class="col-md-8" >
                                      Registration Number 
-                                    <input type="text" class="form-control a" name="regnum" value="<?php echo $auto_reg_number; ?>" readonly="">
+                                    <input type="hidden" class="form-control a" name="regnum" value="<?php echo $auto_reg_number; ?>" readonly="">
                                 </div>
                               </div>
                             </div>

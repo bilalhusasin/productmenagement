@@ -97,7 +97,7 @@ $userId = $user->id; ?>
                                                 echo '<span class="label label-sm label-success" id="status">'. $status .'</span>';
                                             }?>
                                         </td> 
-                                        <td width="75px"> 
+                                        <td width="100px"> 
                                            
                                             <?php /*if($this->ion_auth->is_accountant()){*/ ?>
                                                 <?php if($row['status']=='Unpaid'||$row['status']=='Not Clear'){ ?>

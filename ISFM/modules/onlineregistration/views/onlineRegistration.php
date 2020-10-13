@@ -1,41 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <!-- BEGIN HEAD -->
+    <head>
+        <meta charset="utf-8"/>
+        <title><?php echo lang('system_title'); ?></title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta content="BFTech | Beyond Future Technologies" name="description"/>
+        <meta content="BFTech" name="author"/>
+
+        <!--Base tag start-->
+        <base href="<?php echo $this->config->base_url(); ?>">
+        <!--Base tag end-->
+
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+        <link href="assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+        <!-- END GLOBAL MANDATORY STYLES -->
+        <!-- BEGIN THEME STYLES -->
+        <link href="assets/global/css/components.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/admin/layout/css/layout.min.css" rel="stylesheet" type="text/css"/>
+        <link id="style_color" href="assets/admin/layout/css/themes/default.min.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+        <!-- END THEME STYLES -->
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <script src="assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+        <script src="assets/global/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+        <script src="assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+
+    </head>
+    <!-- END HEAD -->
+    <!-- BEGIN BODY -->
+    <body class="page-header-fixed page-quick-sidebar-over-content page-header-fixed-mobile page-footer-fixed1">
+        <!-- BEGIN HEADER -->
 <!--BEGIN PAGE LEVEL STYLES -->
 <link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css"/>
 <link rel="stylesheet" type="text/css" href="assets/global/jquery_ui_css/jquery-ui.css" />
 <!-- END PAGE LEVEL STYLES -->
-<?php $user = $this->ion_auth->user()->row(); $userId = $user->id;?>
+<?php // $user = $this->ion_auth->user()->row(); $userId = $user->id;?>
 <!-- BEGIN CONTENT -->
 <div class="page-content-wrapper">
-    <div class="page-content">
-        <!-- BEGIN PAGE HEADER-->
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
-                <h3 class="page-title">
-                    <?php echo lang('admi_page_title'); ?> <small></small>
-                </h3>
-                <ul class="page-breadcrumb breadcrumb">
-                    <li>
-                        <i class="fa fa-home"></i>
-                        <?php echo lang('home'); ?>
-                        
-                    </li>
-                    <li>
-                        <?php echo lang('header_stu_paren'); ?>
-                        
-                    </li>
-                    <li>
-                        <?php echo lang('header_stude'); ?>
-                        
-                    </li>
-                    <li>
-                        <?php echo lang('header_admission'); ?>
-                    </li>
-                    <li id="result" class="pull-right topClock"></li>
-                </ul>
-                <!-- END PAGE TITLE & BREADCRUMB-->
-            </div>
-        </div> 
-        <!-- END PAGE HEADER-->
+    <div class="page-content"> 
         <!-- BEGIN PAGE CONTENT-->
         <div class="row">
             <div class="col-md-12 ">
@@ -45,25 +55,23 @@
                         <div class="caption">
                             <i class="fa fa-bars"></i> <?php echo lang('admi_form_title'); ?>
                         </div>
-                        <div class="tools">
-                            <a href="" class="collapse">
-                            </a>
-                            <a href="" class="reload">
-                            </a>
-                        </div>
+                         
                     </div>
                     <div class="portlet-body form">
                         <?php $form_attributs = array('class' => 'form-horizontal', 'role' => 'form', 'name' => 'myForm', 'onsubmit' => 'return validateForm()');
-                        echo form_open_multipart('users/reg', $form_attributs);
+                        echo form_open_multipart('onlineregistration/reg', $form_attributs);
                         ?>
                         <div class="form-body">
                             <?php
-                            if (!empty($success)) {
-                                echo $success;
-                            }
+                            $this->load->helper("display_message_helper");
+                            echo error_message('alert');
+                            // if (!empty($success)) {
+                            //     //echo $success;
+
+                            // } 
                             ?>
-                            <div class="row">
-                                 <div class="col-lg-12 " style="padding-left: 8%;"> 
+                        <div class="row">
+                            <div class="col-lg-12 " style="padding-left: 8%;"> 
                                 <div class="col-md-4">
                                     <img src="assets/admin/layout/img/smlogo.png" alt="Punjab School">
                                 </div>
@@ -75,13 +83,13 @@
                             </div>
                         </div>
                         <hr>
-                <input type="hidden" name="created_by" value="<?php echo $userId; ?>">
+                    <input type="hidden" name="created_by" value="<?php echo $userId; ?>">
                         <div class="row" style="margin-left: 5%">
                             <div class="col-md-4"> 
                               <div class="form-group">
-                                <div class="col-md-8" hidden>
+                                <div class="col-md-8" >
                                      Registration Number 
-                                    <input type="hidden" class="form-control a" name="regnum" value="<?php echo $auto_reg_number; ?>" readonly="">
+                                    <input type="text" class="form-control a" name="regnum" value="<?php echo $auto_reg_number; ?>" readonly="">
                                 </div>
                               </div>
                             </div>
@@ -92,7 +100,7 @@
                                     <input type="text" class="form-control" name="date" id="date" placeholder="yyyy-mm-dd">
                                 </div>
                               </div> -->
-                              <?php if(!empty($session_fee)){echo '<span class="label label-sm label-success"> Registration Open</span>';} else{echo '<span class="label label-sm label-danger"> Please Set The Registration Fee First</span>';}?>
+                              <?php if(!empty($session_fee)){echo '<span class="label label-sm label-success">Online  Registration Open</span>';} else{echo '<span class="label label-sm label-danger"> Please Set The Registration Fee First</span>';}?>
                             </div>
                             <div class="col-md-4"> 
                               <div class="form-group">  
@@ -107,7 +115,7 @@
                             <hr>
                         <h3 style="padding-left: 4%; font-weight: 700;">Student Information </h3> 
                     <div class="row"> 
-                        <div class="col-lg-9 " style="padding-left: 8%"> 
+                        <div class="col-md-9 col-sm-12" style="padding-left: 8%"> 
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Academic Session <span class="requiredStar"> * </span></label>
                                 <div class="col-md-6">
@@ -194,11 +202,11 @@
                                 </div>
                             </div> -->
                         </div>
-                        <div class="col-md-3 ">
-                            <label class="control-label "><?php echo lang('admi_students_photo');?> <!-- <span class="requiredStar"> * </span> --></label>
+                        <div class="col-md-3 col-sm-12" >
+                            <label class="control-label " style="padding-left: 8%"><?php echo lang('admi_students_photo');?> <!-- <span class="requiredStar"> * </span> --></label>
                             <div class="form-group last">
                                 
-                                <div class="">
+                                <div class="" style="padding-left: 8%">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail">
                                             <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt=""/>
@@ -225,8 +233,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label"> Postal Address <!-- <span class="requiredStar"> * </span> --></label>
                                 <div class="col-md-6">
-                                    <textarea class="form-control" name="address" rows="3"></textarea>
-                       <!--  data-validation="required" data-validation-error-msg="<?php // echo lang('admi_admi_detailschool_error_msg'); ?>" -->             
+                                    <textarea class="form-control" name="address" rows="3"></textarea>             
                                 </div>
                             </div>
 
@@ -237,7 +244,7 @@
                                 </div>
                             </div>
                              
-                          <div class="form-group">
+                            <div class="form-group">
                                 <label class="col-md-3 control-label"><?php  echo lang('admi_Sex'); ?> <span class="requiredStar"> * </span></label>
                                 <div class="col-md-4 marginLeftSex">
                                     <div class="radio-list">
@@ -314,7 +321,7 @@
                                     <input class="form-control eduForm" name="regnumb3" type="text" placeholder="" > 
                                 </div> 
                             </div>
-                         <div class="form-group">
+                            <div class="form-group">
                                 <label class="col-md-3 control-label"> How Did You Came To Know Us</label>
                                 <div class="col-md-9">
                                     <div class="checkbox-list">
@@ -336,7 +343,7 @@
                             <div class="form-actions fluid">
                               <div class="col-md-offset-3 col-md-6">
                                 <button type="submit" class="btn green btn-lg" name="submit" id="submit_data" value="submit"><?php echo lang('save');?></button>
-                            <button type="reset" class="btn default"><?php  echo lang('refresh');?></button>
+                                <button type="reset" class="btn default"><?php  echo lang('refresh');?></button>
                                  
                               </div>
                             </div>
@@ -367,6 +374,32 @@
 <script src="assets/global/plugins/typeahead/typeahead.bundle.min.js" type="text/javascript"></script>
 <script src="assets/admin/pages/scripts/components-form-tools.js"></script>
 <script src="assets/global/plugins/jquery.form-validator.min.js" type="text/javascript"></script>  
+
+
+<!-- End FOOTER -->
+<!-- Start Javasceipt -->
+<!-- Start Common Script For All System -->
+<script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="assets/global/plugins/select2/select2.min.js"></script>
+<script src="assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
+<!-- Start Common Script For All System -->
+<script>
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        QuickSidebar.init() // init quick sidebar
+        TableAdvanced.init();
+    });
+</script>
+<!-- End javasceipt -->
 
 <script>
     $.validate();
@@ -667,4 +700,8 @@ toValidate.keyup(function () {
         }, 1000));
     });
 </script>
-<!-- END PAGE LEVEL script
+<!-- END PAGE LEVEL script-->
+
+</body>
+<!-- End BODY -->
+</html>

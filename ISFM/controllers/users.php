@@ -1811,6 +1811,14 @@ class Users extends CI_Controller {
         $tps='TPS';
         $data['auto_reg_number'] =$num.$tps.$count; 
         $data['s_class'] = $this->common->getAllData('class');
+        $fee_query= $this->db->query("SELECT registration_fee FROM fee_structure WHERE session=$year");
+        $fee=$fee_query->result_array();
+        if(!empty($fee)){
+            $data['session_fee'] = $fee[0]['registration_fee'];
+        } else{
+            $data['session_fee'] ="";
+        }
+             
         $this->load->view('temp/header');
         $this->load->view('registration', $data);
         $this->load->view('temp/footer');
@@ -1830,12 +1838,13 @@ class Users extends CI_Controller {
             else{
                 $reg_fee="This session registration fee not Add";
             }
-       echo '<input type="hidden" name="registration_fee" value="'.$reg_fee.'" readonly>';
+       echo '<input type="text" name="registration_fee" value="'.$reg_fee.'" readonly>';
     }
     // student registration function
     public function reg(){
         $class_id = $this->db->escape_like_str($this->input->post('class', TRUE)); 
         if ($this->input->post('submit', TRUE)) {
+            $regNumber=$this->input->post('regnum', TRUE);
             $tables   = $this->config->item('tables', 'ion_auth');
             
             $bs_1 = '';
@@ -1933,19 +1942,31 @@ class Users extends CI_Controller {
             $this->load->library('upload', $config);
             $this->upload->do_upload();
             $uploadFileInfo = $this->upload->data(); 
+
+            $query1= $this->db->query("SELECT registration_fee FROM fee_structure WHERE session=date('Y')");
+            $data=$query1->result_array();
+            foreach($data as $row){
+                $reg_fee=$row['registration_fee'];
+            } 
+
             $phone = $this->input->post('phoneCode', TRUE) . '' . $this->input->post('phone', TRUE);
+
+
             //This array information's are sending to "user" table as a core information as a user this system
-            $additional_data = array(
-                'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
-                'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
-                'phone' => $this->db->escape_like_str($phone),
-                
-               );
+                $additional_data = array(
+                    'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
+                    'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
+                    'phone' => $this->db->escape_like_str($phone)
+                );
                 //This array information's are sending to "student_info" table.
                 $regnbr=$this->input->post('regnum', TRUE);
                 $voucher_number=date("y").''.date("m").''.$regnbr;
+                $regdate = date('yy-m-d'); 
+                $year = date('Y');
+            while (true){
+
                 $studata = array(
-                    'year' => date('Y'),                     
+                    'year' => $this->db->escape_like_str($year),                     
                     'class_id' => $this->db->escape_like_str($class_id),
                     'student_nam' => $this->db->escape_like_str($username),
                     'previous_info1' => $this->db->escape_like_str($bs_1),
@@ -1957,12 +1978,12 @@ class Users extends CI_Controller {
                     'sibling_info4' => $this->db->escape_like_str($be_1),
                     'sibling_info5' => $this->db->escape_like_str($be_2),
                     'sibling_info6' => $this->db->escape_like_str($be_3), 
-                    'reg_number' => $this->db->escape_like_str($this->input->post('regnum', TRUE)),
-                    'reg_date' => $this->db->escape_like_str($this->input->post('date', TRUE)),
+                    'reg_number' => $this->db->escape_like_str($regNumber),
+                    'reg_date' => $this->db->escape_like_str($regdate),
                     'due_date' => $this->db->escape_like_str($this->input->post('due_date', TRUE)),
                     'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
                     'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
-                    'session' => $this->db->escape_like_str($this->input->post('session', TRUE)),
+                    'session' => $this->db->escape_like_str($year),
                     'b_form' => $this->db->escape_like_str($this->input->post('bfnumb', TRUE)),
                     //'birth_certificate' => $this->db->escape_like_str($uploadFileInfo1['file_name']),
                     'father_name' => $this->db->escape_like_str($this->input->post('father_name', TRUE)),
@@ -1980,34 +2001,43 @@ class Users extends CI_Controller {
                     'heard_from5' => $this->db->escape_like_str($this->input->post('mouth', TRUE)),
                     'heard_from6' => $this->db->escape_like_str($this->input->post('other', TRUE)),
                     'status' => $this->db->escape_like_str($stat),    
-                    'registration_fee' => $this->db->escape_like_str($this->input->post('registration_fee', TRUE)),
+                    'registration_fee' => $this->db->escape_like_str($reg_fee),
                     'voucher_number' => $this->db->escape_like_str($voucher_number),
-                    'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)),
-                );
-                $this->db->insert('registration', $studata, $additional_data);
+                    'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE))
+                );               
+                    if($this->db->insert('registration', $studata)===false){
+                        $regNumber++;
+                        $voucher_number++;
+                     continue;
+                    } else{
+                       break;
+                    }
+            }
                 $reg_stud = array(
                     'class_id' => $this->db->escape_like_str($class_id),
                     'student_nam' => $this->db->escape_like_str($username),
                     'status' => $this->db->escape_like_str($stat),
-                    'reg_number' => $this->db->escape_like_str($this->input->post('regnum', TRUE)),
+                    'reg_number' => $this->db->escape_like_str($regNumber),
                     'voucher_number' => $this->db->escape_like_str($voucher_number),
-                    'session' => $this->db->escape_like_str($this->input->post('session', TRUE)),
-                    'registration_fee' => $this->db->escape_like_str($this->input->post('registration_fee', TRUE)), 
-                    'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)),
-                ); 
+                    'session' => $this->db->escape_like_str($year),
+                    'registration_fee' => $this->db->escape_like_str($reg_fee), 
+                    'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE))
+                );  
                 $this->db->insert('registered', $reg_stud);
+
                 $voucher_data = array(
                     'voucher_type' => $this->db->escape_like_str('Registration'),
-                    'student_ref_id' => $this->db->escape_like_str($this->input->post('regnum', TRUE)),
+                    'student_ref_id' => $this->db->escape_like_str($regNumber),
                     'voucher_number' => $this->db->escape_like_str($voucher_number),
-                    'total_amount' => $this->db->escape_like_str($this->input->post('registration_fee', TRUE)),
-                    'month_id' => $this->db->escape_like_str('0'),
+                    'total_amount' => $this->db->escape_like_str($reg_fee),
+                    'month_id' => $this->db->escape_like_str(date("m")),
                     'voucher_status' => $this->db->escape_like_str('unpaid'),
-                    'issue_date' => $this->db->escape_like_str($this->input->post('date', TRUE)),
+                    'issue_date' => $this->db->escape_like_str($regdate),
                     'due_date' => $this->db->escape_like_str($this->input->post('due_date', TRUE)),
                     'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE))
-                );   
+                );
                 $this->db->insert('vouchers', $voucher_data);
+
                 $data['message'] = '<div class="alert alert-success alert-dismissable">
                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
                                 <strong>Success!</strong> Student Registration Successfully processed.

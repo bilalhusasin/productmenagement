@@ -51,8 +51,11 @@ $(document).ready(function ()
             { data: "month" }            
         ],
 
-    "buttons": [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+     "buttons": [
+            { extend: 'copyHtml5', footer: true },
+            { extend: 'excelHtml5', footer: true },
+            { extend: 'csvHtml5', title: 'Student Fee Report(TPS)',footer: true },
+            { extend: 'pdfHtml5',  title: 'Student Fee Report(TPS)',footer: true }
         ],
         deferRender:    true,
           scrollY:        "300px",

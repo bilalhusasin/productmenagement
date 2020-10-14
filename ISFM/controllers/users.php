@@ -2038,7 +2038,7 @@ class Users extends CI_Controller {
                 );
                 $this->db->insert('vouchers', $voucher_data);
 
-                $data['message'] = '<div class="alert alert-success alert-dismissable">
+                /*$data['message'] = '<div class="alert alert-success alert-dismissable">
                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
                                 <strong>Success!</strong> Student Registration Successfully processed.
                             </div>';
@@ -2046,7 +2046,14 @@ class Users extends CI_Controller {
                 $data['stu'] = $this->common->getAllData('registered');
                 $this->load->view('temp/header');
                 $this->load->view('registered' , $data);
-                $this->load->view('temp/footer');
+                $this->load->view('temp/footer');*/
+
+                $this->session->set_userdata(array('msg_type'=>'success'));
+                $this->session->set_flashdata('success','<div class="alert alert-success alert-dismissable">
+                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                                 <strong>Success!</strong> Student Registration Successfully processed.
+                             </div>'); 
+                redirect('users/reg_stu');
         }  
     }
 //this function will show student fee voucher

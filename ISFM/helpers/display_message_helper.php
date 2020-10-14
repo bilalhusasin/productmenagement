@@ -22,17 +22,11 @@ function error_message($style="")// by default On Page - set 'alert' for pop-up
 	 if($style=="alert")
 	  {
 		  ?>
-<!--           <div id="alert_box"><div class="alert_area">
+          <div id="alert_box"><div class="alert_area">
             <div class="close">
                 <span onclick="$('#alert_box').fadeOut(100);"; class="txt">Close [x]</span>
             </div>
-            <div style=" width:100%; text-align:left;"> 
- -->
-
-            <div class="alert alert-success alert-dismissable">
-                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
-                                <!-- <strong>Success!</strong> Student Registration Successfully processed. -->
-      
+            <div style=" width:100%; text-align:left;">      
 		  <?php
 	  }
  ?>
@@ -49,11 +43,9 @@ function error_message($style="")// by default On Page - set 'alert' for pop-up
    <?php if($style=="alert")
 		{
 		  ?>
-            </div>     
-
-<!--               </div>
+              </div>
              </div>
-            </div> -->
+            </div>
 		  <?php
 		}
   

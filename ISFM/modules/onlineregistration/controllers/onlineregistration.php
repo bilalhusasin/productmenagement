@@ -248,7 +248,10 @@ class onlineregistration extends CI_Controller {
                 //                 <strong>Success!</strong> Student Registration Successfully processed.
                 //             </div>';
                 $this->session->set_userdata(array('msg_type'=>'success'));
-                $this->session->set_flashdata('success',"Student Registration Successfully processed."); 
+                $this->session->set_flashdata('success','<div class="alert alert-success alert-dismissable">
+                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                                 <strong>Success!</strong> Student Registration Successfully processed.
+                             </div>'); 
                 redirect('onlineregistration/index'); 
         }  
     }

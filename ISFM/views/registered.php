@@ -31,8 +31,8 @@ $userId = $user->id; ?>
         <div class="row">
             <div class="col-md-12">
                 <?php
-                    $this->load->helper("display_message_helper");
-                    echo error_message('alert');
+                    //$this->load->helper("display_message_helper");
+                    //echo error_message('alert');
                /* if (!empty($message)) {
                     echo '<br>' . $message;
                 } */

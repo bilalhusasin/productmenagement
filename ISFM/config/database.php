@@ -31,10 +31,11 @@ $active_record = TRUE;
 $db['default']['hostname'] = 'localhost';
 
 $db['default']['username'] = 'ypw4fv50_tpslab';
+$db['default']['username'] = 'root';
 
-$db['default']['password'] = '0P!4ooVyo5f';
+$db['default']['password'] = '';
 
-$db['default']['database'] = 'ypw4fv50__tpslab';
+$db['default']['database'] = 'foretell_lab1';
 
 $db['default']['dbdriver'] = 'mysqli';
 
@@ -42,7 +43,7 @@ $db['default']['dbprefix'] = '';
 
 $db['default']['pconnect'] = TRUE;
 
-$db['default']['db_debug'] = TRUE;
+$db['default']['db_debug'] = FALSE;
 
 $db['default']['cache_on'] = FALSE;
 

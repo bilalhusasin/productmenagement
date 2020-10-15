@@ -1840,13 +1840,11 @@ class Users extends CI_Controller {
             }
        echo '<input type="text" name="registration_fee" value="'.$reg_fee.'" readonly>';
     }
-    // student registration function
+     // student registration function
     public function reg(){
         $class_id = $this->db->escape_like_str($this->input->post('class', TRUE)); 
         if ($this->input->post('submit', TRUE)) {
-            $regNumber = $this->input->post('regnum', TRUE);
-
-            $curr_session = $this->input->post('session', TRUE);
+            $regNumber=$this->input->post('regnum', TRUE);
             $tables   = $this->config->item('tables', 'ion_auth');
             
             $bs_1 = '';
@@ -1945,11 +1943,12 @@ class Users extends CI_Controller {
             $this->upload->do_upload();
             $uploadFileInfo = $this->upload->data(); 
 
-            $query1= $this->db->query("SELECT registration_fee FROM fee_structure WHERE session=$curr_session");
-            $fee_reg=$query1->result_array();
-            
-            $reg_fee=$fee_reg[0]['registration_fee'];
-            
+            $query1= $this->db->query("SELECT registration_fee FROM fee_structure WHERE session=date('Y')");
+            $data=$query1->result_array();
+            foreach($data as $row){
+                $reg_fee=$row['registration_fee'];
+            } 
+
             $phone = $this->input->post('phoneCode', TRUE) . '' . $this->input->post('phone', TRUE);
 
 
@@ -1962,11 +1961,12 @@ class Users extends CI_Controller {
                 //This array information's are sending to "student_info" table.
                 $regnbr=$this->input->post('regnum', TRUE);
                 $voucher_number=date("y").''.date("m").''.$regnbr;
-                $regdate = date('yy-m-d');  
+                $regdate = date('yy-m-d'); 
+                $year = date('Y');
             while (true){
 
                 $studata = array(
-                    'year' => $this->db->escape_like_str($curr_session),                     
+                    'year' => $this->db->escape_like_str($year),                     
                     'class_id' => $this->db->escape_like_str($class_id),
                     'student_nam' => $this->db->escape_like_str($username),
                     'previous_info1' => $this->db->escape_like_str($bs_1),
@@ -1983,7 +1983,7 @@ class Users extends CI_Controller {
                     'due_date' => $this->db->escape_like_str($this->input->post('due_date', TRUE)),
                     'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
                     'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
-                    'session' => $this->db->escape_like_str($curr_session),
+                    'session' => $this->db->escape_like_str($year),
                     'b_form' => $this->db->escape_like_str($this->input->post('bfnumb', TRUE)),
                     //'birth_certificate' => $this->db->escape_like_str($uploadFileInfo1['file_name']),
                     'father_name' => $this->db->escape_like_str($this->input->post('father_name', TRUE)),
@@ -2019,7 +2019,7 @@ class Users extends CI_Controller {
                     'status' => $this->db->escape_like_str($stat),
                     'reg_number' => $this->db->escape_like_str($regNumber),
                     'voucher_number' => $this->db->escape_like_str($voucher_number),
-                    'session' => $this->db->escape_like_str($curr_session),
+                    'session' => $this->db->escape_like_str($year),
                     'registration_fee' => $this->db->escape_like_str($reg_fee), 
                     'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE))
                 );  
@@ -2617,12 +2617,6 @@ class Users extends CI_Controller {
          }
 // this function get and display  pass student data 
         public function pass_student(){
-            /*$empty = $this->common->pass_student();
-            if(!empty($empty)){ 
-                $data['status']  = $empty;     
-            } else{
-                $data['status']  =""; 
-            }*/
             $data['status'] = $this->common->pass_student();
             $this->load->view('temp/header');
             $this->load->view('pass_student', $data);

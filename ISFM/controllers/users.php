@@ -1846,7 +1846,7 @@ class Users extends CI_Controller {
         if ($this->input->post('submit', TRUE)) {
             $regNumber = $this->input->post('regnum', TRUE);
 
-            $session = $this->input->post('session', TRUE);
+            $curr_session = $this->input->post('session', TRUE);
             $tables   = $this->config->item('tables', 'ion_auth');
             
             $bs_1 = '';
@@ -1945,10 +1945,10 @@ class Users extends CI_Controller {
             $this->upload->do_upload();
             $uploadFileInfo = $this->upload->data(); 
 
-            $query1= $this->db->query("SELECT registration_fee FROM fee_structure WHERE session=$session");
-            $data=$query1->result_array();
+            $query1= $this->db->query("SELECT registration_fee FROM fee_structure WHERE session=$curr_session");
+            $fee_reg=$query1->result_array();
             
-            $reg_fee=$data[0]['registration_fee'];
+            $reg_fee=$fee_reg[0]['registration_fee'];
             
             $phone = $this->input->post('phoneCode', TRUE) . '' . $this->input->post('phone', TRUE);
 
@@ -1966,7 +1966,7 @@ class Users extends CI_Controller {
             while (true){
 
                 $studata = array(
-                    'year' => $this->db->escape_like_str($session),                     
+                    'year' => $this->db->escape_like_str($curr_session),                     
                     'class_id' => $this->db->escape_like_str($class_id),
                     'student_nam' => $this->db->escape_like_str($username),
                     'previous_info1' => $this->db->escape_like_str($bs_1),
@@ -1983,7 +1983,7 @@ class Users extends CI_Controller {
                     'due_date' => $this->db->escape_like_str($this->input->post('due_date', TRUE)),
                     'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
                     'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
-                    'session' => $this->db->escape_like_str($session),
+                    'session' => $this->db->escape_like_str($curr_session),
                     'b_form' => $this->db->escape_like_str($this->input->post('bfnumb', TRUE)),
                     //'birth_certificate' => $this->db->escape_like_str($uploadFileInfo1['file_name']),
                     'father_name' => $this->db->escape_like_str($this->input->post('father_name', TRUE)),
@@ -2019,7 +2019,7 @@ class Users extends CI_Controller {
                     'status' => $this->db->escape_like_str($stat),
                     'reg_number' => $this->db->escape_like_str($regNumber),
                     'voucher_number' => $this->db->escape_like_str($voucher_number),
-                    'session' => $this->db->escape_like_str($session),
+                    'session' => $this->db->escape_like_str($curr_session),
                     'registration_fee' => $this->db->escape_like_str($reg_fee), 
                     'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE))
                 );  

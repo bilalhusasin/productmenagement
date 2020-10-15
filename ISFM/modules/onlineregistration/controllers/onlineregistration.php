@@ -147,8 +147,8 @@ class onlineregistration extends CI_Controller {
             $this->load->library('upload', $config);
             $this->upload->do_upload();
             $uploadFileInfo = $this->upload->data(); 
-
-            $query1= $this->db->query("SELECT registration_fee FROM fee_structure WHERE session=date('Y')");
+            $year = date('Y');
+            $query1= $this->db->query("SELECT registration_fee FROM fee_structure WHERE session=$year");
             $data=$query1->result_array();
             foreach($data as $row){
                 $reg_fee=$row['registration_fee'];
@@ -167,7 +167,7 @@ class onlineregistration extends CI_Controller {
                 $regnbr=$this->input->post('regnum', TRUE);
                 $voucher_number=date("y").''.date("m").''.$regnbr;
                 $regdate = date('yy-m-d'); 
-                $year = date('Y');
+                
             while (true){
 
                 $studata = array(

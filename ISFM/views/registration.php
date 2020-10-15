@@ -111,7 +111,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Academic Session <span class="requiredStar"> * </span></label>
                                 <div class="col-md-6">
-                                    <input onchange="selectSession(this.value);" type="text" class="form-control a" id="session" value="<?php echo date('Y');?>"  readonly="">
+                                    <input onchange="selectSession(this.value);" type="text" class="form-control a" name="session" id="session" value="<?php echo date('Y');?>"  readonly="">
                                     <div id="ajaxResult"></div>
                                 </div>
                             </div>

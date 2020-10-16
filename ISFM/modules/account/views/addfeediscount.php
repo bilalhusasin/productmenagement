@@ -40,13 +40,22 @@ $userId = $user->id; ?>
         <!-- BEGIN PAGE CONTENT-->
           
         <div class="row">
+            <?php if($this->session->flashdata('success')){
+               echo '<div class="alert alert-success alert-dismissible">
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'
+                  .$this->session->flashdata('success').'
+               </div>';
+            } ?>
+
         <?php
-        if (!empty($successMessage)) {
-            ?>
-            <div class="col-md-12">
-                <?php echo $successMessage;?>
-            </div>
-        <?php }?>
+
+        /*if (!empty($successMessage)) {
+            
+            echo '<div class="col-md-12">'
+                .$successMessage.
+            '</div>';
+        }*/
+        ?>
             <div class="col-md-4">
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                 <div class="portlet box green">

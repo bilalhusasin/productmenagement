@@ -1648,13 +1648,16 @@ class Account extends MX_Controller {
             );    
             if ($this->db->insert('fee_discount', $fee_discount)) {  
                 $data['fee_discount'] = $this->common->getWhere('fee_discount', 'session_discount', $year);  
-                $data['message'] = '<div class="alert alert-success alert-dismissable">
+               /* $data['message'] = '<div class="alert alert-success alert-dismissable">
                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
                                 <strong>Success ! </strong>  Discount Reason Added Successfully. 
-                            </div>'; 
-                $this->load->view('temp/header');
+                            </div>'; */
+                /*$this->load->view('temp/header');
                 $this->load->view('addfeediscount', $data);
-                $this->load->view('temp/footer');
+                $this->load->view('temp/footer');*/ 
+                $this->session->set_flashdata('success', '<strong>Success ! </strong>  Discount Reason Added Successfully. ');
+                 
+                redirect('account/addfeediscount');
             }
         }
         else{ 

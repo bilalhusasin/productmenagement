@@ -30,9 +30,12 @@ $userId = $user->id; ?>
         <!-- BEGIN PAGE CONTENT-->        
         <div class="row">
             <div class="col-md-12">
-                <?php
-                    //$this->load->helper("display_message_helper");
-                    //echo error_message('alert');
+                <?php if($this->session->flashdata('success')){
+               echo '<div class="alert alert-success alert-dismissible">
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'
+                  .$this->session->flashdata('success').'
+               </div>';
+            }  
                /* if (!empty($message)) {
                     echo '<br>' . $message;
                 } */

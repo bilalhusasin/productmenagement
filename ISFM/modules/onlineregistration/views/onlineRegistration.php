@@ -63,12 +63,12 @@
                         ?>
                         <div class="form-body">
                             <?php
-                            $this->load->helper("display_message_helper");
-                            echo error_message('alert');
-                            // if (!empty($success)) {
-                            //     //echo $success;
-
-                            // } 
+                            if($this->session->flashdata('success')){
+                               echo '<div class="alert alert-success alert-dismissible">
+                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'
+                                  .$this->session->flashdata('success').'
+                               </div>';
+                            } 
                             ?>
                         <div class="row">
                             <div class="col-lg-12 " style="padding-left: 8%;"> 

@@ -254,7 +254,7 @@ $userId = $user->id; ?>
     });
   });
 </script>
- <script>  
+<script>  
 function selectYear(str){ 
         var year= document.getElementById("session_year").value; 
        // alert(year);

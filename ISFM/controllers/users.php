@@ -2037,16 +2037,6 @@ class Users extends CI_Controller {
                     'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE))
                 );
                 $this->db->insert('vouchers', $voucher_data);
-
-                /*$data['message'] = '<div class="alert alert-success alert-dismissable">
-                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
-                                <strong>Success!</strong> Student Registration Successfully processed.
-                            </div>';
-                $data['sit'] = $this->common->getAllData('account_title');
-                $data['stu'] = $this->common->getAllData('registered');
-                $this->load->view('temp/header');
-                $this->load->view('registered' , $data);
-                $this->load->view('temp/footer');*/
                 $this->session->set_flashdata('success', '<strong>Success ! </strong>  Student Registration Successfully processed. ');
                 redirect('users/reg_stu');
         }  

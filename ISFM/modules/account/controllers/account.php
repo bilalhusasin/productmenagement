@@ -1647,6 +1647,7 @@ class Account extends MX_Controller {
                 'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)), 
             );    
             if ($this->db->insert('fee_discount', $fee_discount)) {  
+                $data['class'] = $this->common->getAllData('class');
                 $data['fee_discount'] = $this->common->getWhere('fee_discount', 'session_discount', $year);  
                /* $data['message'] = '<div class="alert alert-success alert-dismissable">
                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
@@ -1661,6 +1662,7 @@ class Account extends MX_Controller {
             }
         }
         else{ 
+            $data['class'] = $this->common->getAllData('class');
             $data['fee_discount'] = $this->common->getWhere('fee_discount', 'session_discount', $year); 
             $data['special_fee_dis'] = $this->common->getWhere('special_fee_discount', 'session_discount', $year);
             $this->load->view('temp/header');
@@ -1669,26 +1671,6 @@ class Account extends MX_Controller {
         }
     }
 
-    // this function use set student Special discount
-    public function addSpecialDiscount(){
-        if($this->input->post('submit', TRUE)){
-            $special_discount = array( 
-                'session_discount' => $this->db->escape_like_str($this->input->post('year', TRUE)),
-                'special_dis_reason' => $this->db->escape_like_str($this->input->post('first_dis_reason', TRUE)),
-                //'special_admi_dis' => $this->db->escape_like_str($this->input->post('first_admi_dis', TRUE)), 
-                'special_tution_dis' => $this->db->escape_like_str($this->input->post('first_tu_dis', TRUE)),
-                'special_dis_month' => $this->db->escape_like_str($this->input->post('first_disc_month', TRUE)),  
-                'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)), 
-            );  
-           if ($this->db->insert('special_fee_discount', $special_discount)) {  
-               // $data['fee_discount'] = $this->common->getWhere('fee_discount', 'session_discount', $year);   
-                $this->session->set_flashdata('success', '<strong>Success ! </strong> Special Discount Reason Added Successfully. ');
-                 
-                redirect('account/addfeediscount');
-            }
-        }
-
-    }
     // this function use set student discount after admission 
     public function set_student_discount(){
         $year= date('Y');
@@ -1885,4 +1867,57 @@ class Account extends MX_Controller {
         $this->load->view('addfeediscount', $data);
         $this->load->view('temp/footer');
     } 
+
+    // this function use set student Special discount
+    public function addSpecialDiscount(){
+        if($this->input->post('submit', TRUE)){
+            $special_discount = array( 
+                'session_discount' => $this->db->escape_like_str($this->input->post('year', TRUE)),
+                'special_dis_reason' => $this->db->escape_like_str($this->input->post('first_dis_reason', TRUE)),
+                'discount_type' => $this->db->escape_like_str($this->input->post('class', TRUE)),
+                //'special_admi_dis' => $this->db->escape_like_str($this->input->post('first_admi_dis', TRUE)), 
+                'special_tution_dis' => $this->db->escape_like_str($this->input->post('first_tu_dis', TRUE)),
+                'special_dis_month' => $this->db->escape_like_str($this->input->post('first_disc_month', TRUE)), 
+                'status' => $this->db->escape_like_str('Active'),  
+                'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)), 
+            );  
+           if ($this->db->insert('special_fee_discount', $special_discount)) {  
+               // $data['fee_discount'] = $this->common->getWhere('fee_discount', 'session_discount', $year);   
+                $this->session->set_flashdata('success', '<strong>Success ! </strong> Special Discount Reason Added Successfully. ');
+                redirect('account/addfeediscount');
+            }
+        }
+    }
+     //this function will use edit Special discount reason 
+    public function edit_Special_discount(){
+        $year= date('Y');  
+        if($this->input->post('submit', TRUE)){
+            $spl_id = $this->input->post('spl_id', TRUE);  
+            $editdiscount = array( 
+                'session_discount' => $this->db->escape_like_str($year), 
+                'special_dis_reason' => $this->db->escape_like_str($this->input->post('first_dis_reason', TRUE)),
+                'discount_type' => $this->db->escape_like_str($this->input->post('class', TRUE)),
+                'special_tution_dis' => $this->db->escape_like_str($this->input->post('first_tu_dis', TRUE)), 
+                'special_dis_month' => $this->db->escape_like_str($this->input->post('first_disc_month', TRUE)), 
+                'status' => $this->db->escape_like_str($this->input->post('status', TRUE)), 
+                'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)), 
+            );   
+            $this->db->where('spl_id', $spl_id);
+            if ($this->db->update('special_fee_discount', $editdiscount)) {  
+                // $data['fee_discount'] = $this->common->getWhere('fee_discount', 'session_discount', $year);   
+                $this->session->set_flashdata('success', '<strong>Success ! </strong> Special Discount Reason Edit Successfully. ');
+                redirect('account/addfeediscount');
+            }
+            //redirect('account/addfeediscount', 'refresh');
+        }
+        else{
+            $id = $this->input->get('spl_id');
+            $data['class'] = $this->common->getAllData('class');
+            $data['special_discount'] = $this->common->getWhere('special_fee_discount', 'spl_id', $id); 
+            $this->load->view('temp/header');
+            $this->load->view('edit_special_discount', $data);
+            $this->load->view('temp/footer'); 
+        }
+    }
+
 }

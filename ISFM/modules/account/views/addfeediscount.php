@@ -188,7 +188,22 @@ $userId = $user->id; ?>
                         <div class="form-body">
                             <input type="hidden" name="created_by" value="<?php echo $userId; ?>">
                             <input type="hidden" name="year" value="<?php echo date('Y'); ?>">
-                            <div class="col-md-12">                          
+                            <div class="col-md-12"> 
+                                <div class="form-group">
+                                    <label class="col-md-5 control-label">Class Title</label>
+                                    <div class="col-md-7">
+                                        <select name="class" id="class" class="form-control"> 
+                                            <option value="">Select...</option> 
+                                            <option value="All Classes">All Classes</option> 
+                                        <?php 
+                                          foreach($class as $row){
+
+                                           echo '<option value="'.$row['id'].'">'.$row['class_title'].'</option>';
+                                          }
+                                        ?> 
+                                        </select>
+                                    </div>
+                                </div>                          
                                 <div class="form-group">
                                     <label class="col-md-5 control-label"> Discount Reason <span class="requiredStar"> * </span></label>
                                     <div class="col-md-7">
@@ -208,7 +223,7 @@ $userId = $user->id; ?>
                                     </div>
                                 </div> 
                                 <div class="form-group">
-                                    <label class="col-md-5 control-label"> Session <span class="requiredStar"> * </span></label>
+                                    <label class="col-md-5 control-label"> Discount Month <span class="requiredStar"> * </span></label>
                                     <div class="col-md-7">
                                         <input class="form-control" name="first_disc_month" id="first_disc_month" placeholder="select..." type="text" data-validation="required" data-validation-error-msg="Please Select Discounted Month ."> 
                                     </div>
@@ -245,8 +260,10 @@ $userId = $user->id; ?>
                                     <th>S.N.</th>
                                     <th>Session Discount</th>
                                     <th>Special Month Discount </th>
-                                    <th>Special Discount Reason</th> 
-                                    <th>Special Tution Discount %</th>  
+                                    <th>Special Discount Reason</th>
+                                    <th>Special Discount Type</th> 
+                                    <th>Special Tution Discount %</th>
+                                    <th>Special Discount Status</th>  
                                     <th>Action</th>
                                 </tr>
                             </thead> 
@@ -259,11 +276,13 @@ $userId = $user->id; ?>
                                         <td><?php echo $row['session_discount']; ?></td>
                                         <td><?php echo $row['special_dis_month']; ?></td>  
                                         <td><?php echo $row['special_dis_reason']; ?></td>
+                                        <td><?php echo $row['discount_type']; ?></td>
                                         <td><?php echo $row['special_tution_dis']; ?></td>
+                                        <td><?php echo $row['status']; ?></td>
                                         <td> 
-                                            <a class="btn btn-xs default" href="index.php/account/edit_dis_reason?id=<?php echo $row1['id'];?>" title="Edit Discount Reason"> <i class="fa fa-pencil-square-o"></i> <?php // echo lang('edit'); ?> </a>
+                                            <a class="btn btn-xs default" href="index.php/account/edit_Special_discount?spl_id=<?php echo $row['spl_id'];?>" title="Edit Special Discount Reason"> <i class="fa fa-pencil-square-o"></i><?php // echo lang('edit'); ?> </a>
                                              
-                                            <!-- <a class="btn btn-xs red" href="index.php/account/delete_discount_per?id=<?php echo $row1['id'];?>" onclick="javascript:return confirm('ARE YOU SURE YOU WANT TO DELETE THIS RECORD ')" title="Delete Discount Persentage"> <i class="fa fa-trash-o"></i> <?php // echo lang('delete'); ?> </a> --> 
+                                             
                                         </td>
                                     </tr>
                                 <?php $i++;} ?> 

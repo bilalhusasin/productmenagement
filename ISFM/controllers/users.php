@@ -2312,33 +2312,33 @@ class Users extends CI_Controller {
             $query=$this->db->query("SELECT * FROM vouchers WHERE student_ref_id='$reg_num' AND voucher_type='Registration'");
             $data1=$query->result_array();
             if(!empty($data1)){
-            $vouchers = array(
-                'voucher_status' => $this->db->escape_like_str('Paid'),
-                'created_by' => $this->db->escape_like_str($created_by),
-                'paid_time' => $this->db->escape_like_str($update),
-                
-            );
-            $this->db->where('student_ref_id', $reg_num);
-            $this->db->where('voucher_type', 'Registration');
-            $this->db->update('vouchers', $vouchers);
-           
-            $this->db->insert('patty_cash', $patty);
-            $this->db->where('reg_number', $reg_num);
-            $this->db->update('registration', $slip_data);
+                $vouchers = array(
+                    'voucher_status' => $this->db->escape_like_str('Paid'),
+                    'created_by' => $this->db->escape_like_str($created_by),
+                    'paid_time' => $this->db->escape_like_str($update),
+                    
+                );
+                $this->db->where('student_ref_id', $reg_num);
+                $this->db->where('voucher_type', 'Registration');
+                $this->db->update('vouchers', $vouchers);
+               
+                $this->db->insert('patty_cash', $patty);
+                $this->db->where('reg_number', $reg_num);
+                $this->db->update('registration', $slip_data);
 
-            $this->db->where('reg_number', $reg_num);
-            $this->db->update('registered', $slip_data);
+                $this->db->where('reg_number', $reg_num);
+                $this->db->update('registered', $slip_data);
 
-            $data['message'] = '<div class="alert alert-success alert-dismissable">
-                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
-                                <strong>WOW!</strong> Your transaction was successfully processed.
-                            </div>';
-            $data['sit'] = $this->common->getAllData('account_title');
-            $data['stu'] = $this->common->getAllData('registered');
-            $this->load->view('temp/header');
-            $this->load->view('registered', $data);
-            $this->load->view('temp/footer');
-        }
+                $data['message'] = '<div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                                    <strong>WOW!</strong> Your transaction was successfully processed.
+                                </div>';
+                $data['sit'] = $this->common->getAllData('account_title');
+                $data['stu'] = $this->common->getAllData('registered');
+                $this->load->view('temp/header');
+                $this->load->view('registered', $data);
+                $this->load->view('temp/footer');
+            }
             
         } else {
             $sid = $this->input->get('id');

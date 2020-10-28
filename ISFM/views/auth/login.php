@@ -28,8 +28,8 @@
         <link id="style_color" href="assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css"/>
         <link href="assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
         <link href="assets/admin/layout/css/formValidation.css" rel="stylesheet" type="text/css"/>
-        <!-- END THEME STYLES -->
-        <link rel="shortcut icon" href="favicon.ico"/>
+        <!-- END THEME STYLES --> 
+        <link id="favicon" rel="shortcut icon" href="assets/admin/layout/img/foretell.png" type="image/png"/>
     </head>
     <!-- BEGIN BODY -->
     <body class="login">

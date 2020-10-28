@@ -71,7 +71,7 @@ $userId = $user->id; ?>
                         ?>
                         <div class="form-body">
                             <input type="hidden" name="created_by" value="<?php echo $userId; ?>">
-                            <input type="text" name="spl_id" value="<?php echo $spl_id; ?>">
+                            <input type="hidden" name="spl_id" value="<?php echo $spl_id; ?>">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="col-md-5 control-label">Class Title</label>

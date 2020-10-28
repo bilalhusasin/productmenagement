@@ -319,7 +319,7 @@ $(document).ready(function ()
                         return '<span class="label label-sm label-success">'+row.admission_status+'</span>';
                     } else if (row.admission_status === 'Not Admitted') {
                         if (row.paid_status === 'Paid') {
-                            return '<a href="index.php/users/goForAdmissions?reg_id='+row.reg_number+'>Go For Admission</a>';
+                            return '<a href="index.php/users/goForAdmissions?reg_id='+row.reg_number+'">Go For Admission</a>';
                         } else if(row.paid_status === 'unpaid'){
                             return '<span class="label label-sm label-danger"> Pay Voucher And Go For Admission </span>';
                         }  

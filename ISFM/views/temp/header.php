@@ -28,7 +28,8 @@
         <link id="style_color" href="assets/admin/layout/css/themes/default.min.css" rel="stylesheet" type="text/css"/>
         <link href="assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
         <!-- END THEME STYLES -->
-        <link rel="shortcut icon" href="favicon.ico"/>
+        <link id="favicon" rel="shortcut icon" href="assets/admin/layout/img/foretell.png" type="image/png"/>
+
         <script src="assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>

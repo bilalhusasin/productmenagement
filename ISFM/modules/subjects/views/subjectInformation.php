@@ -61,6 +61,9 @@
                                     <th>
                                         &nbsp;
                                     </th>
+                                    <th>
+                                        Delete All Subjact
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,6 +77,9 @@
                                     </td>
                                     <td>
                                         <a class="btn btn-xs green viewSubjectButton" href="index.php/subjects/classSubjectDetails?c_id=<?php echo $row['id']; ?>"> <i class="fa fa-bars"></i>&nbsp;&nbsp; <?php echo lang('sub_view_subjec'); ?> </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-xs red " href="index.php/subjects/AllclassSubjectDelete?c_id=<?php echo $row['id']; ?>" onClick="javascript:return confirm('Are you sure you want to delete this class Subjects?')"> <i class="fa fa-bars"></i>&nbsp;&nbsp; All Subject Delete Class Wise </a>
                                     </td>
                                 </tr>
                                 <?php } ?>

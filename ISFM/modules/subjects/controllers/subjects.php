@@ -113,6 +113,24 @@ class Subjects extends MX_Controller {
 
         redirect('subjects/allSubject', 'refresh'); 
      }
+// this function delete all subject title in class wise
+    public function AllclassSubjectDelete(){ 
+        $class_id = $this->input->get('c_id');
+        
+        if($this->db->delete('class_subject', array('class_id' => $class_id))){
+            $data['SubjectInfo'] = $this->common->getAllData('class');
+            $data['message'] = '<div class="alert alert-success alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                                <strong>Success ! </strong>All Subject Info delete Successfully. 
+                            </div>';
+            $this->load->view('temp/header');
+            $this->load->view('subjectInformation', $data);
+            $this->load->view('temp/footer'); 
+        } 
+
+        //redirect('subjects/allSubject', 'refresh'); 
+    }
+
     //This function will set students optional subject
     public function set_optional() {
         if ($this->input->post('submit', TRUE)) {

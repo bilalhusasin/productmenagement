@@ -1144,6 +1144,7 @@ class Account extends MX_Controller {
                 $crntdate =date('Y-m-d');
                 $crntMonth =date('F'); //September
                 $crntYear =date('Y');
+                
                 foreach ($m_t_fee as $row1) {
                     $item_id[] = $row1['id'];
                 if($crntMonth=='January'){

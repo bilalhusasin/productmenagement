@@ -128,6 +128,7 @@
                         $issue_date = $row['reg_date'];
                         $due_date = $row['due_date'];
                         $reg = $this->common->reg($row['id']);
+                        $status = $row['status'];
                          
                     } ?> 
                       <div class="col-md-4 table_print" style="font-size: xx-small;" >
@@ -161,8 +162,8 @@
                                 <tr> 
                                     <td >Session:</td>
                                     <th ><?php echo $session; ?> </th>
-                                    <td> </td>
-                                    <th> </th>
+                                    <td colspan="2" align="center" class="<?php if($status=='Paid'){echo 'text-success';} elseif($status=='Unpaid'){echo 'text-danger';} ?>"> <b><?php echo $status; ?> </b></td>
+                                     
                                 </tr>
                                 <tr> 
                                     <td >Issue date :</td>
@@ -273,8 +274,7 @@
                                 <tr> 
                                     <td >Session:</td>
                                     <th ><?php echo $session; ?> </th>
-                                    <td> </td>
-                                    <th> </th>
+                                    <td colspan="2" align="center" class="<?php if($status=='Paid'){echo 'text-success';} elseif($status=='Unpaid'){echo 'text-danger';} ?>"> <b><?php echo $status; ?> </b></td>
                                 </tr>
                                 <tr> 
                                     <td >Issue date :</td>
@@ -385,8 +385,7 @@
                                 <tr> 
                                     <td >Session:</td>
                                     <th ><?php echo $session; ?> </th>
-                                    <td> </td>
-                                    <th> </th>
+                                    <td colspan="2" align="center" class="<?php if($status=='Paid'){echo 'text-success';} elseif($status=='Unpaid'){echo 'text-danger';} ?>"> <b><?php echo $status; ?> </b></td>
                                 </tr>
                                 <tr> 
                                     <td >Issue date :</td>

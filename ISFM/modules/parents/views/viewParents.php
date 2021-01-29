@@ -31,30 +31,14 @@
         <!-- BEGIN PAGE CONTENT-->
          <div class="row">
             <!---Start Left Site Content-->
-            <div class="col-md-8">
-                <div class="col-md-3">
-                    <ul class="ver-inline-menu tabbable margin-bottom-10">
-                        <li class="detailsPicture">
-                            <img alt="" class="img-responsive" src="assets/uploads/<?php echo $photo; ?>">
-                        </li>  
-                        <li>  
-                          <span class="after"> </span>
-                        </li> 
-                        <li>
-                            <a href="javascript:history.back()">
-                                <i class="fa fa-mail-reply-all"></i> <?php echo lang('back'); ?> </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-9 stuInfoTableBG">
+            <div class="col-md-12">
+                <div class="col-md-8 stuInfoTableBG">
                     <div class="row">
                         <div class="col-md-12 profile-info">
 
                                 <?php
-                                  echo $section;
-
+                                  //echo $section;
                                     foreach($perants_info as $row){
-
                                         $id            =$row['id'];
                                         $student_id    =$row['student_id'];
                                         $parents = $row['parents_name'];
@@ -63,21 +47,19 @@
                                         $password      =$row['dempass'];
                                         $Relation      =$row['relation'];
                                         $cell_number   =$row['phone'];
-
                                     }  
-
                                 ?>
                              
                                 <h1 class="teacherTitleFont"><b><?php  echo $parents; ?></b></h1>
                                 
                                 <div class="row">
                                     <div class="col-sm-4 col-xs-6 detailsEvent">
-                                        Student ID 
+                                        Parents CNIC # 
                                         <span>: </span>
                                     </div>
 
                                     <div class="col-sm-6 col-xs-6 detailsEvent">
-                                        <?php  echo $row['student_id']; ?>
+                                        <?php  echo $row['parents_cnic']; ?>
                                     </div>
                                 </div>
                                 <!-- <div class="row">
@@ -101,7 +83,7 @@
                                        <span>: </span>
                                    </div>
                                    <div class="col-sm-6 col-xs-6 detailsEvent">
-                                       <?php echo $password; ?>
+                                       <?php // echo $password; ?>*********
                                    </div>
                                 </div>  
                                 <div class="row">
@@ -126,6 +108,20 @@
                     </div>
                     <!--end row-->
                 </div>
+                <div class="col-md-4">
+                    <ul class="ver-inline-menu tabbable margin-bottom-10">
+                        <li class="detailsPicture">
+                            <img alt="" class="img-responsive" src="assets/uploads/<?php echo $photo; ?>">
+                        </li>  
+                        <li>  
+                          <span class="after"> </span>
+                        </li> 
+                        <li>
+                            <a href="javascript:history.back()">
+                                <i class="fa fa-mail-reply-all"></i> <?php echo lang('back'); ?> </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <!---End Left Site Content-->
             <!---Start Right Site Content-->
@@ -133,6 +129,52 @@
                  
             </div>
             <!---Start Rigth Site Content-->
+        </div>
+        <!-- END PAGE CONTENT-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <!---Start Left Site Content-->
+        <?php
+        //echo $section;
+            foreach($student_info as $row){ 
+        ?>
+            <div class="col-md-4 stuInfoTableBG"> 
+                <div class="col-md-12 stuInfoTableBG">  
+                    <h4 class="teacherTitleFont"><b><?php  echo $row['student_nam']; ?></b></h4>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-6 detailsEvent"> Student ID # <span>: </span></div>
+                        <div class="col-sm-6 col-xs-6 detailsEvent">
+                            <?php  echo $row['student_id']; ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-6 detailsEvent"> Student Class <span>: </span></div>
+                        <div class="col-sm-6 col-xs-6 detailsEvent">
+                            <?php  echo $row['class_title']; ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-6 detailsEvent"> Class Section <span>: </span></div>
+                        <div class="col-sm-6 col-xs-6 detailsEvent">
+                            <?php  echo $row['section']; ?>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-6 detailsEvent"> Father Name <span>: </span></div>
+                        <div class="col-sm-6 col-xs-6 detailsEvent">
+                            <?php  echo $row['farther_name']; ?>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-6 detailsEvent"> Mother Name <span>: </span></div>
+                        <div class="col-sm-6 col-xs-6 detailsEvent">
+                            <?php  echo $row['mother_name']; ?>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        <?php } ?>
+            <!---End Left Site Content--> 
         </div>
         <!-- END PAGE CONTENT-->
     </div>

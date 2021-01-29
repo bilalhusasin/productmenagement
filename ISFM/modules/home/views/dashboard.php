@@ -27,6 +27,7 @@
         $user = $this->ion_auth->user()->row();
         $userId = $user->id;
         ?>
+        
         <!-- BEGIN DASHBOARD-->
         <?php if ($this->common->user_access('das_top_info', $userId)) { ?>
             <div class="row">
@@ -103,6 +104,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="clearfix"></div>
         <?php } //if($this->ion_auth->is_accountant()){?>
             <!-- <div class="row">

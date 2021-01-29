@@ -317,8 +317,8 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Father CNIC No <?php // echo lang('admi_PhoneNumber'); ?> <span class="requiredStar"> * </span></label> 
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control m" name="father_cnic" id="father_cnic" placeholder=""  data-validation="required" data-validation-error-msg="<?php echo 'Father CNIC Number is Required'; ?>">
-                                    <span class="help-block"> 12345-1234567-8</span>
+                                    <input type="text" class="form-control m" name="father_cnic" id="father_cnic" placeholder=""  data-validation="required" data-validation-error-msg="<?php echo 'Father CNIC Number is Required'; ?>" maxlength="15">
+                                    <span class="help-block"> xxxxx-xxxxxxx-x </span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -362,7 +362,7 @@
                                         <input type="text" class="form-control pc" name="phoneCode" id="phoneCode" placeholder="+92"  data-validation="required" data-validation-error-msg="<?php echo 'Phone Number field is Required'; ?>" value="<?php if(!empty($countryPhoneCode)){echo $countryPhoneCode;}?>">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" class="form-control pn" name="phone" id="phone" placeholder="" data-validation="required" data-validation-error-msg="<?php echo 'Phone Number field is Required'; ?>">
+                                        <input type="text" class="form-control pn" name="phone" id="phone" placeholder="" data-validation="required" data-validation-error-msg="<?php echo 'Phone Number field is Required'; ?>" maxlength="10"  onkeypress="return /[0-9]/i.test(event.key)" >
                                         <span class="help-block">
                                             300 1234567</span>
                                     </div>
@@ -376,8 +376,8 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Mother CNIC No <?php // echo lang('admi_PhoneNumber'); ?> <span class="requiredStar"> * </span></label> 
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control r" name="mother_cnic" placeholder=""  data-validation="required" data-validation-error-msg="<?php echo 'Mother CNIC Number is Required'; ?>">
-                                    <span class="help-block"> 12345-1234567-8</span>
+                                    <input type="text" class="form-control r" name="mother_cnic" id="mother_cnic" placeholder=""  data-validation="required" data-validation-error-msg="<?php echo 'Mother CNIC Number is Required'; ?>" maxlength="15">
+                                    <span class="help-block"> xxxxx-xxxxxxx-x</span>
                                 </div>
                             </div> 
                             <div class="form-group">
@@ -413,7 +413,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Ph. Office  <?php // echo lang('admi_PhoneNumber'); ?> <!-- <span class="requiredStar"> * </span> --></label> 
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control u" name="mother_ph_office" placeholder="" >
+                                    <input type="text" class="form-control u" name="mother_ph_office" placeholder="" maxlength="11" onkeypress="return /[0-9]/i.test(event.key)">
                                     <!-- data-validation="required" data-validation-error-msg="" -->
                                     <span class="help-block"> 0300-1234567</span>
                                 </div>
@@ -438,6 +438,13 @@
                                 <label class="col-md-3 control-label">Guardian Last Name <span class="requiredStar"> * </span></label>
                                 <div class="col-md-6">
                                     <input type="text" class="form-control ln1" name="guardian_last_name" placeholder="" data-validation="required" data-validation-error-msg="<?php echo lang('admi_FatherName_error'); ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Guardian CNIC # <?php // echo lang('admi_PhoneNumber'); ?> <span class="requiredStar"> * </span></label> 
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="guardian_cnic" id="guardian_cnic" placeholder="" data-validation="required" maxlength="15"data-validation-error-msg="<?php echo 'Guardian CNIC Number is Required'; ?>">
+                                    <span class="help-block"> xxxxx-xxxxxxx-x </span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -476,7 +483,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Ph. Res. </label> 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control lp" name="guardian_ph_res" placeholder="">
+                                    <input type="text" class="form-control lp" name="guardian_ph_res" placeholder="" maxlength="11" onkeypress="return /[0-9]/i.test(event.key)">
                                     <!-- data-validation="required" data-validation-error-msg="" -->
                                     <span class="help-block">0300-1234567</span>
                                 </div>
@@ -484,19 +491,19 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Ph. Office </label> 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control lo" name="guardian_ph_office" placeholder=""> 
+                                    <input type="text" class="form-control lo" name="guardian_ph_office" placeholder="" maxlength="11" onkeypress="return /[0-9]/i.test(event.key)"> 
                                     <span class="help-block">0300-1234567</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Mobile <span class="requiredStar"> * </span></label> 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control lm" name="guardian_mobile" placeholder=""  data-validation="required" data-validation-error-msg="">
+                                    <input type="text" class="form-control lm" name="guardian_mobile" placeholder=""  data-validation="required" data-validation-error-msg="" maxlength="11" onkeypress="return /[0-9]/i.test(event.key)">
                                     <span class="help-block">0300-1234567</span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-md-2 control-label">  <input type="checkbox" class="form-control check" name="term_condition" placeholder=""  data-validation="required" value="agree" data-validation-error-msg="<?php echo 'This Field is Required'; ?>"> </div> 
+                                <div class="col-md-2 control-label">  <input type="checkbox" class="check" name="term_condition" placeholder=""  data-validation="required" value="agree" data-validation-error-msg="<?php echo 'This Field is Required'; ?>"> </div> 
                                 <div class="col-md-7"> 
                                     I undertake that my child shall abide by all the School Rules and Regulations in letter and spirit. In case of any dispute, the decision of the School shall be final and acceptable to me and my child. I also undertake to pay the annually 5% enhanced tuition fee, as expected, every year.
                                 </div>
@@ -910,6 +917,56 @@ toValidate.keyup(function () {
         }
     }
     
+</script>
+<script>
+    $('#guardian_cnic').keydown(function(){
+
+  //allow  backspace, tab, ctrl+A, escape, carriage return
+  if (event.keyCode == 8 || event.keyCode == 9 
+                    || event.keyCode == 27 || event.keyCode == 13 
+                    || (event.keyCode == 65 && event.ctrlKey === true) )
+                        return;
+  if((event.keyCode < 48 || event.keyCode > 57))
+   event.preventDefault();
+
+  var length = $(this).val().length; 
+              
+  if(length == 5 || length == 13)
+   $(this).val($(this).val()+'-');
+
+ }); 
+    $('#father_cnic').keydown(function(){
+
+  //allow  backspace, tab, ctrl+A, escape, carriage return
+  if (event.keyCode == 8 || event.keyCode == 9 
+                    || event.keyCode == 27 || event.keyCode == 13 
+                    || (event.keyCode == 65 && event.ctrlKey === true) )
+                        return;
+  if((event.keyCode < 48 || event.keyCode > 57))
+   event.preventDefault();
+
+  var length = $(this).val().length; 
+              
+  if(length == 5 || length == 13)
+   $(this).val($(this).val()+'-');
+
+ });
+ $('#mother_cnic').keydown(function(){
+
+  //allow  backspace, tab, ctrl+A, escape, carriage return
+  if (event.keyCode == 8 || event.keyCode == 9 
+                    || event.keyCode == 27 || event.keyCode == 13 
+                    || (event.keyCode == 65 && event.ctrlKey === true) )
+                        return;
+  if((event.keyCode < 48 || event.keyCode > 57))
+   event.preventDefault();
+
+  var length = $(this).val().length; 
+              
+  if(length == 5 || length == 13)
+   $(this).val($(this).val()+'-');
+
+ }); 
 </script>
 <!-- END PAGE LEVEL script
     

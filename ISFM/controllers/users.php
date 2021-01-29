@@ -47,7 +47,7 @@ class Users extends CI_Controller {
             $curyear = date('Y');
             $curmonth = date('F');
             $curdate = date('Y-m-d');
-                $studentsInfo = array(
+            $studentsInfo = array(
                     'year' => $this->db->escape_like_str($curyear),
                     'admi_month' =>$this->db->escape_like_str($curmonth),
                     // 'user_id' => $this->db->escape_like_str($userid),
@@ -62,10 +62,14 @@ class Users extends CI_Controller {
                     'class_title' => $this->db->escape_like_str($class_title),
                     'section' => $this->db->escape_like_str($this->input->post('section', TRUE)),
                     'farther_name' => $this->db->escape_like_str($this->input->post('father_name', TRUE)),
+                    'father_cnic' => $this->db->escape_like_str($this->input->post('father_cnic', TRUE)),
                     'mother_name' => $this->db->escape_like_str($this->input->post('mother_name', TRUE)),
+                    'mother_cnic' => $this->db->escape_like_str($this->input->post('mother_cnic', TRUE)),
                     'guardian_name' => $this->db->escape_like_str($guardian_name),
                     'guardian_first_name' => $this->db->escape_like_str($this->input->post('guardian_first_name', TRUE)),
                     'guardian_last_name' => $this->db->escape_like_str($this->input->post('guardian_last_name', TRUE)),
+                    'guardian_cnic' => $this->db->escape_like_str($this->input->post('guardian_cnic', TRUE)),
+
                     'guardian_relationship' => $this->db->escape_like_str($this->input->post('guardian_relationship', TRUE)),
                     'guardian_qualification' => $this->db->escape_like_str($this->input->post('guardian_qualification', TRUE)),
                     'gender' => $this->db->escape_like_str($this->input->post('sex', TRUE)),
@@ -118,12 +122,14 @@ class Users extends CI_Controller {
                         'roll_number' => $this->db->escape_like_str($this->input->post('roll_number', TRUE)), 
                         'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)),
                          ); 
+
                         $this->db->where('reg_number', $reg_number);
                         $this->db->update('student_fee_discount', $stu_fee_dis);
                         $voucherInfo = array(   
                         'student_ref_id' => $this->db->escape_like_str($this->input->post('student_id', TRUE)),  
                         'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)),
-                         ); 
+                         );
+
                         $this->db->where('student_ref_id', $reg_number);
                         $this->db->where('voucher_type', 'Admission');
                         $this->db->update('vouchers', $voucherInfo);
@@ -131,6 +137,7 @@ class Users extends CI_Controller {
                         'admission_status' => $this->db->escape_like_str('Admitted'),  
                         'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)),
                          ); 
+
                         $this->db->where('reg_number', $reg_number); 
                         $this->db->update('register_pass', $pass_data);     
                         $studentAmount = $this->common->classStudentAmount($class_id);
@@ -138,12 +145,13 @@ class Users extends CI_Controller {
                             'student_amount' => $this->db->escape_like_str($studentAmount),
                             'created_by' => $this->db->escape_like_str($this->input->post('created_by', TRUE)),
                         );
+
                         $this->db->where('id', $class_id);
                         if ($this->db->update('class', $clas_info)) { 
                                 $data['success'] = '<div class="alert alert-info alert-dismissable admisionSucceassMessageFont">
-                                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
-                                                        <strong>Success!</strong> The student admitted successfully.
-                                                    </div>';
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                                <strong>Success!</strong> The student admitted successfully.
+                                </div>';
                                 //Load the admission form again for new student. 
                                 $data['s_class'] = $this->common->getAllData('class');
                                 $this->load->view('temp/header');
@@ -958,7 +966,7 @@ class Users extends CI_Controller {
     function addParents() {
         if ($this->input->post('submit', TRUE)) {
             $username = $this->input->post('first_name') . ' ' . $this->input->post('last_name');
-            $email = strtolower($this->input->post('email', TRUE));
+            $email = strtolower($this->input->post('email', TRUE)); 
             $password = $this->input->post('password', TRUE);
             //Here is uploading the student's photo.
             $config['upload_path'] = './assets/uploads/';
@@ -977,23 +985,25 @@ class Users extends CI_Controller {
             $additional_data = array(
                 'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
                 'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
+                'user_cnic' => $this->db->escape_like_str($this->input->post('guardian_cnic', TRUE)),
                 'phone' => $this->db->escape_like_str($phone),
                 'profile_image' => $this->db->escape_like_str($uploadFileInfo['file_name'])
-            );
+            ); 
             $group_ids = array(
                 'group_id' => $this->db->escape_like_str(5)
-            );
+            );  
             if ($this->ion_auth->register($username, $password, $email, $additional_data, $group_ids)) {
                 //This the next user id in users table. If we " -1 " from it we can get current user id 
                 $userid = $this->common->usersId();
                 $additionalData1 = array(
                     'year'=>$this->db->escape_like_str($year),
                     'user_id' => $this->db->escape_like_str($userid),
-                    'roll_number' => $this->db->escape_like_str($this->input->post('roll_number', TRUE)),
-                    'student_id' => $this->db->escape_like_str($this->input->post('studentId', TRUE)),
-                    'class_id' => $this->db->escape_like_str($this->input->post('class_id', TRUE)),
-                    'class_title' => $this->db->escape_like_str($this->input->post('class_title', TRUE)),
-                    'section' => $this->db->escape_like_str($this->input->post('section', TRUE)),
+                    //'roll_number' => $this->db->escape_like_str($this->input->post('roll_number', TRUE)),
+                    //'student_id' => $this->db->escape_like_str($this->input->post('studentId', TRUE)),
+                    //'class_id' => $this->db->escape_like_str($this->input->post('class_id', TRUE)),
+                    //'class_title' => $this->db->escape_like_str($this->input->post('class_title', TRUE)),
+                    //'section' => $this->db->escape_like_str($this->input->post('section', TRUE)),
+                    'parents_cnic' => $this->db->escape_like_str($this->input->post('guardian_cnic', TRUE)),
                     'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
                     'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
                     'parents_name' => $this->db->escape_like_str($username),
@@ -1002,16 +1012,16 @@ class Users extends CI_Controller {
                     'phone' => $this->db->escape_like_str($phone),
                     'photo'=> $this->db->escape_like_str($uploadFileInfo['file_name']),
                     'dempass'=> $this->db->escape_like_str($password)
-                );
+                );   
                 $this->db->insert('parents_info', $additionalData1);
                 $parents_access = array(
                     'user_id' => $this->db->escape_like_str($userid),
                     'group_id' => $this->db->escape_like_str(5),
-                    'das_top_info' => $this->db->escape_like_str(0),
-                    'das_grab_chart' => $this->db->escape_like_str(0),
-                    'das_class_info' => $this->db->escape_like_str(0),
+                    'das_top_info' => $this->db->escape_like_str(1),
+                    'das_grab_chart' => $this->db->escape_like_str(1),
+                    'das_class_info' => $this->db->escape_like_str(1),
                     'das_message' => $this->db->escape_like_str(1),
-                    'das_employ_attend' => $this->db->escape_like_str(0),
+                    'das_employ_attend' => $this->db->escape_like_str(1),
                     'das_notice' => $this->db->escape_like_str(1),
                     'das_calender' => $this->db->escape_like_str(1),
                     'admission' => $this->db->escape_like_str(0),
@@ -1052,7 +1062,7 @@ class Users extends CI_Controller {
                     'exam_gread' => $this->db->escape_like_str(0),
                     'add_exam_routin' => $this->db->escape_like_str(0),
                     'all_exam_routine' => $this->db->escape_like_str(0),
-                    'own_exam_routine' => $this->db->escape_like_str(1),
+                    'own_exam_routine' => $this->db->escape_like_str(0),
                     'exam_attend_preview' => $this->db->escape_like_str(0),
                     'approve_result' => $this->db->escape_like_str(0),
                     'view_result' => $this->db->escape_like_str(1),
@@ -1065,7 +1075,7 @@ class Users extends CI_Controller {
                     'all_category' => $this->db->escape_like_str(1),
                     'edit_delete_category' => $this->db->escape_like_str(0),
                     'add_books' => $this->db->escape_like_str(0),
-                    'all_books' => $this->db->escape_like_str(1),
+                    'all_books' => $this->db->escape_like_str(0),
                     'edit_delete_books' => $this->db->escape_like_str(0),
                     'add_library_mem' => $this->db->escape_like_str(0),
                     'memb_list' => $this->db->escape_like_str(0),
@@ -1079,6 +1089,7 @@ class Users extends CI_Controller {
                     'all_transport' => $this->db->escape_like_str(1),
                     'transport_edit_dele' => $this->db->escape_like_str(0),
                     'add_account_title' => $this->db->escape_like_str(0),
+                    'student_reports' => $this->db->escape_like_str(1),
                     'edit_dele_acco' => $this->db->escape_like_str(0),
                     'trensection' => $this->db->escape_like_str(0),
                     'fee_collection' => $this->db->escape_like_str(0),
@@ -1102,6 +1113,7 @@ class Users extends CI_Controller {
                     'other_setting' => $this->db->escape_like_str(0),
                     'front_setings' => $this->db->escape_like_str(0),
                 );
+           
                 if ($this->db->insert('role_based_access', $parents_access)) {
                     //check to see if we are creating the user
                     //redirect them back to the admin page
@@ -1111,14 +1123,15 @@ class Users extends CI_Controller {
 
                     $data['s_class'] = $this->common->getAllData('class');
                     $data['success'] = '<div class="col-md-12"><div class="alert alert-info alert-dismissable admisionSucceassMessageFont">
-                                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
-                                                        <strong>Success!</strong> The parents profile made successfully.
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                        <strong>Success!</strong> The parents profile made successfully.
                                                 </div></div>';
                     $this->load->view('temp/header');
                     $this->load->view('parents', $data);
                     $this->load->view('temp/footer');
                 }
             }
+
         } else {
             $query = $this->common->countryPhoneCode();
             $data['countryPhoneCode'] = $query->countryPhonCode;
@@ -1130,18 +1143,23 @@ class Users extends CI_Controller {
     }
 
     //This function will give the student information from studentID
-    public function studentInfoById() {
-        $studentId = $this->input->get('q', TRUE);
-        $query = $this->common->stuInfoId($studentId);
+    public function studentInfoByCnic() {
+        $gCnic = $this->input->get('q', TRUE); 
+        $query = $this->common->stuInfoByCnic($gCnic);
+        /*echo "<pre>";
+        print_r($query);
+        echo "</pre>";
+        die;*/
+       // $studentId = $query->student_id; 
     if (empty($query)) {
-            echo '<div class="form-group">
-                    <label class="col-md-3 control-label"></label>
-                        <div class="col-md-6">
-                        <div class="alert alert-danger">
-                            <strong>Info:</strong> This student ID <strong>' . $studentId . '</strong> is not matching in our student\'s list.
-                    </div></div></div>';
-    } else {
-        if(!empty($query)){
+        echo '<div class="form-group">
+            <label class="col-md-3 control-label"></label>
+                <div class="col-md-6">
+                <div class="alert alert-danger">
+                    <strong>Info:</strong> This Guardian CNIC <strong>' . $gCnic . '</strong> is not matching in our student\'s list.
+                </div></div></div>';
+    }   else {
+        /*if(!empty($query)){
             $q=$this->db->query("SELECT student_id FROM student_info WHERE student_id='$studentId' AND status='Schoolleft'");
             $q=$q->result_array();
           if($q){
@@ -1151,78 +1169,91 @@ class Users extends CI_Controller {
                     <div class="alert alert-danger">
                         <strong>Info:</strong> This Student ID <strong>' . $studentId . '</strong> Left out Our School.
                 </div></div></div>';
-          }else{
-            $query1=$this->db->query("SELECT student_id FROM parents_info WHERE student_id='$studentId'");
+          }else{*/
+            $query1=$this->db->query("SELECT parents_cnic FROM parents_info WHERE parents_cnic='$gCnic'");
             $data=$query1->result_array();
             if(!empty($data)){
                 echo '<div class="form-group">
                 <label class="col-md-3 control-label"></label>
                     <div class="col-md-6">
                     <div class="alert alert-danger">
-                        <strong>Info:</strong> This Student ID <strong>' . $studentId . '</strong> <br><strong>Parents</strong> information is already access list.
+                        <strong>Info:</strong> This CNIC <strong>' . $gCnic . '</strong> <br><strong>Parents</strong> information is already access list.
                 </div></div></div>';
             }
             else{
-                echo '<div class="col-md-9 col-md-offset-1 stuInfoIdBox">
-                    <div class="col-md-10">
+
+                echo '<div class="col-md-12 stuInfoIdBox">';
+                   
+                     foreach ($query as $key) {
+                    echo '<div class="col-md-4 ">
                         <div class="form-group">
-                            <label class="col-md-3 control-label">Student\'s Name </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" name="studentName" value="' . $query->student_nam . '" readonly>
+                            <label class="col-md-6 control-label">Student\'s ID </label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="studentId" value="' . $key['student_id'] . '" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label">Father\'s Name </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" name="fahtername" value="' . $query->farther_name . '" readonly>
+                            <label class="col-md-6 control-label">Student\'s Name </label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="studentName" value="' . $key['student_nam'] . '" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label">Class </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" name="class_title" value="' . $this->common->class_title($query->class_id) . '" readonly>
+                            <label class="col-md-6 control-label">Father\'s Name </label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="fahtername" value="' . $key['farther_name'] . '" readonly>
                             </div>
                         </div>
-                        <input type="hidden" name="class_id" value="' . $query->class_id . '">
-                        <input type="hidden" name="roll_number" value="' . $query->roll_number . '">
                         <div class="form-group">
-                            <label class="col-md-3 control-label">Section </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" name="section" value="' . $query->section . '" readonly>
+                            <label class="col-md-6 control-label">Class </label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="class_title" value="' . $this->common->class_title($key['class_id']) . '" readonly>
                             </div>
                         </div>
+                        <input type="hidden" name="class_id" value="' . $key['class_id'] . '">
+                        <input type="hidden" name="roll_number" value="' . $key['roll_number'] . '">
+                        <div class="form-group">
+                            <label class="col-md-6 control-label">Section </label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="section" value="' . $key['section'] . '" readonly>
+                            </div>
+                        </div>
+                    </div>';
+
+                     } 
+                   echo '<div class="col-md-10">
                         <div class="form-group">
                             <label class="col-md-3 control-label"> '. lang("par_gafn").' </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" value="' . $query->guardian_first_name . '" name="first_name" readonly>
+                                <input type="text" class="form-control" value="' . $query[0]['guardian_first_name'] . '" name="first_name" readonly>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label"> '. lang("par_galn").' </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" value="' . $query->guardian_last_name . '" name="last_name" readonly>
+                                <input type="text" class="form-control" value="' . $query[0]['guardian_last_name'] . '" name="last_name" readonly>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label">Guardian Relation </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="guardianRelation" value="' . $query->guardian_relationship . '" readonly>
+                                <input type="text" class="form-control" name="guardianRelation" value="' . $query[0]['guardian_relationship'] . '" readonly>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label">Guardian Mobile </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="phone" value="' . $query->guardian_mobile . '" readonly>
+                                <input type="text" class="form-control" name="phone" value="' . $query[0]['guardian_mobile'] . '" readonly>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <img src="assets/uploads/' . $query->student_photo . '" class="img-responsive" alt=""><br>
+                        <img src="assets/uploads/' . $query[0]['student_photo'] . '" class="img-responsive" alt=""><br>
                     </div>
                 </div>';
                 }
-              }
-            }    
+           // }
+        //}    
         }
     }
 
@@ -2287,19 +2318,18 @@ class Users extends CI_Controller {
                 'month' => $this->db->escape_like_str($month),
                 'status' => $this->db->escape_like_str($stu),
                 'mathod' => $this->db->escape_like_str($method),
-            );
-            $regs = $this->common->reg_data($class_id);
-            $name = $this->common->name_data($class_id);
+            ); 
+            //$regs = $this->common->reg_data($class_id);
+            //$name = $this->common->name_data($class_id);
             $patty = array(
                 'class_id' => $this->db->escape_like_str($class_id),
-                'name' => $this->db->escape_like_str($name),
-                'reg_number' => $this->db->escape_like_str($regs),
+                //'name' => $this->db->escape_like_str($name),
+                'reg_number' => $this->db->escape_like_str($reg_num),
                 'status' => $this->db->escape_like_str($stu),
                 'cash' => $this->db->escape_like_str($amount),
                 'voucher_type' => $this->db->escape_like_str('Registration'),
                 'created_by' => $this->db->escape_like_str($created_by),
-            );
-
+            ); 
             $slip_data = array(
                 'total' => $this->db->escape_like_str($total),
                 'paid' => $this->db->escape_like_str($paid),
@@ -2307,7 +2337,7 @@ class Users extends CI_Controller {
                 'mathod' => $this->db->escape_like_str($method),
                 'account_name' => $this->db->escape_like_str($account_name),
                 'created_by' => $this->db->escape_like_str($created_by),
-            );
+            ); 
     // this array update vouchers table data 
             $query=$this->db->query("SELECT * FROM vouchers WHERE student_ref_id='$reg_num' AND voucher_type='Registration'");
             $data1=$query->result_array();

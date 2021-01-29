@@ -61,7 +61,7 @@
                     <i class="fa fa-envelope"></i>
                     <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email"/>
                 </div>
-            </div>
+            </div> 
             <div class="form-actions">
                 <button type="button" id="back-btn" class="btn" onclick="location.href = 'index.php/auth/login'">
                     <i class="m-icon-swapleft"></i> Back </button>
@@ -77,7 +77,7 @@
     <!-- END LOGIN -->
     <!-- BEGIN COPYRIGHT -->
     <div class="copyright">
-       <?php echo date("Y");?> &copy; <a href="http://bftech.co.uk/" target="_blank" style="color:#fff;">BFTech.</a> All Rights Reserved.
+       <?php echo date("Y");?> &copy; <a href="http://bftech.uk/" target="_blank" style="color:#fff;">BFTech.</a> All Rights Reserved.
     </div>
     <!-- END COPYRIGHT -->
     <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

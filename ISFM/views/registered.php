@@ -90,7 +90,7 @@ $userId = $user->id; ?>
                                             if($status=='Unpaid'){
                                                 echo '<a href="index.php/users/vouch?regnum=' .$reg_number.'">Genrate Registration Fee voucher </a>';
                                             } else {
-                                               echo '<span class="label label-sm label-success" id="status"> Registration Fee Clear</span>';
+                                               echo '<a href="index.php/users/vouch?regnum=' .$reg_number.'"><span class="label label-sm label-success" id="status"> Registration Fee Clear</span></a>';
                                             }?>
                                             
                                         </td>

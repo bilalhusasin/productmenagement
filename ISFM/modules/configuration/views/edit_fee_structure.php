@@ -110,9 +110,9 @@ $userId = $user->id; ?>
                                         <input type="text" name="annual_fund" value="<?php echo $row['annual_fund']; ?>" class="form-control">
                                     </div>
                                 </div>
-                                <input type="text" name="session" value="<?php echo $row['session']; ?>">
-                                <input type="text" name="item_id" value="<?php echo $row['id']; ?>">
-                                <input type="text" name="created_by" value="<?php echo $userId; ?>">
+                                <input type="hidden" name="session" value="<?php echo $row['session']; ?>" readonly="">
+                                <input type="hidden" name="item_id" value="<?php echo $row['id']; ?>" readonly="">
+                                <input type="hidden" name="created_by" value="<?php echo $userId; ?>" readonly="">
 
                             </div>
                             <?php } ?>

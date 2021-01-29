@@ -879,7 +879,7 @@
                                                         </a>
                                                     </li>
                                                 <?php  } if ($this->common->user_access('combine_mark_sheet', $userId)) { ?>
-                                                    <li class="nav-item <?php echo $Combinemarksheet; ?>">
+                                                    <li class="nav-item <?php echo $Combinemarksheet;?>">
                                                         <a href="index.php/examination/combineClassMarksheet" class="nav-link ">
                                                             <span class="title"> Combine Mark Sheet </span>
                                                         </a>
@@ -890,12 +890,13 @@
                                                             <span class="title"><?php echo lang('header_my_mar_shee'); ?></span>
                                                         </a>
                                                     </li>
-                                                <?php } ?>
+                                                <?php } if ($this->common->user_access('view_result', $userId)){ ?>
                                                     <li class="nav-item <?php echo $fullclassresult; ?>">
                                                         <a href="index.php/examination/selectClassSection" class="nav-link ">
                                                             <span class="title"> Full Class Result</span>
                                                         </a>
-                                                    </li>     
+                                                    </li> 
+                                                <?php }?>    
                                             </ul>           
                                         </li>
                                     <?php } if ($this->common->user_access('make_suggestion', $userId) || $this->common->user_access('all_suggestion', $userId)) { ?>
@@ -993,13 +994,13 @@
                                                             <span class="title"><?php echo lang('header_stu_info'); ?></span>
                                                         </a>
                                                     </li>
-                                                <?php } ?>
+                                                <?php } if ($this->common->user_access('class_promotion', $userId)){ ?>
                                                     <li class="nav-item <?php echo $studentClassPromote; ?>">
                                                         <a href="index.php/students/studentClassPromote" class="nav-link ">
                                                             <span class="title">Student Class Promote</span>
                                                         </a>
                                                     </li>
-                                                <?php if ($this->common->user_access('stu_own_info', $userId)){ ?>
+                                                <?php } if ($this->common->user_access('stu_own_info', $userId)){ ?>
                                                     <li class="<?php echo $studentsInfo; ?>">
                                                         <a href="index.php/students/studentsInfo?uisd=<?php echo $userId; ?>">
                                                             <span class="title"><?php echo lang('header_own_student_info'); ?></span>
@@ -1269,6 +1270,11 @@
                                         <a href="index.php/home/Student" class="nav-link ">
                                             <span class="title"><?php echo 'Students Info'; ?></span>
                                         </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $Student; ?>">
+                                        <a href="index.php/home/studentInfoReporst" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Students Info'; ?></span>
+                                        </a>
                                     </li> 
                                     <li class="nav-item <?php echo $Student_reg; ?>">
                                         <a href="index.php/home/Student_reg" class="nav-link ">
@@ -1298,6 +1304,11 @@
                                     <li class="nav-item <?php echo $Student_receiveables; ?>">
                                         <a href="index.php/home/Student_receiveables" class="nav-link ">
                                             <span class="title"><?php echo 'Fee Receiveables'; ?></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $Student_receiveables; ?>">
+                                        <a href="index.php/home/studentReceiveAbles" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Fee Receiveables'; ?></span>
                                         </a>
                                     </li> 
                                     <li class="nav-item <?php echo $FeeReceipt_reports; ?>">

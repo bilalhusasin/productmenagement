@@ -45,35 +45,34 @@
                         </div>
                     </div>
                     <div class="portlet-body form">
-                        <?php
+                    <?php
                         $u_id = $this->input->get('puid', TRUE);
                         $P_I_Id = $this->input->get('painid', TRUE);
-                        ?>
-                        <?php
+                         
                         $form_attributs = array('class' => 'form-horizontal', 'role' => 'form');
                         echo form_open("parents/editParentsInfo?painid=$P_I_Id&puid=$u_id", $form_attributs);
-                        ?>
+                    ?>
                         <div class="form-body">
                             <?php
-                            foreach ($info as $row) {
-                                $userId = $row['user_id'];
+                            foreach ($info as $row) {  
+                               // $userId = $row['user_id'];
                                 $data = array();
-                                $query = $this->db->get_where('users', array('id' => $userId));
+                               /* $query = $this->db->get_where('users', array('id' => $userId));
                                 foreach ($query->result_array() as $row1) {
                                     $firstName = $row1['first_name'];
                                     $last_name = $row1['last_name'];
-                                }
-                                ?>
-                                <div class="form-group">
+                                }*/
+                                } ?>
+                                <!-- <div class="form-group">
                                     <label class="col-md-3 control-label"><?php echo lang('par_cla_tit'); ?><span class="requiredStar">  </span></label>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control" placeholder="" name="class_title" value="<?php echo $this->common->class_title($row['class_id']); ?>" readonly="">
                                     </div>
-                                </div>
+                                </div> --> 
                                 <div class="form-group">
                                     <label class="col-md-3 control-label"><?php echo lang('par_stu_id'); ?><span class="requiredStar">  </span></label>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control" placeholder="" name="class_title" value="<?php echo $row['student_id']; ?>" readonly="">
+                                        <input type="text" class="form-control" placeholder="" name="p_cnic" value="<?php echo $row['parents_cnic']; ?>" readonly="">
                                     </div>
                                 </div>
                                 <div id="ajaxResult">
@@ -110,14 +109,13 @@
                                     </div>
                                 </div>
                             </div>
-<?php } ?>
                         <div class="form-actions fluid">
                             <div class="col-md-offset-3 col-md-6">
                                 <button type="submit" class="btn green" name="submit" value="Submit"><?php echo lang('par_update'); ?></button>
                                 <button type="reset" class="btn default" onclick="location.href = 'javascript:history.back()'"> <?php echo lang('back'); ?></button>
                             </div>
                         </div>
-<?php echo form_close(); ?>
+                    <?php echo form_close(); ?>
                     </div>
                 </div>
                 <!-- END SAMPLE FORM PORTLET-->

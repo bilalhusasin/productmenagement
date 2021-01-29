@@ -1,30 +1,33 @@
 <!-- Begin PAGE STYLES -->
 <link href="assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet"/>
-
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
- <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>  
-        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js" type="text/javascript"></script>
-       
-        <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
-        <script src="https://cdn.datatables.net/scroller/2.0.2/js/dataTables.scroller.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>  
+<script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/scroller/2.0.2/js/dataTables.scroller.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" type="text/javascript"></script>
-          <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js" type="text/javascript"></script>
-           <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" />  
-         <script type="text/javascript">
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" />  
+<script type="text/javascript">
          var table;  
 $(document).ready(function ()  
 {  
 
  // Setup - add a text input to each footer cell
+    $('#datatable thead #th').each( function () {
+        var title = $(this).text();
+        console.log(title);
+        $(this).html( '<input type="text" style="width:90%; border: 1px solid grey; border-radius: 6px !important;" placeholder="'+$(this).text()+'" />' );
+    } );
     $('#datatable tfoot th').each( function () {
         var title = $(this).text();
         console.log(title);
-        $(this).html( '<input type="text" style="width:90px;" placeholder="'+$(this).text()+'" />' );
+        $(this).html( '<input type="text" style="width:90%; border: 1px solid grey; border-radius: 6px !important;" placeholder="'+$(this).text()+'" />' );
     } );
 
       table = $('#datatable').dataTable(  
@@ -32,35 +35,46 @@ $(document).ready(function ()
         "bSort": false,
         "pagingType": "full_numbers",
         "dom": 'Bfrtip',
-        "lengthMenu": [[10, 25, 50, -1],[10, 25, 50, "All"]
-
-    ], 
-"data" : <?php echo json_encode($stdInfo); ?>,
-"columns": [
-            
-           
+        "lengthMenu": [[10, 25, 50, -1],[10, 25, 50, "All"]], 
+///below  fetch data from db & hand over to data  // 
+                                           
+        "data" : <?php echo json_encode($stdInfo); ?>,
+        "columns": [
             { data: "student_id" },
             { data: "student_nam" },
             { data: "phone" },
             { data: "class_title" },
             { data: "section" },
-           { data: "amount" },
+            { data: "amount" },
             { data: "month" }
-           
         ],
 
-    "buttons": [
+        ///////////////////////////
+
+
+//// pdf, cvs, exel ////
+        "buttons": [
             { extend: 'copyHtml5', footer: true },
             { extend: 'excelHtml5', footer: true },
             { extend: 'csvHtml5', title: 'Student Receiveable Report(TPS)',footer: true },
             { extend: 'pdfHtml5',  title: 'Student Receiveable Report(TPS)',footer: true }
         ],
+
+        ////
+
+        /// design control
         deferRender:    true,
-          scrollY:        "300px",
+        scrollY:        "300px",
         scrollX:        true,
         scrollCollapse: true,
         fixedColumns:   true,
-         scroller:       true,
+        scroller:       true,
+
+
+        ///// 
+
+
+        //// bottom search fields //// 
           initComplete: function () {
             // Apply the search
             this.api().columns().every( function () {
@@ -104,25 +118,13 @@ $(document).ready(function ()
  
             // Update footer
             $( api.column( 5 ).footer() ).html(
-                'Page Total: '+pageTotal +' pkr'+'\n Grand Total: '+ total +'  pkr'
+                'Page Total: '+pageTotal +' PKR'+'\n Grand Total: '+ total +'  PKR'
             );
-        }
-
-
-
-    }); 
-
-
-   
-
+        } 
+    });  
 });  
 
-
-
- 
-
         </script>
-<
 <!-- End PAGE STYLES -->
 <!-- Begin CONTENT -->
 <div class="page-content-wrapper">
@@ -345,9 +347,19 @@ $(document).ready(function ()
                                 <div class="table-scrollable">
                                     <table id="datatable" class="table table-striped table-hover">
                                         <thead>
-                                            <tr>
-                                               
-                                               
+                                            <tr > 
+                                                <th id="th">Student ID</th>
+                                                
+                                                <th id="th">Student Name</th>
+                                                <th id="th">Contact#</th>
+                                                
+                                                <th id="th">Class</th>
+                                                <th id="th">Section</th>
+                                                
+                                                <th id="th">Amount</th>
+                                                <th id="th">Number of overdue</th> 
+                                            </tr>
+                                             <tr style="text-align: center;"> 
                                                 <th>Student ID</th>
                                                 
                                                 <th>Student Name</th>
@@ -357,10 +369,7 @@ $(document).ready(function ()
                                                 <th>Section</th>
                                                 
                                                  <th>Amount</th>
-                                                <th>Number of overdue</th>
-                                                
-                                                
-                                                
+                                                <th style=" width: 180px;">Number of overdue</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -380,9 +389,6 @@ $(document).ready(function ()
                                                 
                                                  <th>Amount</th>
                                                 <th>Number of overdue</th>
-                                                
-                                                
-                                                
                                             </tr>
                                         </tfoot>
                                     </table>

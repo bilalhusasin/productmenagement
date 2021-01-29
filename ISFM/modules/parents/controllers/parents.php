@@ -16,24 +16,31 @@ class Parents extends CI_Controller {
         if (!$this->ion_auth->logged_in()) {
             redirect('auth/login');
         }
-    }
+    } 
     //This function lode a view where is select class for know about parents infomation
     public function parentsInformation() {
         if ($this->input->post('submit', TRUE)) {
-            $class_id = $this->input->post('class_id', TRUE);
-            
-            $section = $this->input->post('section', TRUE);
-
-            $data['section']=$section;
-            $data['classTitle'] = $this->common->class_title($class_id);
-            $data['parents'] = $this->common->getWhere('parents_info', 'class_id', $class_id, 'section',$section);
-
-            // print_r($data);
-            // die();
-
-            $this->load->view('temp/header');
-            $this->load->view('parentsInformation', $data);
-            $this->load->view('temp/footer');
+            if(!empty($this->input->post('class_id', TRUE) AND $this->input->post('section', TRUE))){
+                $class_id = $this->input->post('class_id', TRUE); 
+                $section = $this->input->post('section', TRUE);
+                $data['section']=$section;
+                $data['classTitle'] = $this->common->class_title($class_id);
+                $query = $this->db->query("SELECT `guardian_cnic` FROM student_info WHERE class_id=$class_id AND section= '$section'" ); 
+                foreach ($query->result_array() as $row) {
+                    $g_cnic = $row['guardian_cnic'];
+                } 
+                /*$data['parents'] = $this->common->getWhere('parents_info', 'class_id', $class_id, 'section',$section);*/
+               $data['parents'] = $this->common->getWhere('parents_info', 'parents_cnic', $g_cnic);
+                $this->load->view('temp/header');
+                $this->load->view('parentsInformation', $data);
+                $this->load->view('temp/footer');
+            } else{
+                        
+                echo '<script type="text/javascript">'; 
+                echo 'window.alert("Please Select Class Name and Class Section First");';  
+                echo '</script>';
+                redirect("parents/parentsInformation", 'refresh');
+            }
 
         } else {
             $data['s_class'] = $this->common->getAllData('class');
@@ -103,29 +110,39 @@ class Parents extends CI_Controller {
         }
     }
     //This function will update the parents information.
-    public function editParentsInfo() {
-        $userID = $this->input->get('puid');
-        $parentsInfoId = $this->input->get('painid');
+    public function editParentsInfo() {  
+        //$userID = $this->input->get('puid');
+        //$parentsInfoId = $this->input->get('painid');
         if ($this->input->post('submit', TRUE)) {
+            $p_cnic = $this->input->post('p_cnic', TRUE);
             $username = $this->input->post('first_name', TRUE) . ' ' . $this->input->post('last_name', TRUE);
             $additional_data = array(
                 'username' => $this->db->escape_like_str($username),
                 'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
                 'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
+                'user_cnic' => $this->db->escape_like_str($p_cnic),
                 'phone' => $this->db->escape_like_str($this->input->post('phone', TRUE)),
                 'email' => $this->db->escape_like_str($this->input->post('email', TRUE))
             );
-            $this->db->where('id', $userID);
+            /*echo "<pre>";
+            print_r($additional_data);
+            echo "</pre>";*/
+            $this->db->where('user_cnic', $p_cnic);
             $this->db->update('users', $additional_data);
             $additionalData1 = array(
                 'first_name' => $this->db->escape_like_str($this->input->post('first_name', TRUE)),
                 'last_name' => $this->db->escape_like_str($this->input->post('last_name', TRUE)),
                 'parents_name' => $this->db->escape_like_str($username),
+                'parents_cnic' => $this->db->escape_like_str($p_cnic),
                 'relation' => $this->db->escape_like_str($this->input->post('guardianRelation', TRUE)),
                 'email' => $this->db->escape_like_str($this->input->post('email', TRUE)),
                 'phone' => $this->db->escape_like_str($this->input->post('phone', TRUE)),
             );
-            $this->db->where('id', $parentsInfoId);
+            /*echo "<pre>";
+            print_r($additionalData1);
+            echo "</pre>";
+            die;*/
+            $this->db->where('parents_cnic', $p_cnic);
             $this->db->update('parents_info', $additionalData1);
             $data['s_class'] = $this->common->getAllData('class');
             $data['success'] = '<br><div class="col-md-12"><div class="alert alert-info alert-dismissable admisionSucceassMessageFont">
@@ -136,21 +153,26 @@ class Parents extends CI_Controller {
             $this->load->view('parents', $data);
             $this->load->view('temp/footer');
         } else {
-            $data['info'] = $this->common->getWhere('parents_info', 'id', $parentsInfoId);
+            $p_cnic = $this->input->get('p_cnic'); 
+            $data['info'] = $this->common->getWhere('parents_info', 'parents_cnic', $p_cnic);
             $this->load->view('temp/header');
             $this->load->view('editParents', $data);
             $this->load->view('temp/footer');
         }
     }
     public function viewParentsInfo() {
-            $pid = $this->input->get('painid');
-            $section_name = $this->input->get('section');
+            $pcnic = $this->input->get('p_cnic');
+           // $pid = $this->input->get('painid');
+           // $section_name = $this->input->get('section');
             
-            $query= $this->db->query("SELECT * FROM parents_info WHERE id=$pid");
+            $query= $this->db->query("SELECT * FROM student_info WHERE guardian_cnic='$pcnic'");
+            $data['student_info']=$query->result_array();
+
+            $query= $this->db->query("SELECT * FROM parents_info WHERE parents_cnic='$pcnic'");
             $data['perants_info']=$query->result_array();
            // $data['info'] = $this->common->getWhere('parents_info', 'id', $parentsInfoId);
-            $data['user_id'] = $pid;
-            $data['section'] = $section_name;
+            //$data['user_id'] = $pid;
+            //$data['section'] = $section_name;
             $this->load->view('temp/header');
             $this->load->view('viewParents', $data);
             $this->load->view('temp/footer');
@@ -158,12 +180,13 @@ class Parents extends CI_Controller {
     }
     //This function is using for delete any parents profile.
     public function deleteParents() {
-        //$userID = $this->input->get('puid');
-        $parentsInfoId = $this->input->get('painid');
-
-        //$this->db->delete('users', array('id' => $userID));
-        $this->db->delete('parents_info', array('id' => $parentsInfoId));
+        $userID = $this->input->get('puid');
+        $p_cnic = $this->input->get('p_cnic');
+         
+        $this->db->delete('users', array('user_cnic' => $p_cnic));
+        $this->db->delete('parents_info', array('parents_cnic' => $p_cnic));
+        $this->db->delete('role_based_access', array('user_id' => $userID));
 
         redirect("parents/parentsInformation", 'refresh');
     }
-}
+} 

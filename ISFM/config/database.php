@@ -30,7 +30,6 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 
-$db['default']['username'] = 'ypw4fv50_tpslab';
 $db['default']['username'] = 'root';
 
 $db['default']['password'] = '';

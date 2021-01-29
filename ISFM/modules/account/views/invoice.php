@@ -11,7 +11,7 @@
         margin-bottom: 0px !important;
     }
         /* avoid cutting tr's in half */
-    }
+    
     div table  {  
     }
      

@@ -367,7 +367,7 @@
                         <div class="form-actions fluid">
                             <div class="col-md-offset-3 col-md-6">
                                 <button type="submit" class="btn green" name="submit" value="Update"><?php echo lang('hrm_updateButton'); ?></button>
-                                <button type="button" onclick="javascript:history.back()" class="btn default"> <?php echo lang('back'); ?></button>
+                                <button type="button" onclick="javascript:history.back()" class="btn btn-default"> <?php echo lang('back'); ?></button>
                             </div>
                         </div>
                         <?php echo form_close(); ?>

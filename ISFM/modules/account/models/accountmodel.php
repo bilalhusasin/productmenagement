@@ -286,7 +286,6 @@ class AccountModel extends CI_Model {
         $year = date('Y');
         $query = $this->db->query("SELECT id,annual_fund,tution_fee,ac_charges FROM fee_item WHERE session=$year AND class_id=$class_id");
         foreach ($query->result_array() as $row) {
-
             $data[] = $row;
         }return $data;
     }
@@ -296,7 +295,8 @@ class AccountModel extends CI_Model {
          $data = array();
         $year = date('Y');
         $curMonth = date('F'); 
-        $query = $this->db->query("SELECT student_id FROM class_students WHERE class_id=$class_id AND (status='Active' OR status='Defaulter') AND year=$year AND admi_month!='$curMonth'");
+        $query = $this->db->query("SELECT student_id FROM class_students WHERE class_id=$class_id AND (status='Active' OR status='Defaulter') ");
+        //AND year=$year AND admi_month!='$curMonth'
         foreach ($query->result_array() as $row) {
             $data[] = $row;
         }return $data;

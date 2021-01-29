@@ -162,28 +162,12 @@ class Common extends CI_Model {
 
     }
 
-    public function total_chalan() {
-
-        $yearz = date("Y");
-
-       $query1 = $this->db->query("SELECT sum(amount) as dd FROM                           slip 
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where student_info.status='Active'
-
-                                   AND slip.year = '".$yearz."'
-
-                                         ");
-
+    public function total_chalan() { 
+        $yearz = date("Y"); 
+        $query1 = $this->db->query("SELECT sum(amount) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.year = '".$yearz."'"); 
         foreach ($query1->result() as $row) {
-
-            $data1 = $row->dd;
-
-           
-
+            $data1 = $row->dd;        
         }return ($data1);
-
     }
 
 
@@ -412,28 +396,13 @@ public function tota_paid_amount() {
 
     }
 
-public function tota_unpaid_amount() {
-
-    $yearz = date("Y");
-
-         $query1 = $this->db->query("SELECT sum(dis_total) as dd FROM                           slip
-
-                                      INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where student_info.status='Active'
-
-                                    AND slip.payment_status='Unpaid' 
-
-                                    AND slip.year = '".$yearz."'");
-
+    public function tota_unpaid_amount() {
+        $yearz = date("Y");
+        $query1 = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Unpaid' AND slip.year = '".$yearz."'");
         foreach ($query1->result() as $row) {
-
-            $data1 = $row->dd;
-
-           
-
-        }return ($data1);
-
+            $data1 = $row->dd;           
+        }
+        return ($data1);
     }
 
     /// deactie student's receiveables ////
@@ -497,37 +466,16 @@ public function count_unpaid_per() {
         return ($data1['Score']);
 
     }
-
-
-
-
-
-
-
-public function count_paid() {
-
-     $data1 = array();
-
-         $query1 = $this->db->query("SELECT *  FROM slip
-
-                                       WHERE payment_status = 'Paid' ");
-
+ 
+    public function count_paid() {
+        $data1 = array();
+        $query1 = $this->db->query("SELECT *  FROM slip WHERE payment_status = 'Paid'");
         foreach ($query1->result_array() as $row) {
-
-            $data1 = $row;
-
-           
-
-        }return count($query1->result_array());
-
+            $data1 = $row; 
+        }
+        return count($query1->result_array());
     }
-
-
-
-
-
-
-
+ 
     public function count_unpaid() {
 
      $data1 = array();
@@ -798,23 +746,14 @@ public function Total_with_discount() {
 
 
 
-   public function studentInfo()
-
-{
-
-    $stu_data = array();
-
+    public function studentInfo()
+    {
+        $stu_data = array();
         $query = $this->db->query("SELECT * FROM student_info");
-
         foreach ($query->result_array() as $row) {
-
             $stu_data[] = $row;
-
         }return $stu_data;
-
-
-
-}
+    }
 
 
 
@@ -1017,21 +956,11 @@ public function student_chalanz()
 public function student_chalan()
 
 {
-
     $month=date("F");
 
     $stu_data = array();
 
-        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, student_info.phone, SUM(slip.amount+ slip.dues)as amount,slip.voucher_number,slip.year, slip.payment_status,slip.dues , slip.tution_fee,slip.discount,COUNT(DISTINCT month) as month FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where slip.payment_status='unpaid' AND student_info.status = 'Active' GROUP BY student_info.student_id ORDER by slip.due_date DESC
-
-
-
-                                   
-
-                                    ");
-
-
-
+        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, student_info.phone, SUM(slip.amount+ slip.dues)as amount,slip.voucher_number,slip.year, slip.payment_status,slip.dues , slip.tution_fee,slip.discount,COUNT(DISTINCT month) as month FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where slip.payment_status='unpaid' AND student_info.status = 'Active' GROUP BY student_info.student_id ORDER by slip.due_date DESC"); 
         foreach ($query->result_array() as $row) {
 
             $stu_data[] = $row;
@@ -1358,6 +1287,22 @@ public function student_chalan1()
 
         return $query;
 
+    }
+    //This function will returan students information by using by  
+
+    public function stuInfoByCnic($a){
+
+        $query = $this->db->query("SELECT * FROM student_info WHERE guardian_cnic = '$a' "); 
+        foreach ($query->result_array() as $row){
+            $data[] = $row;
+        }
+        //return $data;
+        if(!empty($data)){
+            return $data;
+//            return TRUE;
+        }  else {
+            return FALSE;
+        }  
     }
 
     

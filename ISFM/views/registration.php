@@ -147,9 +147,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Student B-Form Number <span class="requiredStar"> * </span></label>
+                                <label class="col-md-3 control-label">Student B-Form # <span class="requiredStar"> * </span></label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control d" name="bfnumb" placeholder="" data-validation="required" data-validation-error-msg="enter B-form Number">
+                                    <input type="text" class="form-control d" name="bfnumb" id="bfnumb" placeholder="xxxxx-xxxxxxx-x" data-validation="required" data-validation-error-msg="enter B-form Number" maxlength="15">
+                                    <label for="">xxxxx-xxxxxxx-x</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -161,7 +162,8 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Father CNIC <span class="requiredStar"> * </span></label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control e" name="father_cnic" placeholder="" data-validation="required" data-validation-error-msg="<?php echo lang('admi_nationality_error_msg'); ?>">
+                                    <input type="text" class="form-control e" name="father_cnic" id="father_cnic" placeholder="xxxxx-xxxxxxx-x" data-validation="required" data-validation-error-msg="<?php echo lang('admi_nationality_error_msg'); ?>" maxlength="15">
+                                    <label for="">xxxxx-xxxxxxx-x</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -233,7 +235,8 @@
                             <div class="form-group ">
                                 <label class="col-md-3 control-label"> Phone Number <span class="requiredStar"> * </span></label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control f" name="phone" placeholder="" data-validation="required" data-validation-error-msg="<?php echo lang('admi_sect_error_msg'); ?>">
+                                    <input type="text" class="form-control f" name="phone" id="phone" placeholder="xxxx-xxxxxxx" data-validation="required" data-validation-error-msg="<?php echo lang('admi_sect_error_msg'); ?>" onkeypress="return /[0-9]/i.test(event.key)" maxlength="12">
+                                    <label for="">xxxx-xxxxxxx</label>
                                 </div>
                             </div>
                              
@@ -666,5 +669,58 @@ toValidate.keyup(function () {
             jQuery("#result").load("index.php/home/iceTime");
         }, 1000));
     });
+</script>
+<script>
+    $('#bfnumb').keydown(function(){
+
+  //allow  backspace, tab, ctrl+A, escape, carriage return
+  if (event.keyCode == 8 || event.keyCode == 9 
+                    || event.keyCode == 27 || event.keyCode == 13 
+                    || (event.keyCode == 65 && event.ctrlKey === true) )
+                        return;
+  if((event.keyCode < 48 || event.keyCode > 57))
+   event.preventDefault();
+
+  var length = $(this).val().length; 
+              
+  if(length == 5 || length == 13)
+   $(this).val($(this).val()+'-');
+
+ });
+
+/// father cnic number pattren
+$('#father_cnic').keydown(function(){
+
+  //allow  backspace, tab, ctrl+A, escape, carriage return
+  if (event.keyCode == 8 || event.keyCode == 9 
+                    || event.keyCode == 27 || event.keyCode == 13 
+                    || (event.keyCode == 65 && event.ctrlKey === true) )
+                        return;
+  if((event.keyCode < 48 || event.keyCode > 57))
+   event.preventDefault();
+
+  var length = $(this).val().length; 
+              
+  if(length == 5 || length == 13)
+   $(this).val($(this).val()+'-');
+
+ });  
+///  phone number pattren
+$('#phone').keydown(function(){
+
+  //allow  backspace, tab, ctrl+A, escape, carriage return
+  if (event.keyCode == 8 || event.keyCode == 9 
+                    || event.keyCode == 27 || event.keyCode == 13 
+                    || (event.keyCode == 65 && event.ctrlKey === true) )
+                        return;
+  if((event.keyCode < 48 || event.keyCode > 57))
+   event.preventDefault();
+
+  var length = $(this).val().length; 
+              
+  if(length == 4)
+   $(this).val($(this).val()+'-');
+
+ });  
 </script>
 <!-- END PAGE LEVEL script

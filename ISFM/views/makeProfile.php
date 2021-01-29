@@ -54,10 +54,10 @@
                         ?>
                         <div class="form-body">
                             <div class="form-group">
-                                <label class="col-md-3 control-label"> <?php echo lang('par_stu_id'); ?> <span class="requiredStar"> * </span></label>
+                                <label class="col-md-3 control-label">Enter Guardian CNIC <?php // echo lang('par_stu_id'); ?> <span class="requiredStar"> * </span></label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" onkeyup="studentInfo(this.value)" placeholder="" name="studentId" data-validation="required">
-                                </div>
+                                    <input type="text" class="form-control" onkeyup="studentInfo(this.value)" placeholder="Enter Guardian CNIC" name="guardian_cnic" id="guardian_cnic" data-validation="required"  maxlength="15">
+                                </div>  <!-- onkeypress="return /[0-9]/i.test(event.key)" -->
                             </div>
                             <div id="ajaxResult">
                             </div>
@@ -95,7 +95,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label"> <?php echo lang('par_con_pass'); ?> <span class="requiredStar"> * </span></label>
                                 <div class="col-md-6">
-                                    <input type="password" class="form-control" placeholder="<?php echo lang('par_pgtsp'); ?>" name="password_confirm" data-validation="required">
+                                    <input type="password" class="form-control" placeholder="<?php echo lang('par_pgtsp'); ?>" name="password_confirm" data-validation="required" autocomplete="off">
                                 </div>
                             </div>
                             <!-- <div class="form-group">
@@ -149,27 +149,31 @@
 </div>
 <!-- END CONTENT -->
 <!-- BEGIN PAGE LEVEL script -->
+<script type="text/javascript" src="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
+<!-- END PAGE LEVEL script -->
+<script src="assets/global/plugins/jquery.form-validator.min.js" type="text/javascript"></script>
+<script> $.validate();</script>
 <script>
 function studentInfo(str) {
-var xmlhttp;
-if (str.length === 0) {
-document.getElementById("ajaxResult").innerHTML = "";
-return;
-}
-if (window.XMLHttpRequest) {
-// code for IE7+, Firefox, Chrome, Opera, Safari
-xmlhttp = new XMLHttpRequest();
-} else {
-// code for IE6, IE5
-xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-}
-xmlhttp.onreadystatechange = function () {
-if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-document.getElementById("ajaxResult").innerHTML = xmlhttp.responseText;
-}
-};
-xmlhttp.open("GET", "index.php/users/studentInfoById?q=" + str, true);
-xmlhttp.send();
+    var xmlhttp;
+    if (str.length === 0) {
+        document.getElementById("ajaxResult").innerHTML = "";
+        return;
+    }
+        if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else {
+    // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+        xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        document.getElementById("ajaxResult").innerHTML = xmlhttp.responseText;
+    }
+    };
+        xmlhttp.open("GET", "index.php/users/studentInfoByCnic?q=" + str, true);
+        xmlhttp.send();
 }
 function checkEmail(str) {
 var xmlhttp;
@@ -199,7 +203,21 @@ jQuery("#result").load("index.php/home/iceTime");
 }, 1000));
 });
 </script>
-<script type="text/javascript" src="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
-<!-- END PAGE LEVEL script -->
-<script src="assets/global/plugins/jquery.form-validator.min.js" type="text/javascript"></script>
-<script> $.validate();</script>
+<script>
+    $('#guardian_cnic').keydown(function(){
+
+  //allow  backspace, tab, ctrl+A, escape, carriage return
+  if (event.keyCode == 8 || event.keyCode == 9 
+                    || event.keyCode == 27 || event.keyCode == 13 
+                    || (event.keyCode == 65 && event.ctrlKey === true) )
+                        return;
+  if((event.keyCode < 48 || event.keyCode > 57))
+   event.preventDefault();
+
+  var length = $(this).val().length; 
+              
+  if(length == 5 || length == 13)
+   $(this).val($(this).val()+'-');
+
+ }); 
+</script>

@@ -54,8 +54,11 @@ $userId = $user->id;
                         <table class="table table-striped table-bordered table-hover" id="sample_1">
                             <thead>
                                 <tr>
+                                    <!-- <th>
+                                        <?php // echo lang('par_stu_id'); ?>
+                                    </th> -->
                                     <th>
-                                        <?php echo lang('par_stu_id'); ?>
+                                        Guardian CNIC #
                                     </th>
                                     <th>
                                         <?php echo lang('par_gar_name'); ?>
@@ -86,8 +89,11 @@ $userId = $user->id;
 
                                  foreach ($parents as $row) { ?>
                                     <tr>
+                                        <!-- <td>
+                                            <?php // echo $row['student_id']; ?>
+                                        </td> -->
                                         <td>
-                                            <?php echo $row['student_id']; ?>
+                                            <?php echo $row['parents_cnic']; ?>
                                         </td>
                                         <td>
                                             <?php echo $row['parents_name']; ?>
@@ -113,11 +119,11 @@ $userId = $user->id;
                                         </td>
                                         <?php if ($this->common->user_access('parents_edit_dlete', $userId)) { ?>
                                        <td>
-                                                 <a class="btn btn-xs blue" href="index.php/parents/viewParentsInfo?painid=<?php echo $row['id']; ?>&puid=<?php echo $row['user_id'];?>" title="View Parents Info"> <i class="fa fa-eye"></i> View <?php // echo lang('edit'); ?> </a>
+                                            <a class="btn btn-xs blue" href="index.php/parents/viewParentsInfo?p_cnic=<?php echo $row['parents_cnic']; ?>" title="View Parents Info"> <i class="fa fa-eye"></i> View <?php // echo lang('edit'); ?> </a>
                                                   
-                                                <a class="btn btn-xs green" href="index.php/parents/editParentsInfo?painid=<?php echo $row['id']; ?>&puid=<?php echo $row['user_id']; ?>" title="Edit Parents Info"> <i class="fa fa-pencil-square" ></i> <?php echo lang('edit'); ?> </a>
+                                            <a class="btn btn-xs green" href="index.php/parents/editParentsInfo?p_cnic=<?php echo $row['parents_cnic'];?>" title="Edit Parents Info"> <i class="fa fa-pencil-square" ></i> <?php echo lang('edit'); ?> </a>
 
-                                                <a class="btn btn-xs red" href="index.php/parents/deleteParents?painid=<?php echo $row['id']; ?>&puid=<?php echo $row['user_id']; ?>" onClick="javascript:return confirm('<?php echo lang('par_aysywtdtgp'); ?>')" title="Edit Parents Info"> <i class="fa fa-trash-o" ></i> <?php echo lang('delete'); ?> </a>
+                                            <a class="btn btn-xs red" href="index.php/parents/deleteParents?p_cnic=<?php echo $row['parents_cnic'];?>&puid=<?php echo $row['user_id']; ?>" onClick="javascript:return confirm('<?php echo lang('par_aysywtdtgp'); ?>')" title="Delete Parents Info"> <i class="fa fa-trash-o" ></i> <?php echo lang('delete'); ?> </a>
                                         </td>
                                         <?php } ?>
                                     </tr>

@@ -1269,7 +1269,7 @@
                                     <?php if ($this->common->user_access('student_reports', $userId)) { ?>
                                     <li class="nav-item <?php echo $Student; ?>">
                                         <a href="index.php/home/Student" class="nav-link ">
-                                            <span class="title"><?php echo 'Students Info'; ?></span>
+                                            <span class="title"> <del><?php echo 'Students Info'; ?></del></span>
                                         </a>
                                     </li>
                                     <li class="nav-item <?php echo $Student; ?>">
@@ -1285,7 +1285,7 @@
                                     
                                     <li class="nav-item <?php echo $Student_reg; ?>">
                                         <a href="index.php/home/Student_reg" class="nav-link ">
-                                            <span class="title"><?php echo 'Registration Info'; ?></span>
+                                            <span class="title"><del><?php echo 'Registration Info'; ?></del></span>
                                         </a>
                                     </li>
                                     <li class="nav-item <?php echo $Student_reg; ?>">
@@ -1295,7 +1295,7 @@
                                     </li> 
                                     <li class="nav-item <?php echo $Chalan_reports; ?>">
                                         <a href="index.php/home/Chalan_reports" class="nav-link ">
-                                            <span class="title"><?php echo 'Chalan Report'; ?></span>
+                                            <span class="title"><del><?php echo 'Chalan Report'; ?></del></span>
                                         </a>
                                     </li>
                                     <li class="nav-item <?php echo $Chalan_reports; ?>">
@@ -1305,7 +1305,7 @@
                                     </li> 
                                     <li class="nav-item <?php echo $Admission; ?>">
                                         <a href="index.php/home/Admission" class="nav-link ">
-                                            <span class="title"><?php echo 'Admission report'; ?></span>
+                                            <span class="title"><del><?php echo 'Admission report'; ?></del></span>
                                         </a>
                                     </li>
                                     <li class="nav-item <?php echo $Admission; ?>">
@@ -1325,7 +1325,7 @@
                                     </li> 
                                     <li class="nav-item <?php echo $Student_receiveables; ?>">
                                         <a href="index.php/home/Student_receiveables" class="nav-link ">
-                                            <span class="title"><?php echo 'Fee Receiveables'; ?></span>
+                                            <span class="title"><del><?php echo 'Fee Receiveables'; ?></del></span>
                                         </a>
                                     </li>
                                     <li class="nav-item <?php echo $Student_receiveables; ?>">
@@ -1340,7 +1340,7 @@
                                     </li> 
                                     <li class="nav-item <?php echo $Leftover; ?>">
                                         <a href="index.php/home/Leftover" class="nav-link ">
-                                            <span class="title"><?php echo 'Student Leftover'; ?></span>
+                                            <span class="title"><del><?php echo 'Student Leftover'; ?></del></span>
                                         </a>
                                     </li>
                                     <li class="nav-item <?php echo $leftoverStudent; ?>">

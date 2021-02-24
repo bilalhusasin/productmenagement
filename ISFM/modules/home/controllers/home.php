@@ -1131,203 +1131,105 @@ public function studentChalanReport(){
                 $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$monthName' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Admission'");
             }
             $stdInfo = $query->result_array();
-            if(empty($stdInfo)){
-                echo '<hr><div class="col-md-12 col-sm-12">
-                        <div class="alert alert-danger">
-                          <strong>Alert!</strong> Record Not Availabe.
-                        </div>
-                    </div>';
-            }
-            else{                               
-            echo'<div class="col-md-12 col-sm-12 p-3 display" > 
-                    <div class="col-md-3 text-center" >
-                        <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
-                    </div>
-                    <div class="col-md-9 text-center">  
-                        <h4 >Student Fee Chalan Report </h4>
-                    </div> 
-                    <div class="portlet ">
-                          
-                        <div class="portlet-body">
-                            <table id="sample_1" class="table" >
-                                <thead>
-                                    <tr> 
-                                        <th> Session: '. $year .' </th>
-                                        <th> Month Name: '. $monthName .' </th>
-                                        <th> Month Name: '. $voucherName .' </th> 
-                                        <th> Class Name: '. $classId .' </th>
-                                        <th> Class Section: '. $classSection.' </th>  
-                                        <th> Date: '. $date.' </th>  
-                                    </tr>
-                                </thead> 
-                            </table>
-                        </div> 
-                    </div>
-                </div>    
-                <div class="col-md-12 col-sm-12 p-5">
-                    <div class="portlet purple box">
-                        <div class="portlet-title no-print">
-                            <div class="caption">
-                                <i class="fa fa-cogs"></i>Student Chalan Report
-                            </div>
-                            <div class="tools">
-                                <a class="collapse" href="javascript:;"> </a>
-                                <a class="reload" href="javascript:;"> </a>
-                            </div>
-                        </div>
-                        <div class="portlet-body"> 
-                            <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
-                                <thead>
-                                    <tr> 
-                                        <th>Sr #</th>
-                                        <th>Chalan No</th>
-                                        <th>Chalan Year</th>
-                                        <th>Chalan Month</th>
-                                        <th>Student ID</th>
-                                        <th>Student Name</th>
-                                        <th>Class</th>
-                                        <th>Section</th> 
-                                        <th>Vouchers Type</th>
-                                        <th>Discount Percentage</th> 
-
-                                        <th>Total Amount</th>
-                                        <th>Paid Amount </th>
-                                        <th>Voucher Status</th>  
-                                    </tr>
-                                </thead> 
-                                <tbody>'; 
-                                $count = 1;   
-                                foreach ($stdInfo as $value) {   
-                                echo' <tr> 
-                                        <td>'. $count++ .'</td>
-                                        <td>'. $value['voucher_number'] .'</td>
-                                        <td>'. $value['year'] .'</td>
-                                        <td>'. $value['month_name'] .'</td> 
-                                        <td>'. $value['student_id'] .'</td>
-                                        <td>'. $value['student_nam'] .'</td>
-                                        <td>'. $value['class_title'] .'</td>
-                                        <td>'. $value['section'] .'</td>
-                                        <td>'. $value['voucher_type'].'</td>
-                                        <td></td>
-
-                                        <td>'. $value['total_amount'].'</td>
-                                        <td>'. $value['paid_amount'].'</td>
-                                        <td>'. $value['voucher_status'].' </td> 
-                                    </tr>';
-                                }  
-                            echo'</tbody>  
-                            </table>
-                        </div>
-                    </div>
-                </div>'; 
-            }
+             
         } else if($voucherName == 'Monthly Fee') {
             if(empty($classId)){                           
-                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month, slip.payment_status, slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE  slip.month = '$monthName' AND slip.year= $year" );
+                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$monthName' AND vouchers.voucher_type = 'Monthly Fee'" );
             } else{
-                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE slip.year= $year AND slip.month = '$monthName' AND slip.class_id = $classId AND student_info.section LIKE '%$classSection'");
+                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$monthName' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Monthly Fee'");
             }
-            $stdInfo = $query->result_array(); 
-            if(empty($stdInfo)){
-                echo '<hr><div class="col-md-12 col-sm-12">
-                        <div class="alert alert-danger">
-                          <strong>Alert!</strong> Record Not Availabe.
-                        </div>
-                    </div>';
-            }
-            else{                               
-            echo'<div class="col-md-12 col-sm-12 p-3 display" > 
-                    <div class="col-md-3 text-center" >
-                        <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
+            $stdInfo = $query->result_array();  
+        }
+        if(empty($stdInfo)){
+            echo '<hr><div class="col-md-12 col-sm-12">
+                    <div class="alert alert-danger">
+                      <strong>Alert!</strong> Record Not Availabe.
                     </div>
-                    <div class="col-md-9 text-center">  
-                        <h4 >Student Fee Chalan Report </h4>
+                </div>';
+        }
+        else{                               
+        echo'<div class="col-md-12 col-sm-12 p-3 display" > 
+                <div class="col-md-3 text-center" >
+                    <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
+                </div>
+                <div class="col-md-9 text-center">  
+                    <h4 >Student Fee Chalan Report </h4>
+                </div> 
+                <div class="portlet ">
+                      
+                    <div class="portlet-body">
+                        <table id="sample_1" class="table" >
+                            <thead>
+                                <tr> 
+                                    <th> Session: '. $year .' </th>
+                                    <th> Month Name: '. $monthName .' </th>
+                                    <th> Month Name: '. $voucherName .' </th> 
+                                    <th> Class Name: '. $classId .' </th>
+                                    <th> Class Section: '. $classSection.' </th>  
+                                    <th> Date: '. $date.' </th>  
+                                </tr>
+                            </thead> 
+                        </table>
                     </div> 
-                    <div class="portlet ">
-                          
-                        <div class="portlet-body">
-                            <table id="sample_1" class="table" >
-                                <thead>
-                                    <tr> 
-                                        <th> Session: '. $year .' </th>
-                                        <th> Month Name: '. $monthName .' </th>
-                                        <th> Month Name: '. $voucherName .' </th> 
-                                        <th> Class Name: '. $classId .' </th>
-                                        <th> Class Section: '. $classSection.' </th>  
-                                        <th> Date: '. $date.' </th>  
-                                    </tr>
-                                </thead> 
-                            </table>
-                        </div> 
-                    </div>
-                </div>    
-                <div class="col-md-12 col-sm-12 p-5">
-                    <div class="portlet purple box">
-                        <div class="portlet-title no-print">
-                            <div class="caption">
-                                <i class="fa fa-cogs"></i>Student Chalan Report
-                            </div>
-                            <div class="tools">
-                                <a class="collapse" href="javascript:;"> </a>
-                                <a class="reload" href="javascript:;"> </a>
-                            </div>
+                </div>
+            </div>    
+            <div class="col-md-12 col-sm-12 p-5">
+                <div class="portlet purple box">
+                    <div class="portlet-title no-print">
+                        <div class="caption">
+                            <i class="fa fa-cogs"></i>Student Chalan Report
                         </div>
-                        <div class="portlet-body"> 
-                            <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
-                                <thead>
-                                    <tr> 
-                                        <th>Sr #</th>
-                                        <th>Chalan No</th>
-                                        <th>Chalan Year</th>
-                                        <th>Chalan Month</th>
-                                        <th>Student ID</th>
-                                        <th>Student Name</th>
-                                        <th>Class</th>
-                                        <th>Section</th>
-                                        <th>Discount Title</th>
-                                        <th>Discount Percentage</th>
-                                        <th>Tuition Fee</th>
-                                        <th>AC Charges</th>
-                                        <th>Total</th>
-                                        <th>Discount</th>
-                                        <th>Grand Total</th>
-                                        <th>Paid Amount</th> 
-                                    </tr>
-                                </thead> 
-                                <tbody>'; 
-                                $count = 1;   
-                                foreach ($stdInfo as $value) {   
-                                echo' <tr> 
-                                        <td>'. $count++ .'</td>
-                                        <td>'. $value['voucher_number'] .'</td>
-                                        <td>'. $value['year'] .'</td>
-                                        <td>'. $value['month'] .'</td> 
-                                        <td>'. $value['student_id'] .'</td>
-                                        <td>'. $value['student_nam'] .'</td>
-                                        <td>'. $value['class_title'] .'</td>
-                                        <td>'. $value['section'] .'</td>
-                                        <td>'; 
-                                            if($value['discount_id'] == 0){ echo "No Discount";}else{
-                                            echo $this->common->discount_cod($value['discount_id']); }
-                                    echo'</td>
-                                        <td>';                    
-                                            if($value['discount_id'] == 0){ echo "No Discount";}else{
-                                            echo $this->common->dis_per($value['discount_id'])."%"; }
-                                    echo'</td>
-                                        <td>'. $value['tution_fee'] .'</td>
-                                        <td>'. $value['ac_charges'] .'</td>
-                                        <td>'. $value['amount'] .'</td>
-                                        <td>'. $value['discount'] .'</td>
-                                        <td>'. $value['dis_total'] .'</td>
-                                        <td>'. $value['paid'] .'</td> 
-                                    </tr>';
-                                }  
-                            echo'</tbody>  
-                            </table>
+                        <div class="tools">
+                            <a class="collapse" href="javascript:;"> </a>
+                            <a class="reload" href="javascript:;"> </a>
                         </div>
                     </div>
-                </div>'; 
-            }
+                    <div class="portlet-body"> 
+                        <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
+                            <thead>
+                                <tr> 
+                                    <th>Sr #</th>
+                                    <th>Chalan No</th>
+                                    <th>Chalan Year</th>
+                                    <th>Chalan Month</th>
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Class</th>
+                                    <th>Section</th> 
+                                    <th>Vouchers Type</th>
+                                    <th>Discount Title</th>
+                                    <th>Discount Percentage</th>  
+                                    <th>Total Amount</th>
+                                    <th>Paid Amount </th>
+                                    <th>Voucher Status</th>  
+                                </tr>
+                            </thead> 
+                            <tbody>'; 
+                            $count = 1;   
+                            $sum = 0;
+                            foreach ($stdInfo as $value) {   
+                            echo' <tr> 
+                                    <td>'. $count++ .'</td>
+                                    <td>'. $value['voucher_number'] .'</td>
+                                    <td>'. $value['year'] .'</td>
+                                    <td>'. $value['month_name'] .'</td> 
+                                    <td>'. $value['student_id'] .'</td>
+                                    <td>'. $value['student_nam'] .'</td>
+                                    <td>'. $value['class_title'] .'</td>
+                                    <td>'. $value['section'] .'</td>
+                                    <td>'. $value['voucher_type'].'</td>
+                                    <td>'. $this->common->discount_cod($value['discount_cat']).'</td> 
+                                    <td>'. $this->common->admission_dis_per($value['discount_cat']).'%' .'</td> 
+                                    <td>'. $value['total_amount'].'</td>
+                                    <td>'. $value['paid_amount'].'</td>
+                                    <td>'. $value['voucher_status'].' </td> 
+                                </tr>';
+                            }  
+                        echo'</tbody>  
+                        </table>
+                    </div>
+                </div>
+            </div>'; 
         }
     }
     //get till data of ajaxRoyalityFeePayableReportTillData

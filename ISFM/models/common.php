@@ -573,6 +573,13 @@ public function count_unpaid_per() {
         $query = $this->db->query("SELECT tution_discount FROM fee_discount WHERE id=$discount_id")->row();
         return $query->tution_discount;
     }
+    //This function will return only admission discount persentage .
+
+    public function admission_dis_per($discount_id){
+        $data = array();
+        $query = $this->db->query("SELECT admission_discount FROM fee_discount WHERE id=$discount_id")->row();
+        return $query->admission_discount;
+    }
 
     //This function will return only class title by class id from class table.
 
@@ -795,65 +802,21 @@ public function fee_struct()
 }
 
 public function student_discounts_reasons()
-
 {
-
     $stu_data = array();
-
-        $query = $this->db->query("
-
-                        SELECT fee_discount.discount_reason as disc,fee_discount.tution_discount as disc_per,fee_discount.admission_discount,
-
-                        student_fee_discount.year as disc_year,  student_info.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name 
-
-              
-
-          FROM student_fee_discount
-
-                                   INNER JOIN student_info ON student_fee_discount.student_id = student_info.student_id
-
-                                   LEFT JOIN fee_discount ON student_fee_discount.discount_id = fee_discount.id
-
-
-
-                                    ");
-
-
-
-        foreach ($query->result_array() as $row) {
-
+    $query = $this->db->query("SELECT fee_discount.discount_reason as disc,fee_discount.tution_discount as disc_per,fee_discount.admission_discount, student_fee_discount.year as disc_year,  student_info.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name FROM student_fee_discount INNER JOIN student_info ON student_fee_discount.student_id = student_info.student_id LEFT JOIN fee_discount ON student_fee_discount.discount_id = fee_discount.id ");
+foreach ($query->result_array() as $row) {
             $stu_data[] = $row;
-
         }return $stu_data;
-
-
-
 }
 
-
-
-
-
-public function student_chalan_receipt()
-
-{
-
+public function student_chalan_receipt(){
     $month=date("F");
-
     $stu_data = array();
-
-        $query = $this->db->query("SELECT * FROM ( (SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, student_info.phone, vouchers.voucher_number,vouchers.month_name,vouchers.year,vouchers.total_amount, vouchers.paid_amount, vouchers.issue_date as advance_date FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id) UNION ALL (SELECT advance_fee.student_id, student_info.student_nam , student_info.class_title, student_info.section, student_info.phone, NULL as voucher_number, advance_fee.advance_month as month_name, advance_fee.advance_year as year, 0 as total_amount, advance_fee.advance_amount as paid_amount, advance_fee.advance_date FROM advance_fee INNER JOIN student_info ON advance_fee.student_id = student_info.student_id ) ) results ORDER BY `results`.`month_name` ASC");
-
-
-
+    $query = $this->db->query("SELECT * FROM ( (SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, student_info.phone, vouchers.voucher_number,vouchers.month_name,vouchers.year,vouchers.total_amount, vouchers.paid_amount, vouchers.issue_date as advance_date FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id) UNION ALL (SELECT advance_fee.student_id, student_info.student_nam , student_info.class_title, student_info.section, student_info.phone, NULL as voucher_number, advance_fee.advance_month as month_name, advance_fee.advance_year as year, 0 as total_amount, advance_fee.advance_amount as paid_amount, advance_fee.advance_date FROM advance_fee INNER JOIN student_info ON advance_fee.student_id = student_info.student_id ) ) results ORDER BY `results`.`month_name` ASC");
         foreach ($query->result_array() as $row) {
-
             $stu_data[] = $row;
-
         }return $stu_data;
-
-
-
 }
 
 

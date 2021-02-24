@@ -56,8 +56,8 @@ $(document).ready(function ()
         "buttons": [
             { extend: 'copyHtml5', footer: true },
             { extend: 'excelHtml5', footer: true },
-            { extend: 'csvHtml5', title: 'Student Receiveable Report(TPS)',footer: true },
-            { extend: 'pdfHtml5',  title: 'Student Receiveable Report(TPS)',footer: true }
+            { extend: 'csvHtml5', title: 'Fee Receiveable Report(TPS)',footer: true },
+            { extend: 'pdfHtml5',  title: 'Fee Receiveable Report(TPS)',footer: true }
         ],
 
         ////

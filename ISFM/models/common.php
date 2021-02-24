@@ -787,8 +787,31 @@ public function student_Admission()
 public function fee_struct()
 {
     $stu_data = array();
+
     $query = $this->db->query("SELECT slip.year,slip.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name,slip.payment_status,slip.month, slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id LEFT JOIN student_fee_discount ON slip.student_id = student_fee_discount.student_id");
     foreach ($query->result_array() as $row) {
+
+
+        $query = $this->db->query("
+
+                        SELECT  slip.year,slip.student_id,class.class_title, student_info.section, student_info.student_nam,student_info.farther_name,slip.payment_status,slip.month, slip.dis_total  
+
+              
+
+          FROM slip
+
+                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
+
+                                   LEFT JOIN student_fee_discount ON slip.student_id = student_fee_discount.student_id
+                                   INNER JOIN class ON slip.class_id = class.id
+
+                                    ");
+
+
+
+        foreach ($query->result_array() as $row) {
+
+
             $stu_data[] = $row;
         }
         return $stu_data;
@@ -863,7 +886,19 @@ public function student_chalanz()
     $month=date("F");
     $year = date("Y");
     $stu_data = array();
+
     $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE  slip.month = '$month' AND slip.year= $year ");
+
+
+        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,class.class_title, student_info.section, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip 
+            INNER JOIN student_info ON slip.student_id = student_info.student_id 
+            INNER JOIN class ON slip.class_id = class.id
+
+                                    ");
+
+
+
+
         foreach ($query->result_array() as $row) {
             $stu_data[] = $row;
         }

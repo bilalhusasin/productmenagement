@@ -51,8 +51,11 @@ $(document).ready(function ()
             
         ],
 
-    "buttons": [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+     "buttons": [
+            { extend: 'copyHtml5', footer: true },
+            { extend: 'excelHtml5', footer: true },
+            { extend: 'csvHtml5', title: 'Fee Receipt Report(TPS)',footer: true },
+            { extend: 'pdfHtml5',  title: 'Fee Receipt Report(TPS)',footer: true }
         ],
         deferRender:    true,
           scrollY:        "300px",
@@ -73,8 +76,60 @@ $(document).ready(function ()
                     }
                 } );
             } );
+        },
+"footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            total = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotal = api
+                .column( 7, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            $( api.column( 7 ).footer() ).html(
+                'Page Total: '+pageTotal +' pkr'+'\n Grand Total: '+ total +'  pkr'
+            );
+			//// column 8 //// 
+ // Total over all pages
+            total1 = api
+                .column( 8 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotal1 = api
+                .column( 8, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            $( api.column( 8 ).footer() ).html(
+                'Page Total: '+pageTotal1 +' '+'\n Grand Total: '+ total1 +'  '
+            );
         }
-
 
     }); 
 

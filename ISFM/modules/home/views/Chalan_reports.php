@@ -56,7 +56,7 @@ $(document).ready(function ()
             { extend: 'copyHtml5', footer: true },
             { extend: 'excelHtml5', footer: true },
             { extend: 'csvHtml5', title: 'Student Chalan Report(TPS)',footer: true },
-            { extend: 'pdfHtml5',  title: 'Student Chalan Report(TPS)',footer: true }
+            { extend: 'pdfHtml5', orientation: 'landscape', title: 'Student Chalan Report(TPS)',footer: true }
         ],
         deferRender:    true,
           scrollY:        "300px",
@@ -468,7 +468,7 @@ $(document).ready(function ()
                             <br><br><br>
                             <div class="" data-always-visible="1" data-rail-visible="0">
                                 <div class="">
-                                    <table id="datatable" class="table table-striped table-hover">
+                                    <table id="datatable" class="dt-center table table-striped table-hover">
                                         <thead>
                                             <tr> 
                                                 <th>Chalan No</th>

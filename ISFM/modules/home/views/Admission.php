@@ -53,7 +53,10 @@ $(document).ready(function ()
              ],
 
     "buttons": [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            { extend: 'copyHtml5', footer: true },
+            { extend: 'excelHtml5', footer: true },
+            { extend: 'csvHtml5', title: 'Student Admission Repoert(TPS)',footer: true },
+            { extend: 'pdfHtml5', orientation: 'landscape',  title: 'Student Admission Report(TPS)',footer: true }
         ],
         deferRender:    true,
           scrollY:        "300px",

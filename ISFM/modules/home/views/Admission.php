@@ -1,4 +1,4 @@
-ta<!-- Begin PAGE STYLES -->
+<!-- Begin PAGE STYLES -->
 <link href="assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet"/>
 

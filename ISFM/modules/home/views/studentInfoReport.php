@@ -1,3 +1,4 @@
+<head>
 <!-- Begin PAGE STYLES -->
 <link href="assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet"/>
@@ -9,7 +10,7 @@
 <style media="print">
     @page{ 
         margin: 25px !important;
-        size: auto;
+        size: landscape;
     }  
     .no-print{
         display: none;
@@ -62,7 +63,8 @@
         .display{ 
         display: none; 
     }
-    </style>  
+    </style> 
+</head> 
 <!-- Begin CONTENT -->
 <div class="page-content-wrapper">
     <div class="page-content">
@@ -109,7 +111,20 @@
                         /*$form_attributs = array('class' => 'form-horizontal', 'role' => 'form');
                         echo form_open('home/commonFilter', $form_attributs);*/
                     ?>
-                        <div class="row "> 
+                        <div class="row ">  
+                            <div class="col-md-2 col-sm-12"> 
+                                <div class="form-group">  
+                                    <!-- <input class="form-control" name="classSession" id="classSession" placeholder="yyyy-mm-dd" type="text"> --> 
+                                    <select name="classSession" id="classSession" class="form-control">
+                                        <option value="">Select Status...</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option> 
+
+                                    </select>
+                                </div> 
+                            </div> 
                             <div class="col-md-3 col-sm-12"> 
                                 <div class="form-group">
                                     <select onchange="classSection(this.value)" name="className" id="className" class="form-control" required="required">
@@ -131,7 +146,7 @@
 
                             <div class="col-md-2 col-sm-12"> 
                                 <div class="form-group">
-                                    <select name="classSection" id="status" class="form-control">
+                                    <select name="status" id="status" class="form-control">
                                         <option value="">Select Status...</option>
                                         <option value="Active">Active</option>
                                         <option value="Deactive">Deactive</option>
@@ -140,11 +155,6 @@
 
                                     </select>
                                 </div> 
-                            </div>
-                            <div class="col-md-2 col-sm-12"> 
-                                <!-- <div class="form-group">
-                                    <input type="number" class="form-control" name="monthid" id="monthid" placeholder="Enter Number">
-                                </div>  -->
                             </div> 
                             <div class="col-md-2 col-sm-12"> 
                                 <div class="form-group">
@@ -349,6 +359,7 @@
                                     <tr>
                                         <th> Sr # </th>
                                         <th> Student ID </th>
+                                        <th> Year </th>
                                         <th> Registration Number </th>
                                         <th> Student Name </th>
                                         <th> Father Name </th>
@@ -365,6 +376,7 @@
                                 echo'<tr>
                                         <td>'. $count++ .'</td>
                                         <td>'. $value["student_id"] .'</td>
+                                        <td>'. $value["year"] .'</td>
                                         <td>'. $value["registration_number"] .'</td>
                                         <td>'. $value["student_nam"] .'</td>
                                         <td>'. $value["farther_name"] .'</td>
@@ -395,10 +407,22 @@
 <script type="text/javascript" src="assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
 <script type="text/javascript" src="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
-<script src="assets/admin/pages/scripts/table-advanced.js"></script>  
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
+<script src="assets/admin/pages/scripts/table-advanced.js"></script>   
+  
 
-<script>
+
+ 
+<script> 
+    $(document).ready(function() { 
+        $(function() { 
+        $("#classSession").datepicker({ 
+            changeYear: true,
+            yearRange:"2000:2050",
+            dateFormat: 'yy-mm-dd'
+                    
+        }); 
+        });   
+    }); 
 function classSection(str) {
     var xmlhttp;
     if (str.length === 0) {
@@ -423,13 +447,16 @@ function classSection(str) {
 </script>
 <script>
 function filterSearch(str) {
-    var className= document.getElementById("className").value; 
-    if(className == ''){
+    var className= document.getElementById("className").value;
+    var classSession = document.getElementById("classSession").value; 
+    
+    if(classSession == ''){
+        alert ('Please Select Class Session');
+    } else if(className == ''){
         alert ('Please Select Class Name');
     } else{ 
         var classSection = document.getElementById("classSection").value; 
-        var status = document.getElementById("status").value; 
-
+        var status = document.getElementById("status").value;  
         var xmlhttp;
         if (str.length === 0) {
             document.getElementById("filterdata").innerHTML = "";
@@ -447,7 +474,7 @@ function filterSearch(str) {
                     document.getElementById("filterdata").innerHTML = xmlhttp.responseText;
                 }
             };
-        xmlhttp.open("GET", "index.php/home/ajaxStudentInfoReport?c_Name=" + className + "&c_Section=" + classSection + "&status=" + status, true);
+        xmlhttp.open("GET", "index.php/home/ajaxStudentInfoReport?c_Name=" + className + "&c_Section=" + classSection + "&status=" + status + "&classSession=" + classSession, true);
         xmlhttp.send(); 
     }
      
@@ -456,7 +483,8 @@ function filterSearch(str) {
 function tillData(){  
     var className= document.getElementById("className").value; 
     var classSection = document.getElementById("classSection").value; 
-    var status = document.getElementById("status").value; 
+    var status = document.getElementById("status").value;
+    var classSession = document.getElementById("classSession").value; 
     //alert(className);
        $.ajax({
             type: "POST",
@@ -465,6 +493,7 @@ function tillData(){
                 "className":className,
                 "classSection":classSection,
                 "status":status,
+                "classSession":classSession,
             },
             dataType: "json",
 
@@ -524,10 +553,6 @@ foreach ($date_wise_students as $cap) {
     options: {}
 });
 </script>
-
-
-
-
 <script>
 
     jQuery(document).ready(function () {

@@ -1,245 +1,71 @@
 <!-- Begin PAGE STYLES -->
 <link href="assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet"/>
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
- <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>  
-        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js" type="text/javascript"></script>
-       
-        <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
-        <script src="https://cdn.datatables.net/scroller/2.0.2/js/dataTables.scroller.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" type="text/javascript"></script>
-          <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js" type="text/javascript"></script>
-           <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" />  
-         <script type="text/javascript">
-         var table;  
-$(document).ready(function ()  
-{  
-
- // Setup - add a text input to each footer cell
-    $('#datatable tfoot th').each( function () {
-        var title = $(this).text();
-        console.log(title);
-        $(this).html( '<input type="text" style="width:90px;" placeholder="'+$(this).text()+'" />' );
-    } );
-
-      table = $('#datatable').dataTable(  
-    {
-        "bSort": false,
-        "pagingType": "full_numbers",
-        "dom": 'Bfrtip',
-        "lengthMenu": [[10, 25, 50, -1],[10, 25, 50, "All"]
-
-    ], 
-"data" : <?php echo json_encode($stdInfo); ?>,
-"columns": [
-            
-            { data: "voucher_number" },
-            { data: "month" },
-            { data: "year"},
-            { data: "student_id" },
-            { data: "student_nam" },
-            { data: "class_title" },
-            { data: "section" },
-            { data: "tution_fee" },
-            { data: "ac_charges" },
-            { data: "amount" },
-            { data: "discount" },
-            { data: "dis_total" },
-            { data: "paid" }
-        ],
-
-    "buttons": [
-            { extend: 'copyHtml5', footer: true },
-            { extend: 'excelHtml5', footer: true },
-            { extend: 'csvHtml5', title: 'Student Chalan Report(TPS)',footer: true },
-            { extend: 'pdfHtml5',  title: 'Student Chalan Report(TPS)',footer: true }
-        ],
-        deferRender:    true,
-          scrollY:        "300px",
-        scrollX:        true,
-        scrollCollapse: true,
-        fixedColumns:   true,
-         scroller:       true,
-          initComplete: function () {
-            // Apply the search
-            this.api().columns().every( function () {
-                var that = this;
- 
-                $( 'input', this.footer() ).on( 'keyup change clear', function () {
-                    if ( that.search() !== this.value ) {
-                        that
-                            .search( this.value )
-                            .draw();
-                    }
-                } );
-            } );
-        },
-        "footerCallback": function ( row, data, start, end, display ) {
-            var api = this.api(), data;
- 
-            // Remove the formatting to get integer data for summation
-            var intVal = function ( i ) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
- 
-            // Total over all pages
-            total = api
-                .column( 7 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal = api
-                .column( 7, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Update footer
-            $( api.column( 7 ).footer() ).html(
-                'Page Total: '+pageTotal +' '+'\n Grand Total: '+ total +'  '
-            );
-
-
-//// column 8 //// 
- // Total over all pages
-            total1 = api
-                .column( 8 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal1 = api
-                .column( 8, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Update footer
-            $( api.column( 8 ).footer() ).html(
-                'Page Total: '+pageTotal1 +' '+'\n Grand Total: '+ total1 +'  '
-            );
-
-//// column 9 //// 
- // Total over all pages
-            total2 = api
-                .column( 9 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal2 = api
-                .column( 9, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Update footer
-            $( api.column( 9 ).footer() ).html(
-                'Page Total: '+pageTotal2 +' '+'\n Grand Total: '+ total2 +'  '
-            );
-            //// column 10 //// 
- // Total over all pages
-            total3 = api
-                .column( 10 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal3 = api
-                .column( 10, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Update footer
-            $( api.column( 10 ).footer() ).html(
-                'Page Total: '+pageTotal3 +' '+'\n Grand Total: '+ total3 +'  '
-            );
-
-            //// column 11 //// 
- // Total over all pages
-            total4 = api
-                .column( 11 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal4 = api
-                .column( 11, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Update footer
-            $( api.column( 11 ).footer() ).html(
-                'Page Total: '+pageTotal4 +' '+'\n Grand Total: '+ total4 +'  '
-            );
-
-            //// column 12 //// 
- // Total over all pages
-            total5 = api
-                .column( 12 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal5 = api
-                .column( 12, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Update footer
-            $( api.column( 12 ).footer() ).html(
-                'Page Total: '+pageTotal5 +' '+'\n Grand Total: '+ total5 +'  '
-            );
-        }
-
-
-    }); 
-
-
-   
-
-});  
-
-
-
- 
-
-        </script>
-<!-- End PAGE STYLES -->
-<!-- Begin CONTENT -->
+<link rel="stylesheet" type="text/css" href="assets/global/jquery_ui_css/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/><!-- Begin CONTENT -->
+<style media="print">
+    @page{ 
+        margin: 25px !important;
+        size: portrait;
+    }  
+    .no-print{
+        display: none;
+    }
+    .display{ 
+        display: block !important; 
+    } 
+    .table{
+        margin-bottom: 0px !important;
+    }
+        /* avoid cutting tr's in half */
+    
+    div table  {  
+    }
+     
+    .table_print {
+    table-layout: fixed !important;
+    width: 33%;
+    float: left;
+    font-size: 6px !important;
+    overflow: none;
+      }
+     td{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: break-word;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    font-size: 8px !important;
+      }
+      th{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: break-word;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    font-size: 8px !important;
+      } 
+    #tdfont{
+        font-size: 9px !important;
+        padding-top: 4px !important;
+    } 
+    p{
+    font-size: 6px !important; 
+      }   
+    </style>  
+    <style>
+        .display{ 
+        display: none; 
+    }
+    </style> 
 <div class="page-content-wrapper">
     <div class="page-content">
         <!-- Begin Page Header-->
-        <div class="row">
+        <div class="row no-print">
             <div class="col-md-12">
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h3 class="page-title">
@@ -261,19 +87,99 @@ $(document).ready(function ()
         $userId = $user->id;
         ?>
         <!-- BEGIN DASHBOARD-->
+        <div class="row no-print"> 
+            <div class="col-md-12 col-sm-12">
+                <div class="portlet purple box">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-search"></i><?php echo 'Search Fee Chalan Report information'; ?>
+                        </div>
+                        <div class="tools">
+                            <a class="collapse" href="javascript:;">
+                            </a>
+                            <a class="reload" href="javascript:;">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body"> 
+                    <?php 
+                        /*$form_attributs = array('class' => 'form-horizontal', 'role' => 'form');
+                        echo form_open('home/commonFilter', $form_attributs);*/
+                    ?>
+                    <div class="row ">
+                        <div class="col-md-12">    
+                            <div class="col-md-3 col-sm-12"> 
+                                <div class="form-group">
+                                   <select name="year" id="year" class="form-control" required="required"> 
+                                        <option value="">Select Year...</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            <div class="col-md-3 col-sm-12"> 
+                                <div class="form-group">
+                                   <select name="monthName" id="monthName" class="form-control" required="required"> 
+                                        <option value="">Select Month...</option>
+                                        <option value="January">January</option>
+                                        <option value="February">February</option>
+                                        <option value="March">March</option>
+                                        <option value="April">April</option> 
+                                        <option value="May">May</option>
+                                        <option value="June">June</option> 
+                                        <option value="July">July</option>  
+                                        <option value="August">August</option> 
+                                        <option value="September">September</option> 
+                                        <option value="October">October</option> 
+                                        <option value="November">November</option> 
+                                        <option value="December">December</option>
+                                    </select>
+                                </div> 
+                            </div> 
+                            <div class="col-md-2 col-sm-12"> 
+                                <div class="form-group">
+                                    <select onchange="classSection(this.value)" name="className" id="className" class="form-control" required="required">
+                                        <option value="">Select Class Title...</option>
+                                    <?php foreach($classTile as $row){?>
+                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['class_title']; ?></option>
+                                    <?php } ?>
+                                    </select>
+                                </div> 
+                            </div>
+                            <div class="col-md-2 col-sm-12"> 
+                                <div class="form-group">
+                                    <select name="classSection" id="classSection" class="form-control">
+                                        <option value="">Select Class Section...</option>  
+                                    </select>
+                                </div>
+                            </div>  
+                            <div class="col-md-2 col-sm-12"> 
+                                <div class="form-group">
+                                    <input type="button" onclick ="filterSearch(this.value); " class="btn green" value="Submit" name="submit">
+                                </div> 
+                            </div> 
+                        </div>
+                    </div> 
+                    <?php // echo form_close(); ?> 
+                    </div>
+                </div>
+            </div> 
+        </div>
+        <hr class="no-print">
         <?php if ($this->common->user_access('das_top_info', $userId)) { ?>
-            <div class="row">
+            <div class="row no-print">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat blue-madison">
                         <div class="visual">
                             <i class="fa fa-group"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                <?php echo $totalStudent; ?>
+                            <div class="number" id="totalAmount">
+                                <?php echo $total_chalan_amount; ?>
                             </div>
                             <div class="desc">
-                                <label style="font-size: 23px;">Total Before Discount</label> 
+                                <label  >Total WithOut Discount</label> 
                             </div>
                         </div>
                         <div  class="more dasTotalStudentTest">
@@ -287,8 +193,8 @@ $(document).ready(function ()
                             <span class="icon-users totalTeacherSpan" aria-hidden="true"></span>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                <?php echo $Active_stds; ?>
+                            <div class="number" id="discountedTotal">
+                                <?php echo $Total_with_discount; ?>
                             </div>
                             <div class="desc">
                                 <?php echo ('Total After Discount'); ?>
@@ -305,15 +211,14 @@ $(document).ready(function ()
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                <?php echo $totalStudent- $Active_stds; ?>
+                            <div class="number" id="discountedAmount">
+                                <?php echo $total_chalan_amount - $Total_with_discount; ?>
                             </div>
                             <div class="desc">
-                                <?php echo ('discounted amount'); ?>
+                                <?php echo ('Discounted Amount'); ?>
                             </div>
                         </div>
-                        <div class="more dbilcss3"> 
-                                                    </div>
+                        <div class="more dbilcss3"> </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -322,11 +227,11 @@ $(document).ready(function ()
                             <i class="fa fa-bar-chart-o"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                <?php echo $total_paid ?>
+                            <div class="number" id="totalPaid">
+                                <?php echo $total_paid; ?>
                             </div>
                             <div class="desc">
-                                <?php echo ('Total Paid'); ?>
+                                <?php echo ('Total Paid Amount'); ?>
                             </div>
                         </div>
                         <div class="more dbilcss3">
@@ -334,17 +239,17 @@ $(document).ready(function ()
                         </div>
                     </div>
                 </div>
-                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat purple-plum">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat yellow">
                         <div class="visual">
                             <i class="fa fa-bar-chart-o"></i>
                         </div>
                         <div class="details">
-                            <div class="number">
-                                <?php echo $total_unpaid ?>
+                            <div class="number" id="totalUnpaid">
+                                <?php echo $total_unpaid; ?>
                             </div>
                             <div class="desc">
-                                <?php echo ('Total Unpaid'); ?>
+                                <?php echo ('Total Unpaid Amount'); ?>
                             </div>
                         </div>
                         <div class="more dbilcss3">
@@ -362,7 +267,7 @@ $(document).ready(function ()
             </div> -->
         <?php //} 
         if ($this->common->user_access('das_grab_chart', $userId)) { ?>
-            <div class="row">
+            <div class="row no-print">
                 <div class="col-md-12 col-sm-12">
                     <!-- BEGIN PORTLET-->
                     <div class="portlet green box">
@@ -372,18 +277,14 @@ $(document).ready(function ()
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <canvas id="myChart"></canvas>
-                           
-                            <div id="site_activities_content" class="display-none">
-                                
-                            </div>
+                            <canvas id="myChart"></canvas> 
+                            <div id="site_activities_content" class="display-none"> </div>
                         </div>
                     </div>
                     <!-- END PORTLET-->
                 </div>
             </div>
-            <div class="clearfix">
-            </div>
+            <div class="clearfix"> </div>
         <?php } ?>
         <?php if ($this->ion_auth->is_student()) { ?>
             <div class="row">
@@ -398,10 +299,8 @@ $(document).ready(function ()
                                 ?> <?php echo lang('des_ful_rou'); ?>.
                             </div>
                             <div class="tools">
-                                <a href="javascript:;" class="collapse">
-                                </a>
-                                <a href="javascript:;" class="reload">
-                                </a>
+                                <a href="javascript:;" class="collapse"> </a>
+                                <a href="javascript:;" class="reload"> </a>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -445,114 +344,89 @@ $(document).ready(function ()
                 </div>
             </div>
         <?php } ?>        
-        <div class="row ">
+        <div class="row " id="filterdata">
             <?php if ($this->common->user_access('das_class_info', $userId)) { ?>
                 <div class="col-md-12 col-sm-12">
                     <div class="portlet purple box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-cogs"></i><?php echo ('Student Chalan information'); ?>
+                                <i class="fa fa-cogs"></i><?php echo ('Student Fee Chalan information'); ?>
                             </div>
                             <div class="tools">
-                                <a class="collapse" href="javascript:;">
-                                </a>
-                                <a class="reload" href="javascript:;">
-                                </a>
+                                <a class="collapse" href="javascript:;"></a>
+                                <a class="reload" href="javascript:;"></a>
                             </div>
                         </div>
-                        <div class="portlet-body">
-                           <!--  <input type="text" onkeyup="get_record('chalan',this.value)" placeholder="chalan no" id="chalanz">
-                            <input type="text" onkeyup="get_record('month',this.value)" placeholder="month" id="monthz"><input type="text" placeholder="Student ID"        onkeyup="get_record('student',this.value)"  id="std_id">
-                            <input type="text" onkeyup="get_record('class',this.value)" placeholder="Class" id="classz">
-                            <input type="text" onkeyup="get_record('section',this.value)" placeholder="Section" id="sectionz"> -->
-                            <br><br><br>
-                            <div class="" data-always-visible="1" data-rail-visible="0">
-                                <div class="">
-                                    <table id="datatable" class="table table-striped table-hover">
-                                        <thead>
-                                            <tr> 
-                                                <th>Chalan No</th>
-                                                <th>Chalan Month</th>
-                                                <th>Chalan Year</th>
-                                                <th>Student ID</th>
-                                                <th>Student Name</th>
-                                                <th>Class</th>
-                                                <th>Section</th>
-                                                <th>Tuition Fee</th>
-                                                <th>AC Charges</th>
-                                                <th>Total</th>
-                                                <th>Discount</th>
-                                                <th>Grand Total</th>
-                                                <th>Paid Amount</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody> 
-                                        </tbody>
-                                        <tfoot>
-                                            <tr> 
-                                                <th>Chalan No</th>
-                                                <th>Chalan Month</th>
-                                                <th>Chalan Year</th>
-                                                <th>Student ID</th>
-                                                <th>Student Name</th>
-                                                <th>Class</th>
-                                                <th>Section</th>
-                                                <th>Tuition Fee</th>
-                                                <th>AC Charges</th>
-                                                <th>Total</th>
-                                                <th>Discount</th>
-                                                <th>Grand Total</th> <th>Paid Amount</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                            
+                        <div class="portlet-body">   
+                            <table id="sample_1" class="table table-striped table-hover">
+                                <thead>
+                                    <tr> 
+                                        <th>Sr #</th>
+                                        <th>Chalan No</th>
+                                        <th>Chalan Month</th>
+                                        <th>Chalan Year</th>
+                                        <th>Student ID</th>
+                                        <th>Student Name</th>
+                                        <th>Class</th>
+                                        <th>Section</th>
+                                        <th>Discount Title</th>
+                                        <th>Discount Percentage</th>
+                                        <th>Tuition Fee</th>
+                                        <th>AC Charges</th>
+                                        <th>Total</th>
+                                        <th>Discount</th>
+                                        <th>Grand Total</th>
+                                        <th>Paid Amount</th> 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                            <?php $count=1; foreach ($stdInfo as $value) {?>
+                                    <tr> 
+                                        <td> <?php echo $count++; ?> </td>
+                                        <td> <?php echo $value['voucher_number']; ?> </td>
+                                        <td> <?php echo $value['month']; ?> </td>
+                                        <td> <?php echo $value['year']; ?> </td>
+                                        <td> <?php echo $value['student_id']; ?> </td>
+                                        <td> <?php echo $value['student_nam']; ?> </td>
+                                        <td> <?php echo $value['class_title']; ?> </td>
+                                        <td> <?php echo $value['section']; ?> </td>
+                                        <td> 
+                                            <?php if($value['discount_id'] == 0){ echo "No Discount";}else{
+                                            echo $this->common->discount_cod($value['discount_id']); }?>
+                                        </td>
+                                        <td> 
+                                            <?php if($value['discount_id'] == 0){ echo "No Discount";}else{
+                                            echo $this->common->dis_per($value['discount_id'])."%"; }?>
+                                        </td>
+                                        <td> <?php echo $value['tution_fee']; ?> </td>
+                                        <td> <?php echo $value['ac_charges']; ?> </td>
+                                        <td> <?php echo $value['amount']; ?> </td>
+                                        <td> <?php echo $value['discount']; ?> </td>
+                                        <td> <?php echo $value['dis_total']; ?> </td>
+                                        <td> <?php echo $value['paid']; ?> </td> 
+                                    </tr> 
+                            <?php } ?>
+                                </tbody>
+                            </table> 
                         </div>
                     </div>
                 </div>
-            <?php }?>
+            <?php }?> 
         </div>
-        <div class="clearfix"></div>
-        <div class="row ">
-            <div class="col-md-12 col-sm-12">
-                <!-- BEGIN PORTLET-->
-                
-                <!-- END PORTLET-->
-            </div>
-
-        </div>
+        <div class="clearfix"></div> 
         <!-- END DASHBOARD STATS -->
     </div>
 </div>
-<!-- END CONTENT -->
-
+<!-- END CONTENT --> 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
-
-<script src="assets/global/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
-
-<script src="assets/global/plugins/jquery.pulsate.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
-<!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
-<script src="assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script type="text/javascript" src="assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
-<!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="assets/admin/pages/scripts/index.js" type="text/javascript"></script>
-<script src="assets/admin/pages/scripts/tasks.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="assets/admin/pages/scripts/table-advanced.js"></script>
+<!-- END PAGE LEVEL SCRIPTS --> 
 
 <script>
 
@@ -789,8 +663,6 @@ if(value!=""){
 //          alert(typeof response);
    //       var xx= JSON.parse(result)
           $("#datatable > tbody").empty();
-
-
 //console.log(result);
           $.each(result, function(i, item) {
             //alert("in");
@@ -817,17 +689,92 @@ if(value!=""){
 //}
 
     }
-
-
-function double_column(column1, val1,column2,val2)
-    {
-    
-alert(column1+" "+val1+" "+column2+" "+val2);
-
-//if(value!="")
-
  
+
+</script>
+<script>
+
+function classSection(str) {
+    var xmlhttp;
+    if (str.length === 0) {
+        document.getElementById("classSection").innerHTML = "";
+        return;
+    }
+    if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else {
+        // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                document.getElementById("classSection").innerHTML = xmlhttp.responseText;
+            }
+        };
+    xmlhttp.open("GET", "index.php/home/ajaxClassSectionApp?q=" + str, true);
+    xmlhttp.send();
 }
+function filterSearch(str) {
+    var year = document.getElementById("year").value; 
+    var monthName = document.getElementById("monthName").value;                            
+    var className = document.getElementById("className").value;   
+    var classSection = document.getElementById("classSection").value; 
+    //alert(year + monthName + className + classSection);
+    if(year == ''){
+        alert ('Please Select Session First');
+    } else if(monthName == ''){
+        alert ('Please Select Month Name First');
+    } else{  
+        var xmlhttp;
+        if (str.length === 0) {
+            document.getElementById("filterdata").innerHTML = "";
+            return;
+        }
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    document.getElementById("filterdata").innerHTML = xmlhttp.responseText;
+                }
+            };
+        xmlhttp.open("GET", "index.php/home/ajaxStudentChalanReport?className=" + className + "&classSection=" + classSection + "&monthName=" + monthName + "&year=" + year, true);
+        xmlhttp.send(); 
+        TillData();
+    }
+     
+}
+function TillData(){
+    var year = document.getElementById("year").value; 
+    var monthName = document.getElementById("monthName").value;                            
+    var className = document.getElementById("className").value;   
+    var classSection = document.getElementById("classSection").value; 
+    //alert(year + monthName + className + classSection );
+       $.ajax({
+            type: "POST",
+            url: "index.php/home/ajaxStudentChalanReportTillData",
+            data: {
+                "year":year,
+                "monthName":monthName, 
+                "className":className,  
+                "classSection":classSection, 
+            },
+            dataType: "json",
 
-
+            //if received a response from the server
+            success: function( datas, textStatus, jqXHR) {  
+                //alert(datas.totalAmount - datas.discounteTotal); 
+                $("#totalAmount").html(datas.totalAmount); 
+                $("#discountedTotal").html(datas.discounteTotal);
+                $("#discountedAmount").html(parseInt(datas.totalAmount) - parseInt(datas.discounteTotal));
+                $("#totalPaid").html(datas.totalPaid); 
+                $("#totalUnpaid").html(datas.totalUnpaid); 
+            },
+        }); 
+} 
 </script>

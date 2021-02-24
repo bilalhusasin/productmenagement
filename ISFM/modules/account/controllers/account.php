@@ -470,7 +470,7 @@ class Account extends MX_Controller {
             $year = $this->input->get('year', TRUE);
 
         $due_date=strtotime($d_date); 
-        $curr_date = strtotime(date('yy-m-d')); 
+        $curr_date = strtotime(date('Y-m-d')); 
        if($due_date >= $curr_date ){ 
               
             $data['voucher'] = $this->accountmodel->vocher($std_id,$class_id,$voch_no,$month,$year); 
@@ -640,7 +640,7 @@ class Account extends MX_Controller {
             $year = $this->input->get('year');
             
             $due_date=strtotime($d_date); 
-            $curr_date = strtotime(date('yy-m-d')); 
+            $curr_date = strtotime(date('Y-m-d')); 
             if($due_date >= $curr_date ){ 
                 $data['slip_data'] = $this->accountmodel->s_slip_info($sid,$class_id,$voch_no,$month,$year);
                 $query1=$this->db->query("SELECT * FROM payment_methods WHERE status='active'");
@@ -1294,7 +1294,8 @@ class Account extends MX_Controller {
     public function previousPayments(){ 
         $month = date('F');  
         $year = date('Y');                     
-        $query=$this->db->query("SELECT * FROM slip WHERE month!= '$month' AND year='$year' AND payment_status!='Paid' ");
+        //$query=$this->db->query("SELECT * FROM slip WHERE month!= '$month' AND year='$year' AND payment_status!='Paid' ");
+        $query=$this->db->query("SELECT * FROM slip WHERE month!= '$month' AND payment_status!='Paid' ");
         $data['slip_unpaid']=$query->result_array();
             $this->load->view('temp/header');
             $this->load->view('previousPayments', $data);
@@ -1306,7 +1307,7 @@ class Account extends MX_Controller {
         $sid = $this->input->get('q');
         $month = date('F');
         $year = date('Y');
-        $query=$this->db->query("SELECT * FROM slip WHERE student_id='$sid' AND month!= '$month' AND year='$year' AND payment_status!='Paid' ");
+        $query=$this->db->query("SELECT * FROM slip WHERE student_id='$sid' AND month!= '$month' AND payment_status!='Paid' ");
         $slip_unpaid=$query->result_array();
        $count=1;
         foreach ($slip_unpaid as $row) { 

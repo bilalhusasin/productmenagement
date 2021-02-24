@@ -131,16 +131,17 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="index.php/home/profileView">
-                                        <i class="icon-user"></i> <?php echo lang('top_nav_my_profile'); ?> </a>
+                                        <i class="icon-user"></i> <?php echo lang('top_nav_my_profile'); ?>
+                                    </a>
                                 </li>
                                 <li>
                                     <a href="index.php/home/calender">
-                                        <i class="icon-calendar"></i> <?php echo lang('top_nav_my_calendar'); ?> </a>
+                                        <i class="icon-calendar"></i> <?php echo lang('top_nav_my_calendar'); ?> 
+                                    </a>
                                 </li>
                                 <li>
                                     <a href="index.php/message/inbox">
-                                        <i class="icon-envelope-open"></i> Message <span class="badge badge-danger">
-                                            <?php echo $urmAmount; ?>  </span>
+                                        <i class="icon-envelope-open"></i> Message <span class="badge badge-danger"> <?php echo $urmAmount; ?>  </span>
                                     </a>
                                 </li>
                                 <li class="divider">
@@ -1275,20 +1276,41 @@
                                         <a href="index.php/home/studentInfoReporst" class="nav-link ">
                                             <span class="title"><?php echo 'PHP Students Info'; ?></span>
                                         </a>
-                                    </li> 
+                                    </li>
+                                    <li class="nav-item <?php echo $StudentStrength; ?>">
+                                        <a href="index.php/home/currentStudentStrength" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Current Student Strength'; ?></span>
+                                        </a>
+                                    </li>
+                                    
                                     <li class="nav-item <?php echo $Student_reg; ?>">
                                         <a href="index.php/home/Student_reg" class="nav-link ">
                                             <span class="title"><?php echo 'Registration Info'; ?></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $Student_reg; ?>">
+                                        <a href="index.php/home/studentRegiserReport" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Registration Info'; ?></span>
                                         </a>
                                     </li> 
                                     <li class="nav-item <?php echo $Chalan_reports; ?>">
                                         <a href="index.php/home/Chalan_reports" class="nav-link ">
                                             <span class="title"><?php echo 'Chalan Report'; ?></span>
                                         </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $Chalan_reports; ?>">
+                                        <a href="index.php/home/studentChalanReport" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Chalan Report'; ?></span>
+                                        </a>
                                     </li> 
                                     <li class="nav-item <?php echo $Admission; ?>">
                                         <a href="index.php/home/Admission" class="nav-link ">
                                             <span class="title"><?php echo 'Admission report'; ?></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $Admission; ?>">
+                                        <a href="index.php/home/studentAdmission" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Admission report'; ?></span>
                                         </a>
                                     </li> 
                                     <li class="nav-item <?php echo $Student_fee; ?>">
@@ -1321,6 +1343,26 @@
                                             <span class="title"><?php echo 'Student Leftover'; ?></span>
                                         </a>
                                     </li>
+                                    <li class="nav-item <?php echo $leftoverStudent; ?>">
+                                        <a href="index.php/home/leftoverStudents" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Leftover Students'; ?></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $siblingStudent; ?>">
+                                        <a href="index.php/home/siblingStudent" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Siblings Students'; ?></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $feeRecoveryReport; ?>">
+                                        <a href="index.php/home/feeRecoveryReport" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Recovery Report'; ?></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $feeRecoveryReport; ?>">
+                                        <a href="index.php/home/royaltyFeePayableReport" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Royalty Fee Payable Report'; ?></span>
+                                        </a>
+                                    </li> 
                                     <?php } ?> 
                                 </ul>
                             </li>

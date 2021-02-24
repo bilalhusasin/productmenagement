@@ -345,9 +345,11 @@ public function given_discount() {
     }
 
     public function tota_paid_amount() {
-        $yearz = date("Y");
+        $year = date("Y");
         $month = date("F");
-        $query1 = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Paid' AND slip.year = $yearz AND slip.month = '$month' ");
+
+        $numberMonth = date('m',strtotime($month));
+        $query1 = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND YEAR(vouchers.paid_time) = $year AND MONTH(vouchers.paid_time) = $numberMonth ");
         foreach ($query1->result() as $row) {
             $data1 = $row->dd;
         }return ($data1);
@@ -356,7 +358,8 @@ public function given_discount() {
     public function totalAdmissionAmount() {
         $year = date("Y");   
         $month = date("F");
-        $query1 = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND vouchers.year = $year AND vouchers.month_name = '$month' AND vouchers.voucher_type = 'Admission' ");
+        $numberMonth = date('m',strtotime($month));
+        $query1 = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND YEAR(vouchers.paid_time) = $year AND MONTH(vouchers.paid_time) = $numberMonth AND vouchers.voucher_type = 'Admission' ");
         foreach ($query1->result() as $row) {
             $data1 = $row->dd;
         }return ($data1);                        
@@ -573,7 +576,6 @@ public function count_unpaid_per() {
         $query = $this->db->query("SELECT tution_discount FROM fee_discount WHERE id=$discount_id")->row();
         return $query->tution_discount;
     }
-    //This function will return only admission discount persentage .
 
     public function admission_dis_per($discount_id){
         $data = array();
@@ -794,49 +796,26 @@ public function student_Admission()
 public function fee_struct()
 {
     $stu_data = array();
-
     $query = $this->db->query("SELECT slip.year,slip.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name,slip.payment_status,slip.month, slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id LEFT JOIN student_fee_discount ON slip.student_id = student_fee_discount.student_id");
     foreach ($query->result_array() as $row) {
-
-
-        $query = $this->db->query("
-
-                        SELECT  slip.year,slip.student_id,class.class_title, student_info.section, student_info.student_nam,student_info.farther_name,slip.payment_status,slip.month, slip.dis_total  
-
-              
-
-          FROM slip
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   LEFT JOIN student_fee_discount ON slip.student_id = student_fee_discount.student_id
-                                   INNER JOIN class ON slip.class_id = class.id
-
-                                    ");
-
-
-
-        foreach ($query->result_array() as $row) {
-
-
             $stu_data[] = $row;
         }
         return $stu_data;
 }
 
-public function student_discounts_reasons()
-{
+public function student_discounts_reasons(){
     $stu_data = array();
-    $query = $this->db->query("SELECT fee_discount.discount_reason as disc,fee_discount.tution_discount as disc_per,fee_discount.admission_discount, student_fee_discount.year as disc_year,  student_info.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name FROM student_fee_discount INNER JOIN student_info ON student_fee_discount.student_id = student_info.student_id LEFT JOIN fee_discount ON student_fee_discount.discount_id = fee_discount.id ");
-foreach ($query->result_array() as $row) {
+        $query = $this->db->query("SELECT fee_discount.discount_reason as disc,fee_discount.tution_discount as disc_per,fee_discount.admission_discount,student_fee_discount.year as disc_year,  student_info.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name FROM student_fee_discount INNER JOIN student_info ON student_fee_discount.student_id = student_info.student_id LEFT JOIN fee_discount ON student_fee_discount.discount_id = fee_discount.id");
+        foreach ($query->result_array() as $row) {
             $stu_data[] = $row;
         }return $stu_data;
 }
 
+
 public function student_chalan_receipt(){
     $month=date("F");
     $stu_data = array();
-    $query = $this->db->query("SELECT * FROM ( (SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, student_info.phone, vouchers.voucher_number,vouchers.month_name,vouchers.year,vouchers.total_amount, vouchers.paid_amount, vouchers.issue_date as advance_date FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id) UNION ALL (SELECT advance_fee.student_id, student_info.student_nam , student_info.class_title, student_info.section, student_info.phone, NULL as voucher_number, advance_fee.advance_month as month_name, advance_fee.advance_year as year, 0 as total_amount, advance_fee.advance_amount as paid_amount, advance_fee.advance_date FROM advance_fee INNER JOIN student_info ON advance_fee.student_id = student_info.student_id ) ) results ORDER BY `results`.`month_name` ASC");
+        $query = $this->db->query("SELECT * FROM ( (SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, student_info.phone, vouchers.voucher_number,vouchers.month_name,vouchers.year,vouchers.total_amount, vouchers.paid_amount, vouchers.issue_date as advance_date FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id) UNION ALL (SELECT advance_fee.student_id, student_info.student_nam , student_info.class_title, student_info.section, student_info.phone, NULL as voucher_number, advance_fee.advance_month as month_name, advance_fee.advance_year as year, 0 as total_amount, advance_fee.advance_amount as paid_amount, advance_fee.advance_date FROM advance_fee INNER JOIN student_info ON advance_fee.student_id = student_info.student_id ) ) results ORDER BY `results`.`month_name` ASC");
         foreach ($query->result_array() as $row) {
             $stu_data[] = $row;
         }return $stu_data;
@@ -844,88 +823,59 @@ public function student_chalan_receipt(){
 
 
 // get all fee chalan in current month using this function 
-public function student_chalanz()
-{
+public function student_chalanz(){
     $month=date("F");
     $year = date("Y");
     $stu_data = array();
-
     $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE  slip.month = '$month' AND slip.year= $year ");
-
-
-        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,class.class_title, student_info.section, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip 
-            INNER JOIN student_info ON slip.student_id = student_info.student_id 
-            INNER JOIN class ON slip.class_id = class.id
-
-                                    ");
-
-
-
-
         foreach ($query->result_array() as $row) {
             $stu_data[] = $row;
         }
         return $stu_data;
 }       
 
-public function student_chalan()
-
-{
+public function student_chalan(){
     $month=date("F");
-
     $stu_data = array();
-
-        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, student_info.phone, SUM(slip.amount+ slip.dues)as amount,slip.voucher_number,slip.year, slip.payment_status,slip.dues , slip.tution_fee,slip.discount,COUNT(DISTINCT month) as month FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where slip.payment_status='unpaid' AND student_info.status = 'Active' GROUP BY student_info.student_id ORDER by slip.due_date DESC"); 
+    $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, student_info.phone, SUM(slip.amount+ slip.dues)as amount,slip.voucher_number,slip.year, slip.payment_status,slip.dues , slip.tution_fee,slip.discount,COUNT(DISTINCT month) as month FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where slip.payment_status='unpaid' AND student_info.status = 'Active' GROUP BY student_info.student_id ORDER by slip.due_date DESC"); 
         foreach ($query->result_array() as $row) {
-
             $stu_data[] = $row;
-
         }return $stu_data;
-
-
-
 }
 
 public function student_chalan1(){
     $stu_data = array();
-        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam, student_info.farther_name, student_info.class_title, student_info.section, student_info.year, SUM(slip.dis_total) as dis_total, left_over_student_info.date_of_leaving,left_over_student_info.left_over_reason FROM left_over_student_info INNER JOIN slip ON left_over_student_info.student_id = slip.student_id INNER JOIN student_info ON left_over_student_info.student_id = student_info.student_id where slip.payment_status='unpaid' GROUP BY student_info.student_id ORDER BY student_info.student_id ASC ");
-        foreach ($query->result_array() as $row) {
-            $stu_data[] = $row;
-        }return $stu_data;
+    $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam, student_info.farther_name, student_info.class_title, student_info.section, student_info.year, SUM(slip.dis_total) as dis_total, left_over_student_info.date_of_leaving,left_over_student_info.left_over_reason FROM left_over_student_info INNER JOIN slip ON left_over_student_info.student_id = slip.student_id INNER JOIN student_info ON left_over_student_info.student_id = student_info.student_id where slip.payment_status='unpaid' GROUP BY student_info.student_id ORDER BY student_info.student_id ASC ");
+    foreach ($query->result_array() as $row) {
+        $stu_data[] = $row;
+    }return $stu_data;
 }
 
-
-
-
-
-    function studentInfoId() {
-
+// get all paid fee chalan in current month using this function 
+public function royaltyChalaninfo(){
+    $month=date("F");
+    $year = date("Y");
+    $stu_data = array();
+    $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$month' AND vouchers.voucher_type = 'Monthly Fee' AND vouchers.voucher_status = 'Paid'");
+        foreach ($query->result_array() as $row) {
+            $stu_data[] = $row;
+        }
+        return $stu_data;
+} 
+    public function studentInfoId() {
         $maxid = 0;
-
         $row = $this->db->query('SELECT MAX(id) AS `maxid` FROM `student_info`')->row();
-
         if ($row) {
-
             $maxid = $row->maxid;
-
         }return $maxid;
-
     }
 
-
-
     public function getAllData($a) {
-
         $data = array();
-
         $query = $this->db->get($a);
-
         foreach ($query->result_array() as $row) {
-
             $data[] = $row;
-
         }return $data;
-
     }
 
     //  Cash over due

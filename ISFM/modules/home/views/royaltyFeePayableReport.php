@@ -373,47 +373,37 @@
                                         <th>Sr #</th>
                                         <th>Chalan No</th>
                                         <th>Chalan Year</th>
-                                        <th>Chalan Month</th> 
+                                        <th>Chalan Month</th>
                                         <th>Student ID</th>
                                         <th>Student Name</th>
                                         <th>Class</th>
-                                        <th>Section</th>
+                                        <th>Section</th> 
+                                        <th>Vouchers Type</th>
                                         <th>Discount Title</th>
-                                        <th>Discount Percentage</th>
-                                        <th>Tuition Fee</th>
-                                        <th>AC Charges</th>
-                                        <th>Total</th>
-                                        <th>Discount</th>
-                                        <th>Grand Total</th>
-                                        <th>Paid Amount</th> 
+                                        <th>Discount Percentage</th>  
+                                        <th>Voucher Amount</th>
+                                        <th>Paid Amount </th>
+                                        <th>Voucher Status</th>  
                                     </tr>
                                 </thead>
                                 <tbody>
                             <?php $count=1; foreach ($stdInfo as $value) {?>
                                     <tr> 
-                                        <td> <?php echo $count++; ?> </td>
-                                        <td> <?php echo $value['voucher_number']; ?> </td>
-                                        <td> <?php echo $value['year']; ?> </td>
-                                        <td> <?php echo $value['month']; ?> </td> 
-                                        <td> <?php echo $value['student_id']; ?> </td>
-                                        <td> <?php echo $value['student_nam']; ?> </td>
-                                        <td> <?php echo $value['class_title']; ?> </td>
-                                        <td> <?php echo $value['section']; ?> </td>
-                                        <td> 
-                                            <?php if($value['discount_id'] == 0){ echo "No Discount";}else{
-                                            echo $this->common->discount_cod($value['discount_id']); }?>
-                                        </td>
-                                        <td> 
-                                            <?php if($value['discount_id'] == 0){ echo "No Discount";}else{
-                                            echo $this->common->dis_per($value['discount_id'])."%"; }?>
-                                        </td>
-                                        <td> <?php echo $value['tution_fee']; ?> </td>
-                                        <td> <?php echo $value['ac_charges']; ?> </td>
-                                        <td> <?php echo $value['amount']; ?> </td>
-                                        <td> <?php echo $value['discount']; ?> </td>
-                                        <td> <?php echo $value['dis_total']; ?> </td>
-                                        <td> <?php echo $value['paid']; ?> </td> 
-                                    </tr> 
+                                    <td><?php echo $count++; ?> </td>
+                                    <td><?php echo $value['voucher_number'] ; ?></td>
+                                    <td><?php echo $value['year'] ; ?></td>
+                                    <td><?php echo $value['month_name'] ; ?></td> 
+                                    <td><?php echo $value['student_id'] ; ?></td>
+                                    <td><?php echo $value['student_nam'] ; ?></td>
+                                    <td><?php echo $value['class_title'] ; ?></td>
+                                    <td><?php echo $value['section'] ; ?></td>
+                                    <td><?php echo $value['voucher_type']; ?></td>
+                                    <td><?php echo $this->common->discount_cod($value['discount_cat']); ?></td> 
+                                    <td><?php echo $this->common->admission_dis_per($value['discount_cat']).'%' ; ?></td> 
+                                    <td><?php echo $value['total_amount']; ?> </td>
+                                    <td><?php echo $value['paid_amount']; ?> </td>
+                                    <td><?php echo $value['voucher_status']; ?> </td> 
+                                </tr>
                             <?php } ?>
                                 </tbody>
                             </table> 

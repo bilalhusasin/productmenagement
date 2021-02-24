@@ -1099,7 +1099,7 @@ public function studentChalanReport(){
     // // get all class title using class table common function
     $data['classTile'] = $this->common->getAllData('class');
     // // get all vouchers of current month and current year common function
-    $data['stdInfo'] = $this->common->student_chalanz(); 
+    $data['stdInfo'] = $this->common->royaltyChalaninfo(); 
     $data['total_paid'] = $this->common->tota_paid_amount();
 
     $mRoyaltyVar = ($this->common->tota_paid_amount() /100*10);
@@ -1123,20 +1123,23 @@ public function studentChalanReport(){
         $classSection = $this->input->get('classSection');  
         $voucherName = $this->input->get('voucherName');  
         $date = date('Y-m-d');
+
+
+        $nmonth = date('m',strtotime($monthName)); 
         // echo $year.'<br>'. $monthName.'<br>' . $classId .'<br>' . $classSection .'<br>' .$voucherName .'<br>' .$date;  
         if($voucherName == 'Admission'){
             if(empty($classId)){                           
-                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$monthName' AND vouchers.voucher_type = 'Admission'");
+                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$monthName' AND vouchers.voucher_type = 'Admission' AND vouchers.voucher_status = 'Paid'");
             } else{
-                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$monthName' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Admission'");
+                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE YEAR(vouchers.paid_time)= $year AND MONTH(vouchers.paid_time) = $nmonth AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Admission' AND vouchers.voucher_status = 'Paid'");
             }
             $stdInfo = $query->result_array();
              
         } else if($voucherName == 'Monthly Fee') {
             if(empty($classId)){                           
-                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$monthName' AND vouchers.voucher_type = 'Monthly Fee'" );
+                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE YEAR(vouchers.paid_time)= $year AND MONTH(vouchers.paid_time) = $nmonth AND vouchers.voucher_type = 'Monthly Fee' AND vouchers.voucher_status = 'Paid'" );
             } else{
-                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$monthName' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Monthly Fee'");
+                $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE YEAR(vouchers.paid_time)= $year AND MONTH(vouchers.paid_time) = $nmonth AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Monthly Fee' AND vouchers.voucher_status = 'Paid'");
             }
             $stdInfo = $query->result_array();  
         }
@@ -1199,7 +1202,7 @@ public function studentChalanReport(){
                                     <th>Vouchers Type</th>
                                     <th>Discount Title</th>
                                     <th>Discount Percentage</th>  
-                                    <th>Total Amount</th>
+                                    <th>Voucher Amount</th>
                                     <th>Paid Amount </th>
                                     <th>Voucher Status</th>  
                                 </tr>
@@ -1207,7 +1210,10 @@ public function studentChalanReport(){
                             <tbody>'; 
                             $count = 1;   
                             $sum = 0;
-                            foreach ($stdInfo as $value) {   
+                            $paidAmount = 0;
+                            foreach ($stdInfo as $value) {  
+                                $sum = $sum + $value['total_amount'];
+                                $paidAmount = $paidAmount + $value['paid_amount'];
                             echo' <tr> 
                                     <td>'. $count++ .'</td>
                                     <td>'. $value['voucher_number'] .'</td>
@@ -1225,7 +1231,13 @@ public function studentChalanReport(){
                                     <td>'. $value['voucher_status'].' </td> 
                                 </tr>';
                             }  
-                        echo'</tbody>  
+                        echo'</tbody> 
+                                <tr>
+                                    <td colspan="11" rowspan="" headers=""> Total </td>
+                                    <td >'. $sum .'</td>
+                                    <td >'. $paidAmount .'</td>
+                                    <td ></td>
+                                </tr>    
                         </table>
                     </div>
                 </div>
@@ -1239,10 +1251,13 @@ public function studentChalanReport(){
         $monthName = $this->input->post('monthName');          
         $classId = $this->input->post('className');  
         $classSection = $this->input->post('classSection');
+        // use this function get month id
+        $numberMonth = date('m',strtotime($monthName));
+
         if(empty($classId)){
-            $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Paid' AND slip.year = $year AND slip.month = '$monthName' ");
+            $query = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND YEAR(vouchers.paid_time) = $year AND MONTH(vouchers.paid_time) = $numberMonth AND vouchers.voucher_type = 'Monthly Fee'");
         } else{
-            $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Paid' AND slip.year = $year AND slip.month = '$monthName' AND slip.class_id= $classId AND student_info.section LIKE '%$classSection' ");
+            $query = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND YEAR(vouchers.paid_time) = $year AND MONTH(vouchers.paid_time) = $numberMonth AND student_info.class_id= $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Monthly Fee' ");
         }  
             foreach ($query->result() as $row) {
                 $data['totalPaid'] = $row->dd;
@@ -1251,9 +1266,9 @@ public function studentChalanReport(){
          
 
         if(empty($classId)){
-            $query = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND vouchers.year = $year AND vouchers.month_name = '$monthName' AND vouchers.voucher_type = 'Admission'");
+            $query = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND YEAR(vouchers.paid_time) = $year AND MONTH(vouchers.paid_time) = $numberMonth AND vouchers.voucher_type = 'Admission'");
         } else{
-            $query = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND vouchers.year = $year AND vouchers.month_name = '$monthName' AND student_info.class_id= $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Admission' ");
+            $query = $this->db->query("SELECT sum(vouchers.paid_amount) as dd FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id where student_info.status='Active' AND vouchers.voucher_status='Paid' AND YEAR(vouchers.paid_time) = $year AND MONTH(vouchers.paid_time) = $numberMonth AND student_info.class_id= $classId AND student_info.section LIKE '%$classSection' AND vouchers.voucher_type = 'Admission' ");
         }  
             foreach ($query->result() as $row) {
                 $data['admissionTotal'] = $row->dd;

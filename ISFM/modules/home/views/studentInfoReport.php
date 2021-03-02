@@ -73,7 +73,7 @@
             <div class="col-md-12">
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h3 class="page-title">
-                    <?php echo ('Student Report'); ?> <small></small>
+                    <?php echo ('Student List Report'); ?> <small></small>
                 </h3>
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
@@ -96,7 +96,7 @@
                 <div class="portlet purple box">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-search"></i><?php echo 'Search Student information'; ?>
+                            <i class="fa fa-search"></i><?php echo 'Search Student List Report'; ?>
                         </div>
                         <div class="tools">
                             <a class="collapse" href="javascript:;">
@@ -344,7 +344,7 @@
                     <div class="portlet purple box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-cogs"></i><?php echo ('Students Information '); ?>
+                                <i class="fa fa-cogs"></i><?php echo ('Student List Report'); ?>
                             </div>
                             <div class="tools">
                                 <a class="collapse" href="javascript:;">

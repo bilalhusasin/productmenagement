@@ -70,7 +70,7 @@
             <div class="col-md-12">
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h3 class="page-title">
-                    <?php echo ('Students Fee Recovery Report Information'); ?> <small></small>
+                    <?php echo ('Daily Recovery Report'); ?> <small></small>
                 </h3>
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
@@ -93,7 +93,7 @@
                 <div class="portlet purple box">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-search"></i><?php echo 'Search Recovery Report'; ?>
+                            <i class="fa fa-search"></i><?php echo 'Search Daily Recovery Report'; ?>
                         </div>
                         <div class="tools">
                             <a class="collapse" href="javascript:;">
@@ -316,7 +316,7 @@
                     <div class="portlet green box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-bullhorn"></i><?php echo ('Monthly Collections'); ?>
+                                <i class="fa fa-bullhorn"></i><?php echo ('Daily Recovery Report'); ?>
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -544,7 +544,7 @@ function TillData(){
 
             //if received a response from the server
             success: function( datas, textStatus, jqXHR) {  
-                alert(datas.overDue);
+                //alert(datas.overDue);
                 // $("#totalStudent").html(datas.totalStudent);   
                 // $("#activeStudent").html(datas.activeStudent);
                 $("#paidVoucher").html(datas.paidVoucher); 

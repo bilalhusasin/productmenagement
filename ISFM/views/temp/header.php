@@ -1358,9 +1358,14 @@
                                             <span class="title"><?php echo 'PHP Recovery Report'; ?></span>
                                         </a>
                                     </li>
-                                    <li class="nav-item <?php echo $feeRecoveryReport; ?>">
+                                    <li class="nav-item <?php echo $royaltyFeePayableReport; ?>">
                                         <a href="index.php/home/royaltyFeePayableReport" class="nav-link ">
                                             <span class="title"><?php echo 'PHP Royalty Fee Payable Report'; ?></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $advancefeepaymentReport; ?>">
+                                        <a href="index.php/home/advanceFeePaymentReport" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Advance Fee Payment'; ?></span>
                                         </a>
                                     </li> 
                                     <?php } ?> 

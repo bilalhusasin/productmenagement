@@ -70,7 +70,7 @@
             <div class="col-md-12">
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h3 class="page-title">
-                    <?php echo ('Leftover Students Information'); ?> <small></small>
+                    <?php echo ('Student Leftover Report'); ?> <small></small>
                 </h3>
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
@@ -93,7 +93,7 @@
                 <div class="portlet purple box">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-search"></i><?php echo 'Search Student information'; ?>
+                            <i class="fa fa-search"></i><?php echo 'Search Leftover Report'; ?>
                         </div>
                         <div class="tools">
                             <a class="collapse" href="javascript:;">
@@ -242,7 +242,7 @@
                     <div class="portlet green box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-bullhorn"></i><?php echo ('Monthly Collections'); ?>
+                                <i class="fa fa-bullhorn"></i><?php echo ('Student Leftover Report'); ?>
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -323,7 +323,7 @@
                     <div class="portlet purple box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-cogs"></i><?php echo ('Leftover Students Information'); ?>
+                                <i class="fa fa-cogs"></i><?php echo ('Student Leftover Report'); ?>
                             </div>
                             <div class="tools">
                                 <a class="collapse" href="javascript:;"> </a>

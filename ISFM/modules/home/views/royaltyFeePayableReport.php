@@ -359,7 +359,7 @@
                     <div class="portlet purple box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-cogs"></i><?php echo ('Student Royalty Fee Payable Report'); ?>
+                                <i class="fa fa-cogs"></i><?php echo ('Royalty Fee Payable Report'); ?>
                             </div>
                             <div class="tools">
                                 <a class="collapse" href="javascript:;"></a>

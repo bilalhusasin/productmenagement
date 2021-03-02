@@ -123,7 +123,7 @@ public function ajaxStudentInfoReport(){
             <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
         </div>
         <div class="col-md-9 text-center">  
-            <h4 >Student Information Report</h4>
+            <h4 >Student List Report</h4>
         </div> 
         <div class="portlet ">
               
@@ -144,7 +144,7 @@ public function ajaxStudentInfoReport(){
         <div class="portlet purple box">
             <div class="portlet-title no-print">
                 <div class="caption">
-                    <i class="fa fa-cogs"></i>Student Receiveables information
+                    <i class="fa fa-cogs"></i>Student List Report
                 </div>
                 <div class="tools">
                     <a class="collapse" href="javascript:;">
@@ -276,7 +276,7 @@ public function ajaxCurrentStudentStrength(){
             <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
         </div>
         <div class="col-md-9 text-center">  
-            <h4 >Student Information Report</h4>
+            <h4 >Current Student Strength</h4>
         </div> 
         <div class="portlet ">
               
@@ -300,7 +300,7 @@ public function ajaxCurrentStudentStrength(){
         <div class="portlet purple box">
             <div class="portlet-title no-print">
                 <div class="caption">
-                    <i class="fa fa-cogs"></i>Student Receiveables information
+                    <i class="fa fa-cogs"></i>Current Student Strength
                 </div>
                 <div class="tools">
                     <a class="collapse" href="javascript:;">
@@ -459,7 +459,7 @@ public function ajaxStudentRegisterReport(){
                 <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
             </div>
             <div class="col-md-9 text-center">  
-                <h4 >Student Information Report</h4>
+                <h4 >Students Registration Report</h4>
             </div> 
             <div class="portlet ">
                   
@@ -480,7 +480,7 @@ public function ajaxStudentRegisterReport(){
             <div class="portlet purple box">
                 <div class="portlet-title no-print">
                     <div class="caption">
-                        <i class="fa fa-cogs"></i>Student Registration information
+                        <i class="fa fa-cogs"></i>Students Registration Report
                     </div>
                     <div class="tools">
                         <a class="collapse" href="javascript:;">
@@ -959,7 +959,7 @@ public function studentChalanReport(){
                 <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
             </div>
             <div class="col-md-9 text-center">  
-                <h4 >Student Fee Chalan Report </h4>
+                <h4 >Student Fee Challan Report</h4>
             </div> 
             <div class="portlet ">
                   
@@ -982,7 +982,7 @@ public function studentChalanReport(){
             <div class="portlet purple box">
                 <div class="portlet-title no-print">
                     <div class="caption">
-                        <i class="fa fa-cogs"></i>Student Chalan Report
+                        <i class="fa fa-cogs"></i>Student Fee Challan Report
                     </div>
                     <div class="tools">
                         <a class="collapse" href="javascript:;"> </a>
@@ -1156,7 +1156,7 @@ public function studentChalanReport(){
                     <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
                 </div>
                 <div class="col-md-9 text-center">  
-                    <h4 >Student Fee Chalan Report </h4>
+                    <h4 >Royalty Fee Payable Report</h4>
                 </div> 
                 <div class="portlet ">
                       
@@ -1180,7 +1180,7 @@ public function studentChalanReport(){
                 <div class="portlet purple box">
                     <div class="portlet-title no-print">
                         <div class="caption">
-                            <i class="fa fa-cogs"></i>Student Chalan Report
+                            <i class="fa fa-cogs"></i>Royalty Fee Payable Report
                         </div>
                         <div class="tools">
                             <a class="collapse" href="javascript:;"> </a>
@@ -1277,6 +1277,286 @@ public function studentChalanReport(){
         echo json_encode($data); 
 
     }
+
+// this function will get all advance record in table
+    public function advanceFeePaymentReport(){
+        $user = $this->ion_auth->user()->row();
+        $id = $user->id;                                          
+        // get all class title using class table common function
+        $data['classTile'] = $this->common->getAllData('class');
+        // get all vouchers of current month and current year common function
+        $data['advanceInfo'] = $this->common->advanceFeeInfo(); 
+        $data['totalAdvance'] = $this->common->totalAdvance();
+        $data['totalBalance'] = $this->common->totalBalance();
+        $data['totalStudent'] = $this->common->countAdvanceFeeStudent();
+
+        $this->load->view('temp/header', $data);
+        $this->load->view('advanceFeePaymentReport', $data);
+        $this->load->view('temp/footer');
+    }
+// advance fee payment report filter search
+    public function ajaxAdvanceFeePaymentReport(){
+        $year = $this->input->get('year');
+        $month = $this->input->get('monthName'); 
+        $classId = $this->input->get('className');
+        $classSection = $this->input->get('classSection');  
+        // $voucherName = $this->input->get('voucherName');  
+        $date = date('Y-m-d'); 
+        // $nmonth = date('m',strtotime($monthName));   
+         
+        if(empty($classId)){                           
+            $query = $this->db->query("SELECT sum(advance_fee.advance_amount) as totalAdvance,sum(advance_fee.advance_amount) - slip.dis_total as totalBalance, student_info.student_nam,student_info.class_title, student_info.section,slip.year,slip.student_id,slip.payment_status,slip.month, slip.dis_total,slip.advance,slip.balance,advance_fee.advance_year,advance_fee.advance_month,advance_fee.advance_date,advance_fee.advance_receipt_num,advance_fee.advance_amount,advance_fee.total_advance_amount, advance_fee.advance_flag FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id LEFT JOIN advance_fee ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$month' AND slip.balance != 0 GROUP BY student_info.student_id");
+        } else{
+            $query = $this->db->query("SELECT sum(advance_fee.advance_amount) as totalAdvance,sum(advance_fee.advance_amount) - slip.dis_total as totalBalance, student_info.student_nam,student_info.class_title, student_info.section,slip.year,slip.student_id,slip.payment_status,slip.month, slip.dis_total,slip.advance,slip.balance,advance_fee.advance_year,advance_fee.advance_month,advance_fee.advance_date,advance_fee.advance_receipt_num,advance_fee.advance_amount,advance_fee.total_advance_amount, advance_fee.advance_flag FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id LEFT JOIN advance_fee ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$month' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND slip.balance != 0 GROUP BY student_info.student_id");
+        }
+        $stdInfo = $query->result_array();
+        if(empty($stdInfo)){
+            echo '<hr><div class="col-md-12 col-sm-12">
+                    <div class="alert alert-danger">
+                      <strong>Alert!</strong> Record Not Availabe.
+                    </div>
+                </div>';
+        }
+        else{                               
+        echo'<div class="col-md-12 col-sm-12 p-3 display" > 
+                <div class="col-md-3 text-center" >
+                    <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
+                </div>
+                <div class="col-md-9 text-center">  
+                    <h4 >Royalty Fee Payable Report</h4>
+                </div> 
+                <div class="portlet ">
+                      
+                    <div class="portlet-body">
+                        <table id="sample_1" class="table" >
+                            <thead>
+                                <tr> 
+                                    <th>  Class Session: '. $year .' </th>
+                                    <th> Advance Month: '. $month .' </th>';
+                                   echo' <th> Class Title: ';if(empty($classId)){}else{ echo $this->common->class_title($classId);} echo'</th>
+                                    <th> Class Section: '. $classSection .' </th>
+                                    <th> Date: '. $date.' </th>  
+                                </tr>
+                            </thead> 
+                        </table>
+                    </div> 
+                </div>
+            </div>    
+            <div class="col-md-12 col-sm-12 p-5">
+                <div class="portlet purple box">
+                    <div class="portlet-title no-print">
+                        <div class="caption">
+                            <i class="fa fa-cogs"></i>Royalty Fee Payable Report
+                        </div>
+                        <div class="tools">
+                            <a class="collapse" href="javascript:;"> </a>
+                            <a class="reload" href="javascript:;"> </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body"> 
+                        <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
+                            <thead>
+                                <tr> 
+                                    <th>Sr #</th> 
+                                    <th>Chalan Year</th>
+                                    <th>Chalan Month</th>  
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Class</th>
+                                    <th>Section</th>   
+                                    <th> Advance Amount</th>
+                                    <th> Remaning Balance </th> 
+                                </tr>
+                            </thead> 
+                            <tbody>'; 
+                           $advSum = 0;
+                           $balSum = 0;
+                            $count=1; foreach ($stdInfo as $value) { 
+                                    $advSum = $advSum + $value['totalAdvance'];
+                                    $balSum = $balSum + $value['totalBalance'];
+                            echo'<tr> 
+                                    <td>'. $count++ .'</td> 
+                                    <td>'. $value['year'] .'</td> 
+                                    <td>'. $value['month'] .' </td>  
+                                    <td>'. $value['student_id'] .'</td>
+                                    <td>'. $value['student_nam'] .'</td>
+                                    <td>'. $value['class_title'] .'</td>
+                                    <td>'. $value['section'] .'</td>  
+                                    <td> <a href="" id="'. $value['student_id'] .'" data-toggle="modal" data-target="#myModal" onclick ="advanceDrildown(this.id)"> '. $value['totalAdvance'] .'
+                                            </a> 
+                                    </td> 
+                                    <td>'. $value['totalBalance'] .'</td>  
+                                </tr>';
+                             }  
+                        echo'</tbody> 
+                                <tr>
+                                    <td colspan="7"> Total </td>
+                                    <td> '.$advSum.' </td>
+                                    <td> '.$balSum.' </td> 
+                                </tr>    
+                        </table>
+                    </div>
+                </div>
+            </div>'; 
+        }                                       
+    }
+// this function get all tills data in ajaxAdvanceFeePaymentReportTillData 
+    public function ajaxAdvanceFeePaymentReportTillData(){
+
+        $year = $this->input->post('year');
+        $monthName = $this->input->post('monthName');
+        $classId = $this->input->post('className');
+        $classSection = $this->input->post('classSection');
+        
+        //this query count total advance amount
+        if(empty($classId)){
+            $advanceAmount = $this->db->query("SELECT sum(advance_fee.advance_amount) as total_advance FROM advance_fee RIGHT JOIN slip ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$monthName' AND slip.balance != 0"); 
+
+        } else{
+            $advanceAmount = $this->db->query("SELECT sum(advance_fee.advance_amount) as total_advance FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id LEFT JOIN advance_fee ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$monthName' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND slip.balance != 0");
+        }
+        
+        foreach ($advanceAmount->result() as $row) {
+            $data['totalAdvance'] = $row->total_advance;       
+        } 
+        //this query count total Balance amount
+        if(empty($classId)){
+            $totalAdvance =  array();
+            $totalBalance =  array();          
+            $query = $this->db->query("SELECT sum(advance_fee.total_advance_amount) as total_advance FROM advance_fee WHERE advance_year = $year AND advance_month = '$monthName' AND advance_flag = 0");
+                foreach ($query->result() as $row) {
+                    $totalAdvance = $row->total_advance;
+                }
+            $query1 = $this->db->query("SELECT sum(slip.balance) as total_balance FROM slip WHERE year = $year AND month = '$monthName' AND payment_status != 'Unpaid'");
+                foreach ($query1->result() as $row) {
+                    $totalBalance = $row->total_balance;
+                }
+            $grandTotalBalance = $totalAdvance + $totalBalance; 
+
+        } else{
+            $totalAdvance =  array();
+            $totalBalance =  array(); 
+            $query = $this->db->query("SELECT sum(advance_fee.total_advance_amount) as total_advance FROM advance_fee INNER JOIN student_info ON advance_fee.student_id = student_info.student_id WHERE advance_fee.advance_year = $year AND advance_fee.advance_month = '$monthName' AND advance_fee.advance_flag = 0 AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection'");
+                foreach ($query->result() as $row) {
+                    $totalAdvance = $row->total_advance;
+                }
+            $query1 = $this->db->query("SELECT sum(slip.balance) as total_balance FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE slip.year = $year AND slip.month = '$monthName' AND slip.payment_status != 'Unpaid' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection'");
+                foreach ($query1->result() as $row) {
+                    $totalBalance = $row->total_balance;
+                }
+            $grandTotalBalance = $totalAdvance + $totalBalance;
+        }
+         
+            $data['totalBalance'] = $grandTotalBalance;       
+        
+
+        //this query count total students of paid amount
+        if(empty($classId)){
+            $dat = array();
+            $countStudent = $this->db->query("SELECT slip.student_id FROM advance_fee RIGHT JOIN slip ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$monthName' AND slip.balance != 0 group by slip.student_id");
+            foreach ($countStudent->result() as $row) {
+                $dat[] = $row;       
+            }  
+            $data['totalStudent'] = count($dat);
+
+        } else{
+            $dat = array();
+            $countStudent = $this->db->query("SELECT  slip.student_id FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id LEFT JOIN advance_fee ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$monthName' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND slip.balance != 0 group by slip.student_id");
+            foreach ($countStudent->result() as $row) {
+                $dat[] = $row;       
+            }  
+            $data['totalStudent'] = count($dat);
+        }
+          
+
+          // foreach ($query->result() as $row) {
+          //       $totalStudent[] = $row;
+          //   }
+          //   return count($totalStudent);
+         
+        echo json_encode($data);
+    }
+
+// advance fee drilldown 
+
+    public function ajaxAdvanceDrildown(){
+        $student_id = $this->input->get('student_id');
+
+        $year = date('Y');
+        $month = date('F');
+
+        $nmonth = date('m',strtotime($month));
+
+        $query = $this->db->query("SELECT * FROM ( (SELECT advance_fee.advance_year as year, advance_fee.advance_month as month ,advance_fee.advance_receipt_num, advance_fee.advance_amount,advance_fee.advance_date, NULL as dis_total, NULL as balance, advance_fee.student_id FROM advance_fee WHERE student_id=$student_id AND advance_fee.advance_month = '$month' AND advance_fee.advance_year = $year) UNION ALL (SELECT slip.year as year, slip.month as month, slip.voucher_number as advance_receipt_num, NULL as advance_amount, slip.last_update as advance_date, slip.dis_total, slip.balance ,slip.student_id FROM slip WHERE slip.student_id= $student_id AND slip.month = '$month' AND slip.year = $year) ) results ORDER BY advance_date ASC");
+        $drildown = $query->result_array(); 
+        echo'
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog modal-lg">
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title text-center text-success"><b>Advance Fee Detail</b></h4>
+                       
+                       <p></p>
+                        <table class="table">
+                            <tr> 
+                                <td colspan="2"> Student ID:  '. $student_id .'</td>   
+                                <td colspan="2"> Student Name: '.$this->common->student_title($student_id).'</td>  
+                                <td colspan="2"> Class: '.$this->common->student_classs_title($student_id).'</td> 
+                                <td colspan="2"> Section: '.$this->common->student_classs_section($student_id).' </td> 
+                            </tr>
+                        </table>
+                        <table class="table table-striped table-bordered table-hover table-responsive p-5">
+                            <thead> 
+                                <tr> 
+                                    <th> Sr.# </th>  
+                                    <th> Year</th>
+                                    <th> Month </th> 
+                                    <th> Receipt Number </th>
+                                    <th> Advance Date</th>
+                                    <th> Advance Amount </th>
+                                    <th> Paid Amount </th>
+                                    <th> Remaning Balance</th> 
+                                </tr>
+                            </thead> 
+                            <tbody>';  
+                            $count = 1; 
+                            $advAmount = 0;
+                            $paidAmount = 0;
+                            $totalAdvance = 0;
+                            foreach ($drildown as $row) { 
+                                    
+                                    if(!empty($row['dis_total'])){ $paidAmount = $row['dis_total'];}
+                                    if(!empty($row['advance_amount'])){ $advAmount = $advAmount + $row['advance_amount'];} 
+                                echo'<tr>
+                                    <td> '. $count++ .' </td> 
+                                    <td> '. $row['year'] .' </td> 
+                                    <td> '. $row['month'] .'</td>
+                                    <td> '. $row['advance_receipt_num'] .'</td>
+                                    <td> '. $row['advance_date'] .'</td>
+                                    <td> '. $row['advance_amount'] .'</td>
+                                    <td> '. $row['dis_total'] .' </td>
+                                    <td> '. $row['balance'] .'  </td> 
+                                </tr>';
+                         } 
+                    echo'   </tbody> 
+                                <tr>
+                                    <td colspan="5"> Total</td> 
+                                    <td> '. $advAmount .' </td>
+                                    <td> '. $paidAmount .' </td>
+                                    <td> '. $totalAdvance =  $advAmount - $paidAmount .' </td> 
+                                </tr>
+                        </table> 
+                    </div> 
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>';
+    }
+
 
 public function FeeReceipt_reports() {
 $user = $this->ion_auth->user()->row();
@@ -1657,7 +1937,7 @@ public function ajaxLeftoverStudent(){
             <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
         </div>
         <div class="col-md-9 text-center">  
-            <h4>Leftover Students Information</h4>
+            <h4>Student Leftover Report</h4>
         </div> 
         <div class="portlet ">
               
@@ -1678,7 +1958,7 @@ public function ajaxLeftoverStudent(){
         <div class="portlet purple box">
             <div class="portlet-title no-print">
                 <div class="caption">
-                    <i class="fa fa-cogs"></i>Leftover Students Information
+                    <i class="fa fa-cogs"></i>Student Leftover Report
                 </div>
                 <div class="tools">
                     <a class="collapse" href="javascript:;">
@@ -1875,7 +2155,7 @@ public function ajaxSiblingStudent(){
             <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
         </div>
         <div class="col-md-9 text-center">  
-            <h4 >Sibling Students Information Report</h4>
+            <h4 >Sibling Students Report</h4>
         </div> 
         <div class="portlet ">
               
@@ -1897,7 +2177,7 @@ public function ajaxSiblingStudent(){
         <div class="portlet purple box">
             <div class="portlet-title no-print">
                 <div class="caption">
-                    <i class="fa fa-cogs"></i>Sibling Students Information
+                    <i class="fa fa-cogs"></i>Sibling Students Report
                 </div>
                 <div class="tools">
                     <a class="collapse" href="javascript:;">

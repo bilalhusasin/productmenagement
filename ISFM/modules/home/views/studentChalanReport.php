@@ -8,7 +8,7 @@
 <style media="print">
     @page{ 
         margin: 25px !important;
-        size: portrait;
+        size: landscape;
     }  
     .no-print{
         display: none;
@@ -69,7 +69,7 @@
             <div class="col-md-12">
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h3 class="page-title">
-                    <?php echo ('Student Fee Chalan Report'); ?> <small></small>
+                    <?php echo ('Student Fee Challan Report'); ?> <small></small>
                 </h3>
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
@@ -92,7 +92,7 @@
                 <div class="portlet purple box">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-search"></i><?php echo 'Search Fee Chalan Report information'; ?>
+                            <i class="fa fa-search"></i><?php echo 'Search Student Fee Challan Report'; ?>
                         </div>
                         <div class="tools">
                             <a class="collapse" href="javascript:;">
@@ -273,7 +273,7 @@
                     <div class="portlet green box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-bullhorn"></i><?php echo ('Student Fee Chalan Graph'); ?>
+                                <i class="fa fa-bullhorn"></i><?php echo ('Student Fee Challan Report Graph'); ?>
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -350,7 +350,7 @@
                     <div class="portlet purple box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-cogs"></i><?php echo ('Student Fee Chalan information'); ?>
+                                <i class="fa fa-cogs"></i><?php echo ('Student Fee Challan Report'); ?>
                             </div>
                             <div class="tools">
                                 <a class="collapse" href="javascript:;"></a>

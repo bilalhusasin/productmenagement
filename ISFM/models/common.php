@@ -63,54 +63,29 @@ class Common extends CI_Model {
     }
 
     
-
     //This function select user access ability.
-
     public function user_access($role, $userId) {
-
         $data = array();
-
         $query = $this->db->query('SELECT ' . $role . ' FROM role_based_access WHERE user_id=' . $userId . ';')->row();
-
         foreach ($query as $row) {
-
             $data = $row;
-
         }
-
         if ($data == 1) {
-
             return TRUE;
-
         } else {
-
             return FALSE;
-
         }
-
     }
 
-    
-
     //This function show the class title for class selecting class
-
     public function selectClass(){
-
         $data = array();
-
         $query = $this->db->query('SELECT id,class_title FROM class');
-
         foreach ($query->result_array() as $row){
-
             $data[] = $row;
-
         }
-
         return $data;
-
     } 
-
-    
 
     //Total students will returan this function
     public function totalStudent() {
@@ -386,44 +361,23 @@ public function given_discount() {
     } 
 
 public function count_paid_per() {
-
-     $data1 = array();
-
-         $query1 = $this->db->query("Select payment_status, (Count(payment_status)* 100 / (Select Count(*) From slip)) as Score From slip WHERE payment_status='paid'");
-
+    $data1 = array();
+    $query1 = $this->db->query("Select payment_status, (Count(payment_status)* 100 / (Select Count(*) From slip)) as Score From slip WHERE payment_status='paid'");
         foreach ($query1->result_array() as $row) {
-
             $data1 = $row;
-
-           
-
         }
-
         return ($data1['Score']);
-
-    }
-
-
-
+}
 
 
 public function count_unpaid_per() {
-
-     $data1 = array();
-
-         $query1 = $this->db->query("Select payment_status, (Count(payment_status)* 100 / (Select Count(*) From slip)) as Score From slip WHERE payment_status='unpaid'");
-
+    $data1 = array();
+    $query1 = $this->db->query("Select payment_status, (Count(payment_status)* 100 / (Select Count(*) From slip)) as Score From slip WHERE payment_status='unpaid'");
         foreach ($query1->result_array() as $row) {
-
             $data1 = $row;
-
-           
-
         }
-
         return ($data1['Score']);
-
-    }
+}
  
     public function count_paid() {
         $data1 = array();
@@ -546,7 +500,6 @@ public function count_unpaid_per() {
         $time = gmt_to_local($now, $timezone);
 
         echo mdate($datestring, $time);
-
     }
 
 
@@ -605,74 +558,51 @@ public function count_unpaid_per() {
 
     }
 
-    
-
-    
-
     //This function will show student title by student id
-
     public function student_title($student_id){
-
 //        $data = array();
-
         $query = $this->db->query("SELECT student_nam FROM student_info WHERE student_id=$student_id")->row();
-
             return $query->student_nam;
-
+    }
+    //This function will show student class title by student id
+    public function student_classs_title($student_id){
+//        $data = array();
+        $query = $this->db->query("SELECT class_title FROM student_info WHERE student_id=$student_id")->row();
+            return $query->class_title;
+    }
+    //This function will show student class section by student id
+    public function student_classs_section($student_id){
+//        $data = array();
+        $query = $this->db->query("SELECT section FROM student_info WHERE student_id=$student_id")->row();
+            return $query->section;
     }
 
     //This function will show student status by student id
-
     public function student_status($student_id){
-
 //        $data = array();
-
         $query = $this->db->query("SELECT status FROM student_info WHERE student_id=$student_id")->row();
-
             return $query->status;
-
     }
-
-    
 
     //This function will return student ID by user ID
-
     public function student_id($user_id){
-
         if($this->ion_auth->in_group(3)){
-
-            $query = $this->db->query("SELECT student_id FROM student_info WHERE user_id=$user_id")->row();
-
+        $query = $this->db->query("SELECT student_id FROM student_info WHERE user_id=$user_id")->row();
             return $query->student_id;
-
         }elseif ($this->ion_auth->in_group(5)) {
-
             $query = $this->db->query("SELECT student_id FROM parents_info WHERE user_id=$user_id")->row();
-
             return $query->student_id;
-
         }
-
     }
-
-    
 
     //class's short information will give this function 
-
     public function classInfo(){
-
         $data = array();
-
         $query = $this->db->query("SELECT class_title,student_amount,attendance_percentices_daily,attend_percentise_yearly FROM class");
-
         foreach ($query->result_array() as $row) {
-
             $data[] = $row;
-
         }return $data;
-
     }
-
 
 // get all student data using this table student_info
     public function studentInfo(){
@@ -852,16 +782,67 @@ public function student_chalan1(){
 }
 
 // get all paid fee chalan in current month using this function 
-public function royaltyChalaninfo(){
-    $month=date("F");
-    $year = date("Y");
-    $stu_data = array();
-    $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$month' AND vouchers.voucher_type = 'Monthly Fee' AND vouchers.voucher_status = 'Paid'");
-        foreach ($query->result_array() as $row) {
-            $stu_data[] = $row;
-        }
-        return $stu_data;
-} 
+    public function royaltyChalaninfo(){
+        $month=date("F");
+        $year = date("Y");
+        $stu_data = array();
+        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$month' AND vouchers.voucher_type = 'Monthly Fee' AND vouchers.voucher_status = 'Paid'");
+            foreach ($query->result_array() as $row) {
+                $stu_data[] = $row;
+            }
+            return $stu_data;
+    } 
+// get all advance fee records for students in table 
+    public function advanceFeeInfo(){
+        $month=date("F");
+        $year = date("Y");
+        $stu_data = array();
+        $query = $this->db->query("SELECT sum(advance_fee.advance_amount) as totalAdvance,sum(advance_fee.advance_amount) - slip.dis_total as totalBalance, student_info.student_nam,student_info.class_title, student_info.section,slip.year,slip.student_id,slip.payment_status,slip.month, slip.dis_total,slip.advance,slip.balance,advance_fee.advance_year,advance_fee.advance_month,advance_fee.advance_date,advance_fee.advance_receipt_num,advance_fee.advance_amount,advance_fee.total_advance_amount, advance_fee.advance_flag FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id LEFT JOIN advance_fee ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$month' AND slip.balance != 0 GROUP BY student_info.student_id");
+            foreach ($query->result_array() as $row) {
+                $stu_data[] = $row;
+            }
+            return $stu_data;
+    }
+    // totalAdvance
+    public function totalAdvance(){ 
+        $month=date("F");
+        $year = date("Y");
+        //$totalAdvance = array();
+        $query = $this->db->query("SELECT sum(advance_fee.advance_amount) as total_advance FROM advance_fee RIGHT JOIN slip ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$month' AND slip.balance != 0");
+            foreach ($query->result() as $row) {
+                $totalAdvance = $row->total_advance;
+            }
+            return $totalAdvance;
+    }
+    // totalBalance
+    public function totalBalance(){ 
+        $month=date("F");
+        $year = date("Y");
+        //$totalBalance = array();
+        $query = $this->db->query("SELECT sum(total_advance_amount) as total_advance FROM advance_fee WHERE advance_year = $year AND advance_month = '$month' AND advance_flag = 0");
+            foreach ($query->result() as $row) {
+                $totalAdvance = $row->total_advance;
+            }
+        $query1 = $this->db->query("SELECT sum(balance) as total_balance FROM slip WHERE year = $year AND month = '$month' AND payment_status != 'Unpaid'");
+            foreach ($query1->result() as $row) {
+                $totalBalance = $row->total_balance;
+            }
+
+            return $totalAdvance + $totalBalance;
+    }
+
+// totalBalance
+    public function countAdvanceFeeStudent(){ 
+        $month=date("F");
+        $year = date("Y");
+        $totalStudent = array();
+        $query = $this->db->query("SELECT slip.student_id FROM advance_fee RIGHT JOIN slip ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$month' AND slip.balance != 0 group by slip.student_id");
+            foreach ($query->result() as $row) {
+                $totalStudent[] = $row;
+            }
+            return count($totalStudent);
+    }    
+              
     public function studentInfoId() {
         $maxid = 0;
         $row = $this->db->query('SELECT MAX(id) AS `maxid` FROM `student_info`')->row();
@@ -927,56 +908,30 @@ public function royaltyChalaninfo(){
 
     }
 
-
-
     //THis function is take class title and make unic Roll nomber that class.
-
     //And return that roll number.
-
     public function rollNumber($a) {
-
         $query2 = $this->db->get_where('class_students', array('class_id' => $a));
-
         $qq = array();
-
         foreach ($query2->result_array() as $aa) {
-
             $qq[] = $aa;
-
         }
-
         $a = $qq;
-
         //return $a;
-
         $b = array();
-
         foreach ($a as $row) {
-
             $b[] = $row['roll_number'];
-
         }$c = $b;
-
         //return max($c);
-
         if (empty($a)) {
-
             $d = 1;
-
             return $d;
-
         } else {
-
             $c;
-
             $e = max($c);
-
             $e++;
-
             return $e;
-
         }
-
     }
 
     //THis function is take group id  and make unic Employ ID that User.
@@ -1584,143 +1539,35 @@ public function royaltyChalaninfo(){
 
 
 ////////// ajax respose methods /////
-
-
-
 //////  single column search   //////
-
-    public function single_col($col,$val)
-
-{
-
-    $stu_data = array();
-
-    if($col=="month")
-
-        {$query = $this->db->query("SELECT student_info.student_id, student_info.student_nam                         ,student_info.class_title, student_info.section, slip.voucher_number                          ,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where slip.month LIKE '".$val."%'
-
-                                    ");
-
-       }
-
-
-
-       else if ($col=="student") {
-
-           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam                         ,student_info.class_title, student_info.section, slip.voucher_number                          ,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where slip.student_id= '".$val."'
-
-                                    ");
-
-       }
-
-
-
- else if ($col=="class") {
-
-           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam                         ,student_info.class_title, student_info.section, slip.voucher_number                          ,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where student_info.class_title LIKE '".$val."%'
-
-                                    ");
-
-       }
-
-
-
-
-
-       else if ($col=="chalan") {
-
-           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam                         ,student_info.class_title, student_info.section,                      slip.voucher_number  ,slip.month, slip.tution_fee, slip.total,                    slip.discount,slip.dis_total FROM slip
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where slip.voucher_number LIKE '".$val."%'
-
-                                    ");
-
-       }
-
-
-
-else if ($col=="section") {
-
-           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam                         ,student_info.class_title, student_info.section,                      slip.voucher_number  ,slip.month, slip.tution_fee, slip.total,                    slip.discount,slip.dis_total FROM slip
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where student_info.section LIKE '".$val."%'
-
-                                    ");
-
+    public function single_col($col,$val){
+        $stu_data = array();
+        if($col=="month"){
+            $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, slip.voucher_number,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where slip.month LIKE '".$val."%'");
+       } else if ($col=="student") {
+           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, slip.voucher_number,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where slip.student_id= '".$val."'");
+       } else if ($col=="class") {
+           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, slip.voucher_number,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.class_title LIKE '".$val."%'");
+       } else if ($col=="chalan") {
+           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section,slip.voucher_number ,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where slip.voucher_number LIKE '".$val."%' ");
+       } else if ($col=="section") {
+           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section,slip.voucher_number  ,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.section LIKE '".$val."%'");
        }       
-
-
-
         foreach ($query->result_array() as $row) {
 
             $stu_data[] = $row;
 
         }return $stu_data;
-
-
-
 }
 
-
-
 ///////   double column search  //////
-
-
-
-public function double_value($col1,$val1,$col2,$val2)
-
-{
-
+public function double_value($col1,$val1,$col2,$val2){
     $stu_data = array();
-
-    if($col1=="class" && $col2== "section")
-
-        {$query = $this->db->query("SELECT student_info.student_id, student_info.student_nam                         ,student_info.class_title, student_info.section, slip.voucher_number                          ,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where student_info.class_title LIKE '".$val1."%'
-
-                                          AND student_info.section LIKE '".$val2."%'
-
-                                    ");
-
-       }
-
-
-
-       else if ($col=="student") {
-
-           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam                         ,student_info.class_title, student_info.section, slip.voucher_number                          ,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip
-
-                                   INNER JOIN student_info ON slip.student_id = student_info.student_id
-
-                                   where slip.student_id= '".$val."'
-
-                                    ");
-
-       }
-
-
-
- else if ($col=="class") {
-
+    if($col1=="class" && $col2== "section"){
+        $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam, student_info.class_title, student_info.section, slip.voucher_number, slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.class_title LIKE '".$val1."%' AND student_info.section LIKE '".$val2."%' ");
+       } else if ($col=="student") {
+           $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam, student_info.class_title, student_info.section, slip.voucher_number, slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where slip.student_id= '".$val."' ");
+       } else if ($col=="class") {
            $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam                         ,student_info.class_title, student_info.section, slip.voucher_number                          ,slip.month, slip.tution_fee, slip.total, slip.discount,slip.dis_total FROM slip
 
                                    INNER JOIN student_info ON slip.student_id = student_info.student_id

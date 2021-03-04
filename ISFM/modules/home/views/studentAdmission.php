@@ -181,7 +181,7 @@
                             <div class="number" id="totalAdmission">
                                 <?php echo $totalStudent; ?>
                             </div>
-                            <div class="desc">
+                            <div class="">
                                 <?php echo ('Total Admissons'); ?>
                             </div>
                         </div>
@@ -199,7 +199,7 @@
                             <div class="number" id="withdiscount">
                                 <?php echo $Active_stds; ?>
                             </div>
-                            <div class="desc">
+                            <div class=" ">
                                 <?php echo ('With Discount'); ?>
                             </div>
                         </div>
@@ -217,7 +217,7 @@
                             <div class="number" id="withOutDiscount">
                                 <?php echo $totalStudent-$Active_stds; ?>
                             </div>
-                            <div class="desc">
+                            <div class=" ">
                                 <?php echo ('Without Discount'); ?>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                             <div class="number" id="dis_total">
                                 <?php echo $total_collection; ?>
                             </div>
-                            <div class="desc">
+                            <div class=" ">
                                 <?php echo ('Discounted Amount'); ?>
                             </div>
                         </div>
@@ -253,7 +253,7 @@
                             <div class="number" id="amount">
                                 <?php echo $actual_total; ?>
                             </div>
-                            <div class="desc">
+                            <div class=" ">
                                 <?php echo ('WithOut Discounted Amount'); ?>
                             </div>
                         </div>

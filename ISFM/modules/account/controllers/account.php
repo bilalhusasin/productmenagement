@@ -1202,7 +1202,7 @@ class Account extends MX_Controller {
                         if ($dis_total_payable > $advance) {
                             $dis_total_payable -= $advance;
                             $paid = $advance;
-                            $mathod = 'Cash';
+                            $mathod = 'Advance';
                             $status = 'Not Clear';
                             $paid_amount = $advance;
                             $paid_time = $date_time;
@@ -1210,14 +1210,14 @@ class Account extends MX_Controller {
                             $balanec = 0;
                             $paid = $dis_total_payable;
                             $status = 'Paid';
-                            $mathod = 'Cash';
+                            $mathod = 'Advance';
                             $paid_amount = $dis_total_payable;
                             $paid_time = $date_time;
                         } elseif ($dis_total_payable < $advance) {
                             $paid = $dis_total_payable;
                             $balanec = $advance - $dis_total_payable;
                             $status = 'Paid';
-                            $mathod = 'Cash';
+                            $mathod = 'Advance';
                             $paid_amount = $dis_total_payable;
                             $paid_time = $date_time;
                         }

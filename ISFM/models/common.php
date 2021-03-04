@@ -139,15 +139,7 @@ class Common extends CI_Model {
 
     
 
- public function totalAdmission() {
-        $year = date('Y');
-        $data = array();
-        $query = $this->db->query("SELECT * FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $year AND register_pass.year = $year");
-        foreach ($query->result_array() as $row) {
-            $data[] = $row;
-        }
-        return count($data);
-    }
+ 
 
     public function total_chalan() { 
         $yearz = date("Y");
@@ -298,15 +290,24 @@ public function totalPaid() {
 
 
 
-public function given_discount() {
-       // $data1 = array();
-    $yearz = date("Y");
+    public function given_discount() {
+        // $data1 = array();
+        $yearz = date("Y");
         $query1 = $this->db->query("SELECT sum(discount) as dd FROM slip where year = '".$yearz."'");
         foreach ($query1->result() as $row) {
             $data1 = $row->dd;
         }return ($data1);
     }
-
+    public function totalAdmission() {
+        $year = date('Y');
+        $data = array();
+        // $query = $this->db->query("SELECT * FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $year AND register_pass.year = $year");
+        $query = $this->db->query("SELECT * FROM student_info  WHERE year = $year");
+        foreach ($query->result_array() as $row) {
+            $data[] = $row;
+        }
+        return count($data);
+    }
 
 // this function count discounted student id of student_fee_discount
     public function with_discount() {
@@ -318,6 +319,56 @@ public function given_discount() {
         }
         return count($data1);
     }
+// this function use current year with out discounted admission counter
+    public function without_discount() {
+        $year = date('Y');
+        $data1 = array();
+        $query1 = $this->db->query("SELECT id FROM student_info WHERE discount_cat = 0 AND year = $year");
+        foreach ($query1->result_array() as $row) {
+            $data1[] = $row;
+        }
+        return count($data1);
+    }
+// get total collected  fees from slip table ////
+    // public function get_sum() {
+    //     $data1 = array();
+    //     $query1 = $this->db->query("SELECT admission_disc FROM register_pass");
+    //   // $data1=$query1->result_array();
+    //     foreach ($query1->result_array() as $row) {
+    //         $data1[] = $row['admission_disc'];
+    //     }return (array_sum($data1));
+    // }
+// get total collected  fees from register table ////
+    public function get_sum() {
+        $year = date('Y');
+        $data1 = array();
+        $query = $this->db->query("SELECT sum(register_pass.total) as dis_total FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $year AND register_pass.year = $year");
+        foreach ($query->result_array() as $row) {
+            $data1[] = $row['dis_total'];
+        }return (array_sum($data1));
+    } 
+
+// get total collected  fees from register table ////
+    public function get_actual_sum() {
+        $year = date('Y');
+        $data1 = array();
+        $query = $this->db->query("SELECT sum(register_pass.admission_fee + register_pass.annual_found)as amount FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $year$year AND register_pass.year = $year$year");
+        foreach ($query->result_array() as $row) {
+            $data1[] = $row['amount'];
+        }return (array_sum($data1));
+    } 
+
+    // this function return new year admission data 
+public function student_Admission()
+{
+    $stu_data = array();
+        $year = date('Y');
+        $query = $this->db->query("SELECT register_pass.discount_reasons as disc,register_pass.discount_persentage as disc_per,register_pass.reg_number,register_pass.reg_date,register_pass.admission_fee,register_pass.annual_found , register_pass.total,(register_pass.admission_fee + register_pass.annual_found)as amount,student_info.student_id , student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name,student_info.registration_number,student_info.admission_date FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $year AND register_pass.year = $year");
+        foreach ($query->result_array() as $row) {
+            $stu_data[] = $row;
+        }
+        return $stu_data;
+}
 
     public function tota_paid_amount() {
         $year = date("Y");
@@ -403,45 +454,6 @@ public function count_unpaid_per() {
             $data1 = $row->dd;
         }return ($data1);
     }
-
-// this function use current year with out discounted admission counter
-    public function without_discount() {
-        $year = date('Y');
-        $data1 = array();
-        $query1 = $this->db->query("SELECT id FROM student_info WHERE discount_cat = 0 AND year = $year");
-        foreach ($query1->result_array() as $row) {
-            $data1[] = $row;
-        }
-        return count($data1);
-    }
-
-// get total collected  fees from slip table ////
-    // public function get_sum() {
-    //     $data1 = array();
-    //     $query1 = $this->db->query("SELECT admission_disc FROM register_pass");
-    //   // $data1=$query1->result_array();
-    //     foreach ($query1->result_array() as $row) {
-    //         $data1[] = $row['admission_disc'];
-    //     }return (array_sum($data1));
-    // }
-// get total collected  fees from register table ////
-    public function get_sum() {
-        $year = date('Y');
-        $data1 = array();
-        $query = $this->db->query("SELECT sum(register_pass.total) as dis_total FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $year AND register_pass.year = $year");
-        foreach ($query->result_array() as $row) {
-            $data1[] = $row['dis_total'];
-        }return (array_sum($data1));
-    } 
-// get total collected  fees from register table ////
-    public function get_actual_sum() {
-        $year = date('Y');
-        $data1 = array();
-        $query = $this->db->query("SELECT sum(register_pass.admission_fee + register_pass.annual_found)as amount FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $year AND register_pass.year = $year");
-        foreach ($query->result_array() as $row) {
-            $data1[] = $row['amount'];
-        }return (array_sum($data1));
-    } 
 
 // Total parents will returan this function
     public function totalParents() {
@@ -709,18 +721,6 @@ public function student_regInfo()
         $stu_data[] = $row;
     }
     return $stu_data;
-}
-
-// this function return new year admission data 
-public function student_Admission()
-{
-    $stu_data = array();
-        $year = date('Y');
-        $query = $this->db->query("SELECT register_pass.discount_reasons as disc,register_pass.discount_persentage as disc_per,register_pass.reg_number,register_pass.reg_date,register_pass.admission_fee,register_pass.annual_found , register_pass.total,(register_pass.admission_fee + register_pass.annual_found)as amount,student_info.student_id , student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name,student_info.registration_number,student_info.admission_date FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $year AND register_pass.year = $year");
-        foreach ($query->result_array() as $row) {
-            $stu_data[] = $row;
-        }
-        return $stu_data;
 }
 
 public function fee_struct()

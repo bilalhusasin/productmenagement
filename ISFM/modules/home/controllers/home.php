@@ -735,26 +735,38 @@ public function ajaxStudentAdmission(){
                             </tr>
                         </thead> 
                         <tbody>';
-                    $count=1; 
-                    foreach ($reg_data as $row) {                  
-                    echo'<tr>
-                            <td>'. $count++ .'</td>
-                            <td>'. $row['admission_date'] .'</td>
-                            <td>'. $row['reg_date'] .'</td>
-                            <td>'. $row['student_id'] .'</td>
-                            <td>'. $row['student_nam'] .'</td>
-                            <td>'. $row['farther_name'] .'</td>
-                            <td>'. $row['class_title'] .'</td>
-                            <td>'. $row['section'] .'</td>
-                            <td>'. $row['disc'] .'</td>
-                            <td>'. $row['disc_per'].'%' .'</td>
-                            <td>'. $row['admission_fee'] .'</td>
-                            <td>'. $row['annual_found'] .'</td>
-                            <td>'. $row['amount'] .'</td>
-                            <td>'. $row['total'] .'</td>
-                        </tr>';
-                    }  
-                        '</tbody>  
+                        $count=1; 
+                        $totWithDis = 0;
+                        $totWithOutDis = 0;
+                        foreach ($reg_data as $row) {  
+                            $totWithDis = $totWithDis + $row['amount'];
+                            $totWithOutDis = $totWithOutDis + $row['total'];                                           
+                        echo'<tr>
+                                <td>'. $count++ .'</td>
+                                <td>'. $row['admission_date'] .'</td>
+                                <td>'. $row['reg_date'] .'</td>
+                                <td>'. $row['student_id'] .'</td>
+                                <td>'. $row['student_nam'] .'</td>
+                                <td>'. $row['farther_name'] .'</td>
+                                <td>'. $row['class_title'] .'</td>
+                                <td>'. $row['section'] .'</td>
+                                <td>'. $row['disc'] .'</td>
+                                <td>'. $row['disc_per'].'%' .'</td>
+                                <td>'. $row['admission_fee'] .'</td>
+                                <td>'. $row['annual_found'] .'</td>
+                                <td>'. $row['amount'] .'</td>
+                                <td>'. $row['total'] .'</td>
+                            </tr>';
+                        }  
+                    echo'</tbody>
+                            <tr>
+                                <td colspan="4"> Total Without Discount </td> 
+                                <td colspan="3"> '. $totWithDis .' </td>
+                                <td colspan="4"> Net Total With Discount </td> 
+                                <td colspan="3"> '. $totWithOutDis .' </td>
+                                
+                            </tr> 
+
                     </table>
                 </div>
             </div>
@@ -940,9 +952,9 @@ public function studentChalanReport(){
         $classSection = $this->input->get('classSection');  
         $date = date('Y-m-d');   
         if(empty($classId)){
-            $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE  slip.month = '$monthName' AND slip.year= $year");
+            $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total,slip.mathod FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE  slip.month = '$monthName' AND slip.year= $year");
         } else{
-            $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE  slip.month = '$monthName' AND slip.year= $year AND slip.class_id = $classId AND student_info.section LIKE '%$classSection'");
+            $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status, slip.dis_total, slip.mathod FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE  slip.month = '$monthName' AND slip.year= $year AND slip.class_id = $classId AND student_info.section LIKE '%$classSection'");
         }
 
             $stdInfo = $query->result_array();  
@@ -1007,6 +1019,7 @@ public function studentChalanReport(){
                                 <th>AC Charges</th> 
                                 <th>Total</th>
                                 <th>Discount</th>
+                                <th>Payment Mathod</th>
                                 <th>Grand Total</th>
                                 <th>Paid Amount</th> 
                             </tr>
@@ -1016,8 +1029,20 @@ public function studentChalanReport(){
                         $payableSum = 0;
                         $paidSum = 0;
                         foreach ($stdInfo as $value) { 
-                            $payableSum =$payableSum + $value['dis_total']; 
-                            $paidSum = $paidSum + $value['paid'];
+                            //$payableSum =$payableSum + $value['dis_total']; 
+                            if($value['mathod'] == 'Advance'){
+                                $payableSum =$payableSum + 0;                                
+                            } else{
+                                $payableSum =$payableSum + $value['dis_total'];       
+                            }
+
+
+                            if($value['mathod'] == 'Advance'){
+                                $paidSum = $paidSum + 0;                                
+                            } else{
+                                $paidSum = $paidSum + $value['paid'];       
+                            }
+                             
                         echo' <tr> 
                                 <td>'. $count++ .'</td>
                                 <td>'. $value['voucher_number'] .'</td>
@@ -1039,6 +1064,7 @@ public function studentChalanReport(){
                                 <td>'. $value["ac_charges"] .' </td> 
                                 <td>'. $value['amount'] .'</td>
                                 <td>'. $value['discount'] .'</td>
+                                <td>'. $value['mathod'] .'</td>
                                 <td>'. $value['dis_total'] .'</td>
                                 <td>'. $value['paid'] .'</td> 
                             </tr>';
@@ -1046,7 +1072,7 @@ public function studentChalanReport(){
                     echo'</tbody>  
 
                         <tr>
-                            <td colspan="14"> Total</td> 
+                            <td colspan="15"> Total</td> 
                             <td>'. $payableSum .'</td>
                             <td>'. $paidSum .'</td>
                         </tr>
@@ -1074,22 +1100,25 @@ public function studentChalanReport(){
             foreach ($query->result() as $row) {
                 $data['totalAmount'] = $row->dd;
             }
+
         if(empty($classId)){
-            $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.year = $year AND month = '$monthName'");
+            $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.year = $year AND slip.month = '$monthName' AND slip.mathod!='Advance'");
         } else{
-            $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.year = $year AND slip.month = '$monthName' AND slip.class_id = $classId AND student_info.section LIKE '%$classSection' ");
+            $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.year = $year AND slip.month = '$monthName' AND slip.class_id = $classId AND student_info.section LIKE '%$classSection' AND slip.mathod!='Advance'");
         }  
             foreach ($query->result() as $row) {
                 $data['discounteTotal'] = $row->dd;
             }
+
         if(empty($classId)){
-            $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Paid' AND slip.year = $year AND slip.month = '$monthName'");
+            $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Paid' AND slip.year = $year AND slip.month = '$monthName' AND slip.mathod!='Advance'");
         } else{
-            $query = $this->db->query(" SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Paid' AND slip.year = $year AND slip.month = '$monthName' AND slip.class_id = $classId AND student_info.section LIKE '%$classSection' ");
+            $query = $this->db->query(" SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Paid' AND slip.year = $year AND slip.month = '$monthName' AND slip.class_id = $classId AND student_info.section LIKE '%$classSection' AND slip.mathod!='Advance'");
         }  
             foreach ($query->result() as $row) {
                 $data['totalPaid'] = $row->dd;
             }
+
         if(empty($classId)){
             $query = $this->db->query("SELECT sum(dis_total) as dd FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id where student_info.status='Active' AND slip.payment_status='Unpaid' AND slip.year = $year AND slip.month = '$monthName'");
         } else{

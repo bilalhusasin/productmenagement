@@ -365,7 +365,7 @@
                                 <a class="collapse" href="javascript:;"></a>
                                 <a class="reload" href="javascript:;"></a>
                             </div>
-                        </div>
+                        </div> 
                         <div class="portlet-body">   
                             <table id="sample_1" class="table table-striped table-hover">
                                 <thead>
@@ -379,8 +379,8 @@
                                         <th>Class</th>
                                         <th>Section</th> 
                                         <th>Vouchers Type</th>
-                                        <th>Discount Title</th>
-                                        <th>Discount Percentage</th>  
+                                        <!-- <th>Discount Title</th>
+                                        <th>Discount Percentage</th> -->  
                                         <th>Voucher Amount</th>
                                         <th>Paid Amount </th>
                                         <th>Voucher Status</th>  
@@ -398,8 +398,8 @@
                                     <td><?php echo $value['class_title'] ; ?></td>
                                     <td><?php echo $value['section'] ; ?></td>
                                     <td><?php echo $value['voucher_type']; ?></td>
-                                    <td><?php echo $this->common->discount_cod($value['discount_cat']); ?></td> 
-                                    <td><?php echo $this->common->admission_dis_per($value['discount_cat']).'%' ; ?></td> 
+                                    <!-- <td><?php // echo $this->common->discount_cod($value['discount_cat']);?></td> 
+                                    <td><?php // echo $this->common->admission_dis_per($value['discount_cat']).'%' ; ?></td> --> 
                                     <td><?php echo $value['total_amount']; ?> </td>
                                     <td><?php echo $value['paid_amount']; ?> </td>
                                     <td><?php echo $value['voucher_status']; ?> </td> 

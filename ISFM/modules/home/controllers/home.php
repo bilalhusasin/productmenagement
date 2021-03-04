@@ -153,7 +153,7 @@ public function ajaxStudentInfoReport(){
                     </a>
                 </div>
             </div>
-            <div class="portlet-body"> 
+            <div class="portlet-body" style="overflow-x: auto;"> 
                 <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                     <thead>
                         <tr> 
@@ -309,7 +309,7 @@ public function ajaxCurrentStudentStrength(){
                     </a>
                 </div>
             </div>
-            <div class="portlet-body"> 
+            <div class="portlet-body" style="overflow-x: auto;"> 
                 <table id="sample_12" class="table table-striped table-bordered table-hover" >
                     <thead>
                         <tr> 
@@ -489,7 +489,7 @@ public function ajaxStudentRegisterReport(){
                         </a>
                     </div>
                 </div>
-                <div class="portlet-body"> 
+                <div class="portlet-body" style="overflow-x: auto;"> 
                     <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                         <thead>
                             <tr>
@@ -714,7 +714,7 @@ public function ajaxStudentAdmission(){
                         </a>
                     </div>
                 </div>
-                <div class="portlet-body"> 
+                <div class="portlet-body" style="overflow-x: auto;"> 
                     <table id="sample_1" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                         <thead>
                             <tr> 
@@ -989,7 +989,7 @@ public function studentChalanReport(){
                         <a class="reload" href="javascript:;"> </a>
                     </div>
                 </div>
-                <div class="portlet-body"> 
+                <div class="portlet-body" style="overflow-x: auto;"> 
                     <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                         <thead>
                             <tr> 
@@ -1004,7 +1004,7 @@ public function studentChalanReport(){
                                 <th>Discount Title</th>
                                 <th>Discount Percentage</th>
                                 <th>Tuition Fee</th>
-                                <th>AC Charges</th>
+                                <th>AC Charges</th> 
                                 <th>Total</th>
                                 <th>Discount</th>
                                 <th>Grand Total</th>
@@ -1013,7 +1013,11 @@ public function studentChalanReport(){
                         </thead> 
                         <tbody>'; 
                         $count = 1;   
-                        foreach ($stdInfo as $value) {   
+                        $payableSum = 0;
+                        $paidSum = 0;
+                        foreach ($stdInfo as $value) { 
+                            $payableSum =$payableSum + $value['dis_total']; 
+                            $paidSum = $paidSum + $value['paid'];
                         echo' <tr> 
                                 <td>'. $count++ .'</td>
                                 <td>'. $value['voucher_number'] .'</td>
@@ -1031,8 +1035,8 @@ public function studentChalanReport(){
                                     if($value['discount_id'] == 0){ echo "No Discount";}else{
                                     echo $this->common->dis_per($value['discount_id'])."%"; }
                             echo'</td>
-                                <td>'. $value['tution_fee'] .'</td>
-                                <td>'. $value['ac_charges'] .'</td>
+                                <td>'. $value["tution_fee"] .' </td>
+                                <td>'. $value["ac_charges"] .' </td> 
                                 <td>'. $value['amount'] .'</td>
                                 <td>'. $value['discount'] .'</td>
                                 <td>'. $value['dis_total'] .'</td>
@@ -1040,6 +1044,12 @@ public function studentChalanReport(){
                             </tr>';
                         }  
                     echo'</tbody>  
+
+                        <tr>
+                            <td colspan="14"> Total</td> 
+                            <td>'. $payableSum .'</td>
+                            <td>'. $paidSum .'</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -1187,7 +1197,7 @@ public function studentChalanReport(){
                             <a class="reload" href="javascript:;"> </a>
                         </div>
                     </div>
-                    <div class="portlet-body"> 
+                    <div class="portlet-body" style="overflow-x: auto;"> 
                         <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                             <thead>
                                 <tr> 
@@ -1201,7 +1211,7 @@ public function studentChalanReport(){
                                     <th>Section</th> 
                                     <th>Vouchers Type</th>
                                     <th>Discount Title</th>
-                                    <th>Discount Percentage</th>  
+                                    <th>Discount Percentage</th>   
                                     <th>Voucher Amount</th>
                                     <th>Paid Amount </th>
                                     <th>Voucher Status</th>  
@@ -1224,8 +1234,8 @@ public function studentChalanReport(){
                                     <td>'. $value['class_title'] .'</td>
                                     <td>'. $value['section'] .'</td>
                                     <td>'. $value['voucher_type'].'</td>
-                                    <td>'. $this->common->discount_cod($value['discount_cat']).'</td> 
-                                    <td>'. $this->common->admission_dis_per($value['discount_cat']).'%' .'</td> 
+                                    <td>'. $this->common->discount_cod($value["discount_cat"]).'</td> 
+                                    <td>'. $this->common->admission_dis_per($value["discount_cat"]).'%'.'</td>  
                                     <td>'. $value['total_amount'].'</td>
                                     <td>'. $value['paid_amount'].'</td>
                                     <td>'. $value['voucher_status'].' </td> 
@@ -1233,10 +1243,14 @@ public function studentChalanReport(){
                             }  
                         echo'</tbody> 
                                 <tr>
-                                    <td colspan="11" rowspan="" headers=""> Total </td>
+                                    <td colspan="9" rowspan="" headers=""> Total </td>
                                     <td >'. $sum .'</td>
                                     <td >'. $paidAmount .'</td>
                                     <td ></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" >Month '.$monthName .' '. $voucherName.' Monthly Royalty Payable</td>
+                                    <td colspan="6" >'. ($paidAmount/100*10) .'</td>
                                 </tr>    
                         </table>
                     </div>
@@ -1353,7 +1367,7 @@ public function studentChalanReport(){
                             <a class="reload" href="javascript:;"> </a>
                         </div>
                     </div>
-                    <div class="portlet-body"> 
+                    <div class="portlet-body" style="overflow-x: auto;"> 
                         <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                             <thead>
                                 <tr> 
@@ -1494,11 +1508,9 @@ public function studentChalanReport(){
                 <div class="modal-dialog modal-lg">
                   <!-- Modal content-->
                   <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="overflow-x: auto;">
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
                       <h4 class="modal-title text-center text-success"><b>Advance Fee Detail</b></h4>
-                       
-                       <p></p>
                         <table class="table">
                             <tr> 
                                 <td colspan="2"> Student ID:  '. $student_id .'</td>   
@@ -1736,7 +1748,7 @@ echo'
                     </a>
                 </div>
             </div>
-            <div class="portlet-body"> 
+            <div class="portlet-body" style="overflow-x: auto;"> 
                 <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                     <thead>
                         <tr> 
@@ -1755,7 +1767,7 @@ echo'
                 $sum=0;
                 foreach ($stdInfo as $row) { 
                              $sum=$sum+$row['amount'];               
-                    echo'<tr>
+                    echo'<tr >
                             <td>'. $count++ .' </td> 
                             <td>'. $row['student_id'] .'</td>
                             <td>'. $row['student_nam'] .'</td>
@@ -1764,8 +1776,7 @@ echo'
                             <td>'. $row['section'] .'</td>
                             <td>'. $row['amount'] .' </td> 
                             <td> 
-                            <a href="" id="'.$row['student_id'].'" data-toggle="modal" data-target="#myModal" onclick ="stdDrildown(this.id)"  >'. $row['month'] .' 
-                                            </a>
+                            <a href="" id="'.$row['student_id'].'" data-toggle="modal" data-target="#myModal" onclick ="stdDrildown(this.id)"  >'. $row['month'] .'</a>
                             </td> 
                         </tr>';
                 }
@@ -1817,7 +1828,7 @@ echo'
             <div class="modal-dialog modal-lg">
               <!-- Modal content-->
               <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="overflow-x: auto;">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="modal-title"><b>Number Of Voucher Detail</b></h4>
                    
@@ -1967,7 +1978,7 @@ public function ajaxLeftoverStudent(){
                     </a>
                 </div>
             </div>
-            <div class="portlet-body"> 
+            <div class="portlet-body" style="overflow-x: auto;"> 
                 <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                     <thead>
                         <tr> 
@@ -1989,7 +2000,7 @@ public function ajaxLeftoverStudent(){
                     <tbody>'; 
                     $count = 1; 
                     foreach ($data as $value) {  
-                    echo' <tr>
+                    echo' <tr >
                             <td>'. $count++ .'</td> 
                             <td>'. $value['registration_number'] .'</td>
                             <td>'. $value['student_id'] .'</td>
@@ -2040,7 +2051,7 @@ public function ajaxleftoverDrildown(){
             <div class="modal-dialog modal-lg">
               <!-- Modal content-->
               <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="overflow-x: auto;">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="modal-title"><b>Number Of Voucher Detail</b></h4>
                    
@@ -2186,7 +2197,7 @@ public function ajaxSiblingStudent(){
                     </a>
                 </div>
             </div>
-            <div class="portlet-body"> 
+            <div class="portlet-body" style="overflow-x: auto;"> 
                 <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                     <thead>
                         <tr> 
@@ -2276,7 +2287,7 @@ public function ajaxsiblingDrildown(){
             <div class="modal-dialog modal-lg">
               <!-- Modal content-->
               <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="overflow-x: auto;">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h4 class="modal-title"><b>Number Of Voucher Detail</b></h4>
                    
@@ -2420,7 +2431,7 @@ public function ajaxRecoveryReport(){
                     </a>
                 </div>
             </div>
-            <div class="portlet-body"> 
+            <div class="portlet-body" style="overflow-x: auto;"> 
                 <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
                     <thead>
                         <tr> 

@@ -1190,21 +1190,36 @@ class Account extends MX_Controller {
                         $total = $tot;
                     }
                     $advance = $this->accountmodel->advance($student_id);
+                    date_default_timezone_set("Asia/Karachi");
+                    $date_time = date('Y-m-d H:i:s a', time());
                     $status = 'Unpaid';
+                    $mathod = '';
                     $paid = 0;
                     $balanec = 0;
+                    $paid_time = '';
+                    $paid_amount = 0;
                     if ($advance != 0) {
                         if ($dis_total_payable > $advance) {
                             $dis_total_payable -= $advance;
+                            $paid = $advance;
+                            $mathod = 'Cash';
                             $status = 'Not Clear';
+                            $paid_amount = $advance;
+                            $paid_time = $date_time;
                         } elseif ($advance == $dis_total_payable) {
                             $balanec = 0;
-                            $paid = 0;
+                            $paid = $dis_total_payable;
                             $status = 'Paid';
+                            $mathod = 'Cash';
+                            $paid_amount = $dis_total_payable;
+                            $paid_time = $date_time;
                         } elseif ($dis_total_payable < $advance) {
-                            $paid = 0;
+                            $paid = $dis_total_payable;
                             $balanec = $advance - $dis_total_payable;
                             $status = 'Paid';
+                            $mathod = 'Cash';
+                            $paid_amount = $dis_total_payable;
+                            $paid_time = $date_time;
                         }
                     } 
                     
@@ -1246,6 +1261,7 @@ class Account extends MX_Controller {
                         'issue_date' => $this->db->escape_like_str($crntdate),
                         //'due_date' => $this->db->escape_like_str($due_date),
                         'payment_status' => $this->db->escape_like_str($status),
+                        'mathod' => $this->db->escape_like_str($mathod),
                         'voucher_number' => $this->db->escape_like_str($voucher_number),
                         'discount_id' => $this->db->escape_like_str($discount_id),
                         'created_by' => $this->db->escape_like_str($userId),
@@ -1262,10 +1278,12 @@ class Account extends MX_Controller {
                         'student_ref_id' => $this->db->escape_like_str($student_id),
                         'voucher_number' => $this->db->escape_like_str($voucher_number),
                         'total_amount' => $this->db->escape_like_str($dis_total_payable),
+                        'paid_amount' => $this->db->escape_like_str($paid_amount),
                         'year' => $this->db->escape_like_str($crntYear),
                         'month_name' => $this->db->escape_like_str($crntMonth),
                         'month_id' => $this->db->escape_like_str(date('m')),
-                        'voucher_status' => $this->db->escape_like_str('unpaid'),
+                        'voucher_status' => $this->db->escape_like_str($status),
+                        'paid_time' => $this->db->escape_like_str($paid_time),
                         'created_by' => $this->db->escape_like_str($userId),
                         'issue_date' => $this->db->escape_like_str($crntdate),
                        // 'due_date' => $this->db->escape_like_str($due_date),

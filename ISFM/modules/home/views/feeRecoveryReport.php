@@ -102,7 +102,17 @@
                             </a>
                         </div>
                     </div>
-
+ 
+<?php
+// for testing
+//   $monthNo = '2021-02-22';
+//  echo date("d", strtotime($monthNo));
+//  $month = 'July';
+//  echo $nmonth = date("m", strtotime($month));
+//  $d=cal_days_in_month(CAL_GREGORIAN,2,2020);
+// echo "There was $d days in February 2017.";
+ 
+?>
                     <div class="portlet-body"> 
                     <?php 
                         /*$form_attributs = array('class' => 'form-horizontal', 'role' => 'form');
@@ -227,7 +237,7 @@
                                 <?php echo $paidVouchers; ?>
                             </div>
                             <div class="desc">
-                                <?php echo ('Paid Vouchers '); ?>
+                                <?php echo ('Paid Vouchers'); ?>
                             </div>
                         </div>
                         <div class="more dasTotalStudentTest">

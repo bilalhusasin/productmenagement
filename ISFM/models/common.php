@@ -667,13 +667,24 @@ public function count_unpaid_per() {
 // this funtion get over Due fee in current month in slip
     public function currentMonthOverDue(){ 
         $year = date('Y');
-        $month = date('F');
-        $date = date('Y-m-d');
-        $query = $this->db->query("SELECT sum(slip.dis_total) as overDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id WHERE slip.month != '$month' AND vouchers.month_name != '$month' AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND (slip.mathod = 'Cash') AND DATE(vouchers.paid_time) = '$date' "); 
-        //SELECT sum(dis_total) as overDue FROM slip WHERE year = $year AND month = '$month' AND payment_status = 'Unpaid' 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        $date = date('Y-m-d'); 
+
+        // this query get all over due in the table using given values
+        $query = $this->db->query("SELECT sum(vouchers.paid_amount) as overDue FROM vouchers INNER JOIN slip ON vouchers.voucher_number = slip.voucher_number WHERE vouchers.month_name!='$month' and YEAR(paid_time)= $year AND MONTH(paid_time)= $nmonth AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND slip.mathod = 'Cash'");
+        // SELECT sum(vouchers.paid_amount) as overDue FROM vouchers INNER JOIN slip ON vouchers.voucher_number = slip.voucher_number WHERE vouchers.month_name!='$month' and YEAR(paid_time)= $year AND MONTH(paid_time)= $nmonth AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND (slip.mathod = 'Cash' OR slip.mathod = 'Advance') AND DATE(vouchers.paid_time) = '$date'
+        
         foreach ($query->result() as $row) {
-            $data = $row->overDue;
+            $ovr = $row->overDue;
         }
+        // this query get all advance in the table using given values
+        $query1 = $this->db->query("SELECT sum(`advance_amount`) as advance FROM advance_fee WHERE YEAR(advance_date)= $year and MONTH(advance_date) = $nmonth ");
+        foreach ($query1->result() as $row) {
+            $adv = $row->advance;
+        }
+        $data = $ovr + $adv;
+
         return $data;
     }
 // this funtion get Total online Paid fee in current month in slip
@@ -691,7 +702,7 @@ public function count_unpaid_per() {
         $year = date('Y');
         $month = date('F');
         $date = date('Y-m-d');
-        $query = $this->db->query("SELECT sum(slip.dis_total) as onlineOverDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id WHERE slip.month != '$month' AND vouchers.month_name != '$month' AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND (slip.mathod = 'Bank' OR slip.mathod ='CreditCard' OR slip.mathod ='Mobility Banking') AND DATE(vouchers.paid_time) = '$date' "); 
+        $query = $this->db->query("SELECT sum(slip.dis_total) as onlineOverDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id WHERE slip.month != '$month' AND vouchers.month_name != '$month' AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND (slip.mathod = 'Bank' OR slip.mathod ='CreditCard' OR slip.mathod ='Mobility Banking')"); 
         //SELECT sum(dis_total) as overDue FROM slip WHERE year = $year AND month = '$month' AND payment_status = 'Unpaid' 
         foreach ($query->result() as $row) {
             $data = $row->onlineOverDue;
@@ -860,18 +871,54 @@ public function student_chalan1(){
     }
 
     //  Cash over due
-    public function getCashOverDue($date){ 
+    public function getCashOverDue($year, $monthName, $day, $classId, $classSection){ 
+        // $currentDate = $date;
+        // $monthNo = date("m", strtotime($currentDate));
+        // $monthName = date("F", mktime(0, 0, 0, $monthNo, 10));
+        // $year = date("Y", strtotime($currentDate));
+        $nmonth = date("m", strtotime($monthName));
+        $date = $year.'-'.$nmonth.'-'.$day;
+        $cashOverDue_sum = 0;
+        $advance_sum = 0;
+        if(empty($classId)){
+            $query = $this->db->query("SELECT sum(slip.dis_total) as cashOverDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id WHERE slip.month != '$monthName' AND vouchers.month_name != '$monthName' AND slip.year != $year and vouchers.year != $year  AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND slip.mathod = 'Cash' AND DATE(vouchers.paid_time) = '$date'");
+            foreach ($query->result() as $row) {
+                $cashOverDue_sum = $row->cashOverDue;
+            }
+            $query1 = $this->db->query("SELECT sum(advance_amount) as advance FROM advance_fee WHERE DATE(advance_date) = '$date'");
+            foreach ($query1->result() as $row) {
+                $advance_sum = $row->advance;
+            }
+                //$data = $cashOverDue_sum + $advance_sum;
 
-        $query = $this->db->query("SELECT sum(slip.dis_total) as cashOverDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id WHERE slip.month != 'February' AND vouchers.month_name != 'February' AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND (slip.mathod = 'Cash') AND DATE(vouchers.paid_time) = '$date'");
-        foreach ($query->result() as $row) {
-            $data = $row->cashOverDue;
+            return $cashOverDue_sum + $advance_sum;
+
+        } else{
+            $query = $this->db->query("SELECT sum(slip.dis_total) as cashOverDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE slip.month != '$monthName' AND vouchers.month_name != '$monthName' AND slip.year != $year and vouchers.year != $year  AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND slip.mathod = 'Cash' AND student_info.class_id = $classId AND student_info.section LIKE '%$classSection'  AND DATE(vouchers.paid_time) = '$date'");
+            foreach ($query->result() as $row) {
+                $cashOverDue_sum = $row->cashOverDue;
+            }
+            $query1 = $this->db->query("SELECT sum(advance_amount) as advance FROM advance_fee INNER JOIN student_info ON advance_fee.student_id = student_info.student_id WHERE student_info.class_id = $classId AND student_info.section LIKE '%$classSection' AND DATE(advance_date) = '$date'");
+            foreach ($query1->result() as $row) {
+                $advance_sum = $row->advance;
+            }
+                //$data = $cashOverDue_sum + $advance_sum;
+
+            return $cashOverDue_sum + $advance_sum;
+
         }
-        return $data;
+        
     }
     //  Bank over due
-    public function getOnlineOverDue($date){ 
-
-        $query = $this->db->query("SELECT sum(slip.dis_total) as onlineOverDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id WHERE slip.month != 'February' AND vouchers.month_name != 'February' AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND (slip.mathod = 'Bank' OR slip.mathod = 'CreditCard' OR slip.mathod = 'Mobility Banking') AND DATE(vouchers.paid_time) = '$date'");
+    public function getOnlineOverDue($year, $monthName, $day, $classId, $classSection){ 
+        $nmonth = date("m", strtotime($monthName));
+        $date = $year.'-'.$nmonth.'-'.$day;
+        if(empty($classId)){
+            $query = $this->db->query("SELECT sum(slip.dis_total) as onlineOverDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id WHERE slip.month != '$monthName' AND vouchers.month_name != '$monthName' AND slip.year != $year and vouchers.year != $year AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND (slip.mathod = 'Bank' OR slip.mathod = 'CreditCard' OR slip.mathod = 'Mobility Banking') AND DATE(vouchers.paid_time) = '$date'");
+        } else{
+            $query = $this->db->query("SELECT sum(slip.dis_total) as onlineOverDue FROM slip INNER JOIN vouchers ON slip.student_id = vouchers.student_ref_id INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE slip.month != '$monthName' AND vouchers.month_name != '$monthName' AND slip.year != $year and vouchers.year != $year AND slip.payment_status = 'Paid' AND vouchers.voucher_status = 'Paid' AND (slip.mathod = 'Bank' OR slip.mathod = 'CreditCard' OR slip.mathod = 'Mobility Banking') AND student_info.class_id = '$classId' AND student_info.section LIKE '%$classSection' AND DATE(vouchers.paid_time) = '$date'");
+        }
+        
         foreach ($query->result() as $row) {
             $data = $row->onlineOverDue;
         }

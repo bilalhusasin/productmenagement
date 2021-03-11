@@ -1367,6 +1367,11 @@
                                         <a href="index.php/home/advanceFeePaymentReport" class="nav-link ">
                                             <span class="title"><?php echo 'PHP Advance Fee Payment'; ?></span>
                                         </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $discountReport; ?>">
+                                        <a href="index.php/home/discountReport" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Discount Report'; ?></span>
+                                        </a>
                                     </li> 
                                     <?php } ?> 
                                 </ul>

@@ -2615,23 +2615,227 @@ public function ajaxRecoveryReport(){
         echo json_encode($data);                                           
     }
 //////////////// ajax functions part //////
-public function ind_value()
-{
-$column = $this->input->post('col');
-$value = $this->input->post('val');
+    public function discountReport(){      
+        $user = $this->ion_auth->user()->row();
+        $id = $user->id;
+        $data['classTile'] = $this->common->getAllData('class');
+        $data['fee_discount'] = $this->common->getAllData('fee_discount');
+        // this function use an other functions
+        $data['totalStudent'] = $this->common->totalStudent();
+        $data['discountedStudent'] = $this->common->withDiscount();
+        // $data['withOutDiscount'] = $this->common->without_discount();
+        // $data['total_collection']=$this->common->get_sum();
+        $data['stdInfo'] = $this->common->student_discounts_reasons();
+        // get all vouchers of current month and current year
+        // $data['stdInfo']=$this->common->discountChallan();
 
-echo json_encode($this->common->single_col($column,$value));
-}
-public function double_value()
-{
-/*$column = $this->input->post('col1');
-$value = $this->input->post('val1');
-$column2 = $this->input->post('col2');
-$value2 = $this->input->post('val2');
-*/echo "sjdfisdhkfhdkjhkdjsf";
+            $this->load->view('temp/header');
+            $this->load->view('discountReport', $data);
+            $this->load->view('temp/footer');                                
+    }
+    // ajaxDiscountReport this function get record using ajax 
+    public function ajaxDiscountReport(){ 
+        $classId = $this->input->get('className');
+        $classSection = $this->input->get('classSection');
+        $discountReason = $this->input->get('discountReason');
+        $discountPer = $this->input->get('discountPercen');
+        if(empty($classId)){
+           $class_id = '';                     
+        } else{
+            $class_id = $this->common->class_title($classId);
+        }
+        if(empty($classId)){
+            $classIdstart=1;
+            $classIdend=99;
+        }
+        else{
+            $classIdstart = $classIdend = $classId;
+        }
+        if(empty($discountReason)){
+            $discountIdStart=1;
+            $discountIdEnd=99;
+        }
+        else{
+            $discountIdStart = $discountIdEnd = $discountReason;
+        }
+        if(empty($discountPer)){
+            $discountPerStart=0;
+            $discountPerEnd=100;
+        }
+        else{
+            $discountPerStart = $discountPerEnd = $discountPer;
+        }
+        //echo $classId . $classSection . $discountReason. $discountPer;
 
-//echo json_encode($this->common->double_col($column,$value, $column2,$value2));
-}
+        $date = date('Y-m-d');
+        // if(empty($discountReason)){
+        //     $query = $this->db->query("SELECT fee_discount.discount_reason ,fee_discount.tution_discount,fee_discount.admission_discount,student_fee_discount.year as disc_year,  student_info.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name FROM student_fee_discount INNER JOIN student_info ON student_fee_discount.student_id = student_info.student_id LEFT JOIN fee_discount ON student_fee_discount.discount_id = fee_discount.id WHERE student_info.class_id BETWEEN $classIdstart AND $classIdend AND student_info.section LIKE '%$classSection'");
+        // } else{
+            $query = $this->db->query("SELECT fee_discount.discount_reason ,fee_discount.tution_discount,fee_discount.admission_discount,student_fee_discount.year as disc_year,  student_info.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name FROM student_fee_discount INNER JOIN student_info ON student_fee_discount.student_id = student_info.student_id LEFT JOIN fee_discount ON student_fee_discount.discount_id = fee_discount.id WHERE student_info.class_id BETWEEN $classIdstart AND $classIdend AND student_info.section LIKE '%$classSection' AND student_fee_discount.discount_id BETWEEN $discountIdStart AND $discountIdEnd AND (student_fee_discount.admission_discount BETWEEN $discountPerStart AND $discountPerEnd OR student_fee_discount.tution_discount BETWEEN $discountPerStart AND $discountPerEnd )");
+        //} 
+        $stdInfo = $query->result_array();
+        if(empty($stdInfo )){
+            echo '<hr><div class="col-md-12 col-sm-12">
+                    <div class="alert alert-danger">
+                      <strong>Alert!</strong> Record Not Availabe.
+                    </div>
+                </div>';
+        }
+        else{                               
+        echo'<div class="col-md-12 col-sm-12 p-3 display" > 
+            <div class="col-md-3 text-center" >
+                <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
+            </div>
+            <div class="col-md-9 text-center">  
+                <h4>Discount Report</h4>
+            </div> 
+            <div class="portlet "> 
+                <div class="portlet-body">
+                    <table id="sample_1" class="table" >
+                        <thead>
+                            <tr>  
+                                <th> Class Name: '. $class_id .' </th>
+                                <th> Class Section: '. $classSection.' </th> 
+                                <th> Class Section: '. $discountReason.' </th> 
+                                <th> Discount Persentage: '. $discountPer.' </th>  
+                                <th> Date: '. $date.' </th>  
+                            </tr>
+                        </thead> 
+                    </table>
+                </div> 
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 p-5">
+            <div class="portlet purple box">
+                <div class="portlet-title no-print">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>Discount Report
+                    </div>
+                    <div class="tools">
+                        <a class="collapse" href="javascript:;">
+                        </a>
+                        <a class="reload" href="javascript:;">
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body" style="overflow-x: auto;"> 
+                    <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
+                        <thead>
+                             <tr> 
+                                <th>Sr #</th> 
+                                <th>Discount Year</th>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <th>Father Name</th>
+                                <th>Class</th>
+                                <th>Section</th>
+                                <th>Admission Discount %</th>
+                                <th>Tution Fee Discount %</th>
+                                <th>Discount Reason </th> 
+                            </tr>
+                        </thead> 
+                        <tbody>'; 
+                        $count = 1;  
+                        foreach ($stdInfo as $value) {  
+                        echo'<tr>
+                                <td>'. $count++ .'</td> 
+                                <td>'. $value['disc_year'] .'</td>
+                                <td>'. $value['student_id'] .'</td>
+                                <td>'. $value['student_nam'] .'</td>
+                                <td>'. $value['farther_name'] .'</td>
+                                <td>'. $value['class_title'] .'</td>
+                                <td>'. $value['section'] .'</td>
+                                <td>'. $value['admission_discount'] .'%</td>
+                                <td>'. $value['tution_discount'] .'%</td> 
+                                <td>'. $value['discount_reason'] .'</td> 
+                            </tr>';
+                        }  
+                    echo'</tbody>  
+                    </table>
+                </div>
+            </div>
+        </div>'; 
+        }
+    }
+
+    ///
+    public function ajaxDiscountReportTillData(){ 
+
+        $classId = $this->input->post('className');  
+        $classSection = $this->input->post('classSection'); 
+        $discountReason = $this->input->post('discountReason');
+        $discountPer = $this->input->post('discountPercen');
+
+        if(empty($classId)){
+            $classIdstart=1;
+            $classIdend=99;
+        }
+        else{
+            $classIdstart = $classIdend = $classId;
+        }
+        if(empty($discountReason)){
+            $discountIdStart=1;
+            $discountIdEnd=99;
+        }
+        else{
+            $discountIdStart = $discountIdEnd = $discountReason;
+        }
+        if(empty($discountPer)){
+            $discountPerStart=0;
+            $discountPerEnd=100;
+        }
+        else{
+            $discountPerStart = $discountPerEnd = $discountPer;
+        }
+         
+        
+        $query = $this->db->query("SELECT count(student_id) as total_student FROM student_info WHERE class_id BETWEEN $classIdstart AND $classIdend AND section LIKE '%$classSection'");
+         
+            foreach ($query->result() as $row) {
+                $data['totalStudent'] = $row->total_student;
+            }
+         
+        
+
+        // with out discounted students 
+        // if(empty($discountReason)){
+        //     $query = $this->db->query("SELECT count(student_info.student_id) as dis_student FROM student_info INNER JOIN student_fee_discount ON student_info.registration_number = student_fee_discount.reg_number WHERE student_info.class_id = $classId AND student_info.section LIKE '%$classSection'");
+        // } else{
+            $query1 = $this->db->query("SELECT count(student_info.student_id) as dis_student FROM student_info INNER JOIN student_fee_discount ON student_info.registration_number = student_fee_discount.reg_number WHERE student_info.class_id BETWEEN $classIdstart AND $classIdend AND student_info.section LIKE '%$classSection' AND student_fee_discount.discount_id BETWEEN $discountIdStart AND $discountIdEnd AND (student_fee_discount.admission_discount BETWEEN $discountPerStart AND $discountPerEnd OR student_fee_discount.tution_discount BETWEEN $discountPerStart AND $discountPerEnd )");
+       // }
+         
+            foreach ($query1->result() as $row) {
+                $data['discountedStudent'] = $row->dis_student;
+            }
+         
+        
+
+        echo json_encode($data); 
+    }
+
+
+
+
+
+
+
+
+    public function ind_value()
+    {
+        $column = $this->input->post('col');
+        $value = $this->input->post('val');
+
+        echo json_encode($this->common->single_col($column,$value));
+    }
+    public function double_value(){
+        /*$column = $this->input->post('col1');
+        $value = $this->input->post('val1');
+        $column2 = $this->input->post('col2');
+        $value2 = $this->input->post('val2');
+        */echo "sjdfisdhkfhdkjhkdjsf";
+
+        //echo json_encode($this->common->double_col($column,$value, $column2,$value2));
+    }
 //    public function index() {
 //        $user = $this->ion_auth->user()->row();
 //        $id = $user->id;

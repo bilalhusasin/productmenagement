@@ -99,7 +99,7 @@ class Common extends CI_Model {
 
 // total active student of over system
     public function activeStudent(){
-       $data = array();
+        $data = array();
         $query = $this->db->query('SELECT * FROM student_info WHERE status = "Active"');
         foreach ($query->result_array() as $row) {
             $data[] = $row;
@@ -309,11 +309,22 @@ public function totalPaid() {
         return count($data);
     }
 
+
 // this function count discounted student id of student_fee_discount
     public function with_discount() {
         $year = date('Y');
         $data1 = array();
         $query1 = $this->db->query("SELECT * FROM student_info INNER JOIN student_fee_discount ON student_info.registration_number = student_fee_discount.reg_number WHERE student_info.year = $year AND student_fee_discount.year = $year ");
+        foreach ($query1->result_array() as $row) {
+            $data1[] = $row;
+        }
+        return count($data1);
+    }
+// this function count discounted student id of student_fee_discount
+    public function withDiscount() {
+        // $year = date('Y');
+        $data1 = array();
+        $query1 = $this->db->query("SELECT * FROM student_info INNER JOIN student_fee_discount ON student_info.registration_number = student_fee_discount.reg_number");
         foreach ($query1->result_array() as $row) {
             $data1[] = $row;
         }
@@ -329,6 +340,7 @@ public function totalPaid() {
         }
         return count($data1);
     }
+    
 // get total collected  fees from slip table ////
     // public function get_sum() {
     //     $data1 = array();
@@ -746,7 +758,7 @@ public function fee_struct()
 
 public function student_discounts_reasons(){
     $stu_data = array();
-        $query = $this->db->query("SELECT fee_discount.discount_reason as disc,fee_discount.tution_discount as disc_per,fee_discount.admission_discount,student_fee_discount.year as disc_year,  student_info.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name FROM student_fee_discount INNER JOIN student_info ON student_fee_discount.student_id = student_info.student_id LEFT JOIN fee_discount ON student_fee_discount.discount_id = fee_discount.id");
+        $query = $this->db->query("SELECT fee_discount.discount_reason ,fee_discount.tution_discount,fee_discount.admission_discount,student_fee_discount.year as disc_year,  student_info.student_id,student_info.class_title, student_info.section, student_info.student_nam,student_info.farther_name FROM student_fee_discount INNER JOIN student_info ON student_fee_discount.student_id = student_info.student_id LEFT JOIN fee_discount ON student_fee_discount.discount_id = fee_discount.id");
         foreach ($query->result_array() as $row) {
             $stu_data[] = $row;
         }return $stu_data;
@@ -765,6 +777,17 @@ public function student_chalan_receipt(){
 
 // get all fee chalan in current month using this function 
 public function student_chalanz(){
+    $month=date("F");
+    $year = date("Y");
+    $stu_data = array();
+    $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam ,student_info.class_title, student_info.section, slip.discount_id, slip.amount, slip.ac_charges,slip.paid, slip.discount,slip.tution_fee,slip.voucher_number,slip.year, slip.month,slip.payment_status,  slip.dis_total FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id WHERE  slip.month = '$month' AND slip.year= $year ");
+        foreach ($query->result_array() as $row) {
+            $stu_data[] = $row;
+        }
+        return $stu_data;
+}  
+// get all fee chalan in current month using this function 
+public function discountChallan(){
     $month=date("F");
     $year = date("Y");
     $stu_data = array();

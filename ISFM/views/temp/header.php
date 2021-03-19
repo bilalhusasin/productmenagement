@@ -1372,6 +1372,11 @@
                                         <a href="index.php/home/discountReport" class="nav-link ">
                                             <span class="title"><?php echo 'PHP Discount Report'; ?></span>
                                         </a>
+                                    </li>
+                                    <li class="nav-item <?php echo $sessionReport; ?>">
+                                        <a href="index.php/home/sessionReport" class="nav-link ">
+                                            <span class="title"><?php echo 'PHP Session Report'; ?></span>
+                                        </a>
                                     </li> 
                                     <?php } ?> 
                                 </ul>

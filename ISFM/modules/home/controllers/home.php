@@ -2647,22 +2647,19 @@ public function ajaxRecoveryReport(){
         if(empty($classId)){
             $classIdstart=1;
             $classIdend=99;
-        }
-        else{
+        } else{
             $classIdstart = $classIdend = $classId;
         }
         if(empty($discountReason)){
             $discountIdStart=1;
             $discountIdEnd=99;
-        }
-        else{
+        } else{
             $discountIdStart = $discountIdEnd = $discountReason;
         }
         if(empty($discountPer)){
             $discountPerStart=0;
             $discountPerEnd=100;
-        }
-        else{
+        } else{
             $discountPerStart = $discountPerEnd = $discountPer;
         }
         //echo $classId . $classSection . $discountReason. $discountPer;
@@ -2765,60 +2762,311 @@ public function ajaxRecoveryReport(){
         $classSection = $this->input->post('classSection'); 
         $discountReason = $this->input->post('discountReason');
         $discountPer = $this->input->post('discountPercen');
-
+        // class_id assign between query
         if(empty($classId)){
             $classIdstart=1;
             $classIdend=99;
-        }
-        else{
+        } else{
             $classIdstart = $classIdend = $classId;
         }
+        // discountReason assign between query
         if(empty($discountReason)){
             $discountIdStart=1;
             $discountIdEnd=99;
-        }
-        else{
+        } else{
             $discountIdStart = $discountIdEnd = $discountReason;
         }
+        // discountPercentage assign between query
         if(empty($discountPer)){
             $discountPerStart=0;
             $discountPerEnd=100;
-        }
-        else{
+        } else{
             $discountPerStart = $discountPerEnd = $discountPer;
-        }
-         
-        
+        }         
         $query = $this->db->query("SELECT count(student_id) as total_student FROM student_info WHERE class_id BETWEEN $classIdstart AND $classIdend AND section LIKE '%$classSection'");
-         
             foreach ($query->result() as $row) {
                 $data['totalStudent'] = $row->total_student;
             }
-         
-        
-
-        // with out discounted students 
-        // if(empty($discountReason)){
-        //     $query = $this->db->query("SELECT count(student_info.student_id) as dis_student FROM student_info INNER JOIN student_fee_discount ON student_info.registration_number = student_fee_discount.reg_number WHERE student_info.class_id = $classId AND student_info.section LIKE '%$classSection'");
-        // } else{
             $query1 = $this->db->query("SELECT count(student_info.student_id) as dis_student FROM student_info INNER JOIN student_fee_discount ON student_info.registration_number = student_fee_discount.reg_number WHERE student_info.class_id BETWEEN $classIdstart AND $classIdend AND student_info.section LIKE '%$classSection' AND student_fee_discount.discount_id BETWEEN $discountIdStart AND $discountIdEnd AND (student_fee_discount.admission_discount BETWEEN $discountPerStart AND $discountPerEnd OR student_fee_discount.tution_discount BETWEEN $discountPerStart AND $discountPerEnd )");
-       // }
-         
             foreach ($query1->result() as $row) {
                 $data['discountedStudent'] = $row->dis_student;
             }
-         
-        
-
         echo json_encode($data); 
     }
 
+    // this function manage student session report
+    public function sessionReport(){
+        $user = $this->ion_auth->user()->row();
+        $id = $user->id;
+        $data['classTile'] = $this->common->getAllData('class');
+        // this function use an other functions
+        $data['totalRegistration'] = $this->common->totalRegistration();
+        // registration total 
+        $data['totalRegAmount'] = $this->common->totalRegistrationAmount();
+        $data['paidRegAmount'] = $this->common->paidRegistrationAmount();
+        // admission total
+        $data['totalAdmissionAmount'] = $this->common->totalSessionAdmissionAmount();
+        $data['totalAdmissionAmountPaid'] = $this->common->totalSessionAdmissionAmountPaid();
+        // annual total
+        $data['totalAnnualFund'] = $this->common->totalSessionAnnualFund();
+        $data['totalAnnualFundPaid'] = $this->common->totalSessionAnnualFundPaid();
+        // tution total
+        $data['totalTutionFee'] = $this->common->totalSessionTutionFee();
+        $data['totalTutionFeePaid'] = $this->common->totalSessionTutionFeePaid();
+
+        // $data['total_collection']=$this->common->get_sum();
+        $data['stdInfo'] = $this->common->sessionReportData();
+
+        $this->load->view('temp/header');
+        $this->load->view('sessionReport', $data);
+        $this->load->view('temp/footer');
+    }
+
+// ajax session report call
+    public function ajaxSessionReport(){
+        $selectYear = $this->input->get('session'); 
+        $classId = $this->input->get('className');
+        // $classSection = $this->input->get('classSection');
+        $date = date('Y-m-d');
+        // echo $selectYear . $classId . $classSection;
+
+        if(empty($selectYear)){
+            $year = date('Y');
+        } else{
+            $year = $selectYear;
+        }
+        if(empty($classId)){
+            $classIdstart=1;
+            $classIdend=99;
+        } else{
+            $classIdstart = $classIdend = $classId;
+        }
+
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1;
+        } 
+
+        $query = $this->db->query(" SELECT * FROM registration LEFT JOIN student_info ON registration.reg_number = student_info.registration_number WHERE (YEAR(registration.reg_date) = $startYear AND MONTH(registration.reg_date) >= 03 OR YEAR(registration.reg_date) = $endYear AND MONTH(registration.reg_date) < 03) AND registration.class_id BETWEEN $classIdstart AND $classIdend ");
+
+        $stdInfo = $query->result_array(); 
+        if(empty($stdInfo)){
+            echo '<hr><div class="col-md-12 col-sm-12">
+                    <div class="alert alert-danger">
+                      <strong>Alert!</strong> Record Not Availabe.
+                    </div>
+                </div>';
+        } else{                               
+            echo'<div class="col-md-12 col-sm-12 p-3 display" > 
+                <div class="col-md-3 text-center" >
+                    <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
+                </div>
+                <div class="col-md-9 text-center">  
+                    <h4>Session Report</h4>
+                </div> 
+                <div class="portlet "> 
+                    <div class="portlet-body">
+                        <table id="sample_1" class="table" >
+                            <thead>
+                                <tr>  
+                                    <th> Session: '. $startYear.'-'. $endYear .' </th>
+                                    <th> Class Name: '. $classId .' </th> 
+                                    <th> Date: '. $date.' </th>  
+                                </tr>
+                            </thead> 
+                        </table>
+                    </div> 
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 p-5">
+                <div class="portlet purple box">
+                    <div class="portlet-title no-print">
+                        <div class="caption">
+                            <i class="fa fa-cogs"></i>Session Report
+                        </div>
+                        <div class="tools">
+                            <a class="collapse" href="javascript:;">
+                            </a>
+                            <a class="reload" href="javascript:;">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="overflow-x: auto;"> 
+                        <table id="sample_12" onbeforeprint="printtable()" class="table table-striped table-bordered table-hover" >
+                            <thead>
+                                <tr> 
+                                    <th>Sr #</th> 
+                                    <th>session Year</th>
+                                    <th>Registration Date</th>
+                                    <th>registration Number</th>
+                                    <th>Student Name</th>
+                                    <th>Father Name</th>
+                                    <th>Class</th> 
+                                    <th>Gender</th>
+                                    <th>phone</th> 
+                                    <th>Present Address</th>
+                                    <th>Voucher Number</th>
+                                    <th>Registration Fee</th>  
+                                    <th>Paid</th>  
+                                    <th>total</th>  
+                                    <th>Status</th>  
+                                </tr>
+                            </thead> 
+                            <tbody>'; 
+                            $count = 1;  
+                            foreach ($stdInfo as $value) {  
+                            echo'<tr> 
+                                    <td>'. $count++ .'</td>
+                                    <td>'. $value['session'] .'</td>
+                                    <td>'. $value['reg_date'] .'</td>
+                                    <td>'. $value['reg_number'] .'</td>
+                                    <td>'. $value['student_nam'] .'</td>
+                                    <td>'. $value['father_name'] .'</td>
+                                    <td>'. $value['class_id'] .'</td> 
+                                    <td>'. $value['gender'] .'</td>
+                                    <td>'. $value['phone'] .'</td>
+                                    <td>'. $value['present_address'] .'</td>
+                                    <td>'. $value['voucher_number'] .'</td>
+                                    <td>'. $value['registration_fee'] .'</td>
+                                    <td>'. $value['paid'] .'</td>
+                                    <td>'. $value['total'] .'</td>
+                                    <td>'. $value['status'] .'</td>
+                                </tr> ';
+                            }  
+                        echo'</tbody>  
+                        </table>
+                    </div>
+                </div>
+            </div>'; 
+        } 
+    }
+    // 
+    public function ajaxSessionReportTillData(){
+        $selectYear = $this->input->post('session'); 
+        $classId = $this->input->post('className');
+        //$classSection = $this->input->post('classSection');
+ 
+        if(empty($selectYear)){
+            $year = date('Y');
+        } else{
+            $year = $selectYear;
+        }
+        if(empty($classId)){
+            $classIdstart=1;
+            $classIdend=99;
+        } else{
+            $classIdstart = $classIdend = $classId;
+        }
+
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        }
+
+        // total number of students in selected year registration
+        $query = $this->db->query("SELECT count(*) as totalStudent FROM `registration` LEFT JOIN student_info ON registration.reg_number = student_info.registration_number WHERE (YEAR(registration.reg_date) = $startYear AND MONTH(registration.reg_date) >= 03 OR YEAR(registration.reg_date) = $endYear AND MONTH(registration.reg_date) < 03) AND registration.class_id BETWEEN $classIdstart AND $classIdend ");
+
+            foreach($query->result() as $row){
+                $data['totalStudent'] = $row->totalStudent;
+            }
+        // total registration fee for register student
+        $query = $this->db->query("SELECT sum(registration.total) as total_reg_fee FROM `registration` LEFT JOIN student_info ON registration.reg_number = student_info.registration_number WHERE (YEAR(registration.reg_date) = $startYear AND MONTH(registration.reg_date) >= 03 OR YEAR(registration.reg_date) = $endYear AND MONTH(registration.reg_date) < 03) AND registration.class_id BETWEEN $classIdstart AND $classIdend ");
+            foreach ($query->result() as $row) {
+                $data['totalRegAmount'] = $row->total_reg_fee;
+            }
+        // total paid registration fee for register student
+        $query = $this->db->query("SELECT sum(registration.paid) as paidAmount FROM `registration` LEFT JOIN student_info ON registration.reg_number = student_info.registration_number WHERE (YEAR(registration.reg_date) = $startYear AND MONTH(registration.reg_date) >= 03 OR YEAR(registration.reg_date) = $endYear AND MONTH(registration.reg_date) < 03) AND registration.class_id BETWEEN $classIdstart AND $classIdend AND registration.status = 'Paid'") ;
+            foreach ($query->result() as $row) {
+                $data['paidAmount'] = $row->paidAmount;
+            }
+
+        // calculate total admission fee 
+        $admissionFee = 0;
+        $feeQuery = $this->db->query("SELECT admission_fee FROM `fee_structure` WHERE session = $startYear");
+            foreach ($feeQuery->result() as $row) {
+                $admissionFee = $row->admission_fee;
+            } 
+        $admissionCount = 0;
+        $admissionDisc = 0;
+        $query = $this->db->query("SELECT count(*) as total_admission, sum(register_pass.admission_disc) as admission_disc FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number LEFT OUTER JOIN vouchers on registration.reg_number = vouchers.student_ref_id AND vouchers.voucher_type='Admission' where registration.reg_date >= '$startYear-03-01' AND registration.reg_date < '$endYear-03-01' AND registration.class_id BETWEEN $classIdstart AND $classIdend ");
+            foreach ($query->result() as $row) {
+                $admissionCount = $row->total_admission; 
+                $admissionDisc = $row->admission_disc;
+            }
+            $data['admissionFeeTotal'] =  ($admissionCount * $admissionFee)-$admissionDisc;
+
+        // calculate total paid Admission fee
+        $totaladmissionAmount = 0;
+        $query = $this->db->query("SELECT sum(register_pass.admission_fee_disc) as paid_admission FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number AND register_pass.paid_status = 'Paid' LEFT OUTER JOIN vouchers ON registration.reg_number = vouchers.student_ref_id AND vouchers.voucher_type='Admission' where registration.reg_date >= '$startYear-03-01' and registration.reg_date < '$endYear-03-01' AND registration.class_id BETWEEN $classIdstart AND $classIdend ");
+            foreach ($query->result() as $row) {
+                $data['registerAdmissionFee'] = $row->paid_admission;
+            } 
+
+        // count total annual fund 
+        $annualFund = 0;
+        $feeQuery = $this->db->query("SELECT annual_fund FROM `fee_structure` WHERE session = $startYear");
+            foreach ($feeQuery->result() as $row) {
+                $annualFund = $row->annual_fund;
+            }
+
+        $annualCount = 0;
+        $query = $this->db->query("SELECT count(*) as annual_count FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number LEFT OUTER JOIN vouchers on registration.reg_number = vouchers.student_ref_id AND vouchers.voucher_type='Admission' where registration.reg_date >= '$startYear-03-01' and registration.reg_date < '$endYear-03-01' AND registration.class_id BETWEEN $classIdstart AND $classIdend ");
+            foreach ($query->result() as $row) {
+                $annualCount = $row->annual_count;
+            }
+            $data['annualTotal'] =  $annualCount * $annualFund;
+        
+        // count paid total annual fund 
+         $query = $this->db->query("SELECT sum(annual_found) as annual_fund FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number AND register_pass.paid_status='Paid' LEFT OUTER JOIN vouchers on registration.reg_number = vouchers.student_ref_id AND vouchers.voucher_type='Admission' where registration.reg_date >= '$startYear-03-01' and registration.reg_date < '$endYear-03-01' AND registration.class_id BETWEEN $classIdstart AND $classIdend ");
+        foreach ($query->result() as $row) {
+            $data['annualFund'] = $row->annual_fund;
+        }
 
 
+        // count total tution fee 
+        $sum = 0;
+        $discount = array();
+        $query1 = $this->db->query("SELECT registration.class_id as class_id, register_pass.discount_reasons FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number WHERE registration.reg_date >= '$startYear-03-01' AND registration.reg_date < '$endYear-03-01' AND registration.class_id BETWEEN $classIdstart AND $classIdend ");
+        foreach ($query1->result_array() as $row) {
 
+                $class_id = $row['class_id'];
+                $dis_reason = $row['discount_reasons'];
+               //  array_push($discount, $dis_reason);
+               // $data['tution_fee_sum'] =$class_id;
+                if(empty($dis_reason)){
+                    $discount_reasons = 'ND'; 
+                } else{
+                    $discount_reasons = $dis_reason;   
+                } 
+                $tution_per = $this->common->getTutionDis($discount_reasons);
+                //array_push($discount, $tution_per);
+            $query = $this->db->query("SELECT class_id, tution_fee, ac_charges FROM `class_fee_structure` WHERE session=$startYear AND class_id = $class_id");
+            foreach ($query->result_array() as $row) {
+                    $classId = $row['class_id'];
 
-
-
+                    $tution_fee = $row['tution_fee'];
+                    //echo $tution_fee . $tution_per;
+                    $disc_tuition = $tution_fee - ($tution_fee * $tution_per / 100);
+                    $total_single_fee = ($disc_tuition * 12);
+                    //$ac_charges = $row['ac_charges'] ;
+            }
+            $sum = $sum + $total_single_fee;
+           /// $data['tution_fee_sum'] = $sum;
+        } 
+         $data['tution_fee_sum'] =$sum;
+         
+        echo json_encode($data);
+    }
 
     public function ind_value()
     {

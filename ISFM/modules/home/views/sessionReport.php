@@ -69,7 +69,7 @@
             <div class="col-md-12">
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h3 class="page-title">
-                    <?php echo ('Discount Report'); ?> <small></small>
+                    <?php echo ('Session Report'); ?> <small></small>
                 </h3>
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
@@ -92,7 +92,7 @@
                 <div class="portlet purple box">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-search"></i><?php echo 'Search Discount Report'; ?>
+                            <i class="fa fa-search"></i><?php echo 'Search Session Report'; ?>
                         </div>
                         <div class="tools">
                             <a class="collapse" href="javascript:;">
@@ -108,7 +108,17 @@
                         echo form_open('home/commonFilter', $form_attributs);*/
                     ?>
                     <div class="row ">
-                        <div class="col-md-12">    
+                        <div class="col-md-12"> 
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <select name="session" id="session" class="form-control">
+                                        <option value="">Select Session...</option>  
+                                        <option value="2019">2019</option> 
+                                        <option value="2020">2020</option> 
+                                        <option value="2021">2021</option> 
+                                    </select>
+                                </div> 
+                            </div>   
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
                                     <select onchange="classSection(this.value)" name="className" id="className" class="form-control" required="required">
@@ -119,29 +129,14 @@
                                     </select>
                                 </div> 
                             </div>
-                            <div class="col-md-2 col-sm-12">  
-                                <div class="form-group">
+                            <div class="col-md-3 col-sm-12">  
+                                <!-- <div class="form-group">
                                     <select name="classSection" id="classSection" class="form-control">
                                         <option value="">Select Class Section...</option>  
                                     </select>
-                                </div>
-                            </div> 
-                            <div class="col-md-3 col-sm-12">
-                                <div class="form-group">
-                                    <select name="discountReason" id="discountReason" class="form-control">
-                                        <option value="">Select Discount Reason...</option> 
-                                        <?php foreach($fee_discount as $row){?>
-                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['discount_reason']; ?></option>
-                                    <?php } ?> 
-                                    </select>
-                                </div> 
-                            </div>
-                            <div class="col-md-2 col-sm-12">
-                                <div class="form-group">
-                                    <input type="text" name="discountPersen" id="discountPersen" class="form-control" maxlength="3" placeholder="Percentage" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')"/> 
-                                </div> 
-                            </div>  
-                            <div class="col-md-2 col-sm-12"> 
+                                </div> -->
+                            </div>   
+                            <div class="col-md-3 col-sm-12 text-center"> 
                                 <div class="form-group">
                                     <input type="button" onclick ="filterSearch(this.value); " class="btn green" value="Submit" name="submit">
                                 </div> 
@@ -156,35 +151,18 @@
         <hr class="no-print">
         <?php if ($this->common->user_access('das_top_info', $userId)) { ?>
             <div class="row no-print">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat blue-madison">
-                        <div class="visual">
-                            <i class="fa fa-group"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number" id="totalStudent">
-                                <?php echo $totalStudent; ?>
-                            </div>
-                            <div class="desc">
-                                <label  >Total Students</label> 
-                            </div>
-                        </div>
-                        <div  class="more dasTotalStudentTest">
-                            
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat red-intense">
                         <div class="visual">
                             <span class="icon-users totalTeacherSpan" aria-hidden="true"></span>
                         </div>
                         <div class="details">
-                            <div class="number" id="discountedStudent">
-                                <?php echo $discountedStudent; ?>
+                            <div class="number" id="totalRegAmount">
+                                <?php echo $totalRegAmount; ?>
                             </div>
-                            <div class="desc">
-                                <?php echo ('Discounted Student'); ?>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Total Registration Amount Payable'); ?>
                             </div>
                         </div>
                         <div class="more dbilcss3">
@@ -193,22 +171,184 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat green-haze">
+                    <div class="dashboard-stat red-intense">
                         <div class="visual">
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="details">
-                            <div class="number" id="withOutDiscounted">
-                                <?php echo $withOutDiscount = $totalStudent - $discountedStudent; ?>
+                            <div class="number" id="paidAmount">
+                                <?php echo $paidRegAmount; ?>
                             </div>
-                            <div class="desc">
-                                <?php echo ('WithOut Discounted Students'); ?>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Paid Registration Amount To Date'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat blue-madison">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="totalAdmissionAmount">
+                                <?php echo $totalAdmissionAmount; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Total Admission Amount'); ?>
                             </div>
                         </div>
                         <div class="more dbilcss3"> </div>
                     </div>
                 </div> 
-            </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat blue-madison">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="paidAdmissionAmount">
+                                <?php echo $totalAdmissionAmountPaid; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Paid Admission Amount To Date'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat green-haze">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="totalAnnualFund">
+                                <?php echo $totalAnnualFund; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Total Annual Fund Payable'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat green-haze">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="totalAnnualFundPaid">
+                                <?php echo $totalAnnualFundPaid; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Paid Annual Fund To Date'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat yellow">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="totalTutionFee">
+                                <?php echo $totalTutionFee; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Total Tution Fee Payable'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div> 
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat yellow">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="totalTutionFeePaid">
+                                <?php echo $totalTutionFeePaid; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Tution Fee Paid To Date'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div> 
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat purple">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="">
+                                <?php echo $overAllTotal = $totalRegAmount + $totalAdmissionAmount + $totalAnnualFund + $totalTutionFee; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Total Projected Amount For Session'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div> 
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat purple">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="">
+                                <?php echo $paid_total = $paidRegAmount + $totalAdmissionAmountPaid + $totalAnnualFundPaid + $totalTutionFeePaid; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Over All Total To Date'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div> 
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat red-intense">
+                        <div class="visual">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="">
+                                <?php echo $overAllTotal - $paid_total; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <?php echo ('Session Hit'); ?>
+                            </div>
+                        </div>
+                        <div class="more dbilcss3"> </div>
+                    </div>
+                </div> 
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat blue-madison">
+                        <div class="visual">
+                            <i class="fa fa-group"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="totalStudent">
+                                <?php echo $totalRegistration; ?>
+                            </div>
+                            <div class="desc" style="font-size: 100% !important;">
+                                <label  >Total Registration in This Year</label> 
+                            </div>
+                        </div>
+                        <div  class="more dasTotalStudentTest">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>  
             <div class="clearfix"></div>
         <?php } //if($this->ion_auth->is_accountant()){?>
             <!-- <div class="row">
@@ -224,7 +364,7 @@
                     <div class="portlet green box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-bullhorn"></i><?php echo ('Discount Report Graph'); ?>
+                                <i class="fa fa-bullhorn"></i><?php echo ('Session Report Graph'); ?>
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -301,7 +441,7 @@
                     <div class="portlet purple box">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-cogs"></i><?php echo ('Discount Report'); ?>
+                                <i class="fa fa-cogs"></i><?php echo ('Session Report'); ?>
                             </div>
                             <div class="tools">
                                 <a class="collapse" href="javascript:;"></a>
@@ -313,30 +453,40 @@
                                 <thead>
                                     <tr> 
                                         <th>Sr #</th> 
-                                        <th>Discount Year</th>
-                                        <th>Student ID</th>
+                                        <th>session Year</th>
+                                        <th>Registration Date</th>
+                                        <th>registration Number</th>
                                         <th>Student Name</th>
                                         <th>Father Name</th>
                                         <th>Class</th>
-                                        <th>Section</th>
-                                        <th>Admission Discount %</th>
-                                        <th>Tution Fee Discount %</th>
-                                        <th>Discount Reason </th> 
+                                        <th>Gender</th>
+                                        <th>phone</th> 
+                                        <th>Present Address</th>
+                                        <th>Voucher Number</th>
+                                        <th>Registration Fee</th>  
+                                        <th>Paid</th>  
+                                        <th>total</th>  
+                                        <th>Status</th>  
                                     </tr>
                                 </thead>
                                 <tbody>
                             <?php $count=1; foreach ($stdInfo as $value) {?>
                                     <tr> 
                                         <td> <?php echo $count++; ?> </td>
-                                        <td> <?php echo $value['disc_year']; ?> </td>
-                                        <td> <?php echo $value['student_id']; ?> </td>
+                                        <td> <?php echo $value['session']; ?> </td>
+                                        <td> <?php echo $value['reg_date']; ?> </td>
+                                        <td> <?php echo $value['reg_number']; ?> </td>
                                         <td> <?php echo $value['student_nam']; ?> </td>
-                                        <td> <?php echo $value['farther_name']; ?> </td>
-                                        <td> <?php echo $value['class_title']; ?> </td>
-                                        <td> <?php echo $value['section']; ?> </td>
-                                        <td> <?php echo $value['admission_discount']; ?> %</td>
-                                        <td> <?php echo $value['tution_discount']; ?> %</td>
-                                        <td> <?php echo $value['discount_reason']; ?> </td>
+                                        <td> <?php echo $value['father_name']; ?> </td>
+                                        <td> <?php echo $value['class_id']; ?> </td> 
+                                        <td> <?php echo $value['gender']; ?> </td>
+                                        <td> <?php echo $value['phone']; ?> </td>
+                                        <td> <?php echo $value['present_address']; ?> </td>
+                                        <td> <?php echo $value['voucher_number']; ?> </td>
+                                        <td> <?php echo $value['registration_fee']; ?> </td>
+                                        <td> <?php echo $value['paid']; ?> </td>
+                                        <td> <?php echo $value['total']; ?> </td>
+                                        <td> <?php echo $value['status']; ?> </td>
                                     </tr> 
                             <?php } ?>
                                 </tbody>
@@ -626,12 +776,7 @@ if(value!=""){
 
 </script>
 <script>
-$('#discountPersen').keyup(function(){
-  if ($(this).val() > 100){
-    alert("No numbers above 100");
-    $(this).val('100');
-  }
-});
+
 function classSection(str) {
     var xmlhttp;
     if (str.length === 0) {
@@ -653,15 +798,11 @@ function classSection(str) {
     xmlhttp.open("GET", "index.php/home/ajaxClassSectionApp?q=" + str, true);
     xmlhttp.send();
 }
-function filterSearch(str) {                             
+function filterSearch(str) { 
+    var session = document.getElementById("session").value;                            
     var className = document.getElementById("className").value;   
-    var classSection = document.getElementById("classSection").value;
-    var discountReason = document.getElementById("discountReason").value;
-    var discountPercen = document.getElementById("discountPersen").value;  
-    // alert(className + classSection + discountReason);
-    // if(className == ''){
-    //     alert ('Please Select Class Name First');
-    // } else{  
+    //var classSection = document.getElementById("classSection").value; 
+    // alert (session + className + classSection);  
         var xmlhttp;
         if (str.length === 0) {
             document.getElementById("filterdata").innerHTML = "";
@@ -679,35 +820,40 @@ function filterSearch(str) {
                     document.getElementById("filterdata").innerHTML = xmlhttp.responseText;
                 }
             };
-        xmlhttp.open("GET", "index.php/home/ajaxDiscountReport?className=" + className + "&classSection=" + classSection + "&discountReason=" + discountReason + "&discountPercen=" + discountPercen, true);
+        xmlhttp.open("GET", "index.php/home/ajaxSessionReport?className=" + className + "&session=" + session, true);
         xmlhttp.send(); 
         TillData();
-    //}
-     
 }
 function TillData(){
+    var session = document.getElementById("session").value;   
     var className = document.getElementById("className").value;   
-    var classSection = document.getElementById("classSection").value;
-    var discountReason = document.getElementById("discountReason").value;
-    var discountPercen = document.getElementById("discountPersen").value; 
+    //var classSection = document.getElementById("classSection").value; 
+
     //alert(year + monthName + className + classSection );
        $.ajax({
             type: "POST",
-            url: "index.php/home/ajaxDiscountReportTillData",
+            url: "index.php/home/ajaxSessionReportTillData",
             data: {  
+                "session":session,  
                 "className":className,  
-                "classSection":classSection,
-                "discountReason":discountReason,
-                "discountPercen":discountPercen, 
+                //"classSection":classSection, 
             },
             dataType: "json",
 
             //if received a response from the server
             success: function( datas, textStatus, jqXHR) {  
-                //alert(datas.discountedStudent); 
+                alert(datas.tution_fee_sum); 
                 $("#totalStudent").html(datas.totalStudent); 
-                $("#discountedStudent").html(datas.discountedStudent);
-                $("#withOutDiscounted").html(parseInt(datas.totalStudent) - parseInt(datas.discountedStudent));
+                $("#totalRegAmount").html(datas.totalRegAmount); 
+                $("#paidAmount").html(datas.paidAmount); 
+                $("#totalAdmissionAmount").html(datas.admissionFeeTotal);  
+                $("#paidAdmissionAmount").html(datas.registerAdmissionFee);
+                $("#totalAnnualFund").html(datas.annualTotal); 
+                $("#totalAnnualFundPaid").html(datas.annualFund); 
+
+                $("#totalTutionFee").html(datas.tution_fee_sum); 
+
+                // $("#withOutDiscounted").html(parseInt(datas.totalStudent) - parseInt(datas.discountedStudent));
             },
         }); 
 } 

@@ -1992,7 +1992,7 @@ class Users extends CI_Controller {
                 //This array information's are sending to "student_info" table.
                 $regnbr=$this->input->post('regnum', TRUE);
                 $voucher_number=date("y").''.date("m").''.$regnbr;
-                $regdate = date('yy-m-d'); 
+                $regdate = date('Y-m-d'); 
                 
             while (true){
 
@@ -2263,9 +2263,9 @@ class Users extends CI_Controller {
                 $this->db->where('reg_number', $reg_number);
                 $this->db->update('registered', $reg_dat);
                 $data['success'] = '<div class="alert alert-info alert-dismissable admisionSucceassMessageFont">
-                                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
-                                                    <strong>' . lang('success') . '</strong> ' . lang('stuc_2') . '
-                                            </div>';
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                                        <strong>' . lang('success') . '</strong> ' . lang('stuc_2') . '
+                                    </div>';
                 //$data['voucher'] = $this->common->getAllData('registration');
                 redirect('users/reg_stu', 'refresh');
             } else{ 

@@ -815,16 +815,270 @@ public function student_chalan1(){
     }return $stu_data;
 }
 
+// get all data of registration table 
+    public function sessionReportData(){ 
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        }
+
+        $stu_data = array();  
+        $query = $this->db->query("SELECT * FROM `registration` WHERE (YEAR(reg_date) = $startYear AND MONTH(reg_date) >= 03 OR YEAR(reg_date) = $endYear AND MONTH(reg_date) < 03)");
+        foreach ($query->result_array() as $row) {
+            $stu_data[] = $row;
+        }
+        return $stu_data;
+    }
+
+// count total registrations 
+    public function totalRegistration(){
+        $totalReg = array();
+        $year = 2020;  
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        }
+
+        $query = $this->db->query("SELECT count(id) as totalRegistration FROM `registration` WHERE registration.reg_date >= '$startYear-03-01' AND registration.reg_date < '$endYear-03-01'");
+            foreach ($query->result() as $row) {
+                $totalReg = $row->totalRegistration;
+            }
+            return $totalReg;
+    }
+
+// count total registrations 
+    public function totalRegistrationAmount(){
+        $totalAmount = array();
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        }
+
+        $query = $this->db->query("SELECT sum(total) as totalAmount FROM `registration` WHERE (YEAR(reg_date) = $startYear AND MONTH(reg_date) >= 03 OR YEAR(reg_date) = $endYear AND MONTH(reg_date) < 03)");
+            foreach ($query->result() as $row) {
+                $totalAmount = $row->totalAmount;
+            }
+            return $totalAmount;
+    } 
+
+// count total registrations 
+    public function paidRegistrationAmount(){
+        $paidAmount = array();
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        }
+
+
+        $query = $this->db->query("SELECT sum(paid) as paidAmount FROM `registration` WHERE (YEAR(reg_date) = $startYear AND MONTH(reg_date) >= 03 OR YEAR(reg_date) = $endYear AND MONTH(reg_date) < 03) AND status = 'Paid' ");
+            foreach ($query->result() as $row) {
+                $paidAmount = $row->paidAmount;
+            }
+            return $paidAmount;
+    }
+//count total registrations 
+    public function totalSessionAdmissionAmount(){
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        }
+        $admissionFee = 0;
+        $feeQuery = $this->db->query("SELECT admission_fee FROM `fee_structure` WHERE session = $startYear");
+            foreach ($feeQuery->result() as $row) {
+                $admissionFee = $row->admission_fee;
+            } 
+        $admissionCount = 0;
+        $admissionDisc = 0;
+        $query = $this->db->query("SELECT count(*) as total_admission, sum(register_pass.admission_disc) as admission_disc FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number LEFT OUTER JOIN vouchers on registration.reg_number = vouchers.student_ref_id AND vouchers.voucher_type='Admission' where registration.reg_date >= '$startYear-03-01' and registration.reg_date < '$endYear-03-01'");
+            foreach ($query->result() as $row) {
+                $admissionCount = $row->total_admission;
+                $admissionDisc = $row->admission_disc;
+            }
+            $total =  ($admissionCount * $admissionFee)-$admissionDisc;
+            return $total;
+    }
+//count total registrations 
+    public function totalSessionAdmissionAmountPaid(){
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        } 
+        $totaladmissionAmount = 0;
+        $query = $this->db->query("SELECT sum(register_pass.admission_fee_disc) as paid_admission FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number AND register_pass.paid_status = 'Paid' LEFT OUTER JOIN vouchers on registration.reg_number = vouchers.student_ref_id AND vouchers.voucher_type='Admission' where registration.reg_date >= '$startYear-03-01' and registration.reg_date < '$endYear-03-01'");
+            foreach ($query->result() as $row) {
+                $registerAdmissionFee = $row->paid_admission;
+            } 
+            return $registerAdmissionFee;
+    }   
+
+//count total registrations 
+    public function totalSessionAnnualFund(){
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        } 
+        $annualFund = 0;
+        $feeQuery = $this->db->query("SELECT annual_fund FROM `fee_structure` WHERE session = $startYear");
+            foreach ($feeQuery->result() as $row) {
+                $annualFund = $row->annual_fund;
+            }
+
+        $annualCount = 0;
+        $query = $this->db->query("SELECT count(*) as annual_count FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number LEFT OUTER JOIN vouchers on registration.reg_number = vouchers.student_ref_id AND vouchers.voucher_type='Admission' where registration.reg_date >= '$startYear-03-01' and registration.reg_date < '$endYear-03-01'");
+            foreach ($query->result() as $row) {
+                $annualCount = $row->annual_count;
+            }
+            $annualTotal =  $annualCount * $annualFund;
+            return $annualTotal;
+    } 
+    //count total registrations 
+    public function totalSessionAnnualFundPaid(){
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        } 
+         
+        $annualFund = 0;
+        $query = $this->db->query("SELECT sum(annual_found) as annual_fund FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number AND register_pass.paid_status='Paid' LEFT OUTER JOIN vouchers on registration.reg_number = vouchers.student_ref_id AND vouchers.voucher_type='Admission' where registration.reg_date >= '$startYear-03-01' and registration.reg_date < '$endYear-03-01'");
+            foreach ($query->result() as $row) {
+                $annualFund = $row->annual_fund;
+            }
+            return $annualFund;
+    }  
+
+//count total tution fee 
+    public function totalSessionTutionFee(){
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        } 
+        $sum = 0;
+        $query1 = $this->db->query("SELECT registration.class_id as class_id, register_pass.discount_reasons FROM registration LEFT OUTER JOIN register_pass ON registration.reg_number = register_pass.reg_number WHERE registration.reg_date >= '$startYear-03-01' AND registration.reg_date < '$endYear-03-01' ORDER BY registration.class_id");
+        foreach ($query1->result_array() as $row) {
+
+                $class_id = $row['class_id'];
+                $dis_reason = $row['discount_reasons'];
+                  if(empty($dis_reason)){
+                    $discount_reasons = 'ND'; 
+                } else{
+                    $discount_reasons = $dis_reason;   
+                } 
+                $tution_per = $this->common->getTutionDis($discount_reasons);
+                  
+            $query = $this->db->query("SELECT class_id, tution_fee, ac_charges FROM `class_fee_structure` WHERE session=$startYear AND class_id = $class_id");
+            foreach ($query->result_array() as $row) {
+                    $classId = $row['class_id'];
+
+                    $tution_fee = $row['tution_fee'];
+                    //echo $tution_fee . $tution_per;
+                    $disc_tuition = $tution_fee - ($tution_fee * $tution_per / 100);
+                    $total_single_fee = ($disc_tuition* 12);
+                    //$ac_charges = $row['ac_charges'] ;
+            }
+             $sum = $sum + $total_single_fee;
+        } 
+        return $sum; 
+    }      
+    public function getTutionDis($discount_reasons){ 
+           
+            //$discount_id = $discount_reasons;
+            $query = $this->db->query("SELECT tution_discount FROM `fee_discount` WHERE discount_code='$discount_reasons'");
+            foreach ($query->result_array() as $value) {
+                $dis_per = $value['tution_discount'];
+            }
+            return $dis_per;
+    }
+//count total tution fee Paid
+    public function totalSessionTutionFeePaid(){
+        $year = 2020; 
+        $month = date('F'); 
+        $nmonth = date('m',strtotime($month));
+        if($nmonth < 3){
+            $startYear =  $year-1;
+            $endYear = $year; 
+        } else{
+            $startYear =  $year;
+            $endYear = $year+1; 
+        } 
+        $sum = 0; 
+        $query1 = $this->db->query("SELECT student_info.student_id as student_id FROM registration LEFT OUTER JOIN student_info ON registration.reg_number = student_info.registration_number WHERE registration.reg_date >= '$startYear-03-01' AND registration.reg_date < '$endYear-03-01'");
+        foreach ($query1->result_array() as $row) {
+            $student_id = $row['student_id'];
+               if (empty($student_id)){
+                    continue;
+                } 
+            $query = $this->db->query("SELECT sum(dis_tution_fee) as dis_tution_fee FROM `slip` where student_id = $student_id AND payment_status = 'Paid' and ( (year = $startYear and MONTH(slip.date) >='03' ) or (year = $endYear and MONTH(slip.date) <'03' ) )");
+            foreach ($query->result_array() as $row) {
+                $tution_fee = $row['dis_tution_fee'];  
+            }
+            $sum = $sum + $tution_fee;
+        } 
+        return $sum; 
+    }
+
 // get all paid fee chalan in current month using this function 
     public function royaltyChalaninfo(){
         $month=date("F");
         $year = date("Y");
         $stu_data = array();
         $query = $this->db->query("SELECT student_info.student_id, student_info.student_nam,student_info.class_title, student_info.section, student_info.discount_cat, vouchers.student_ref_id, vouchers.year, vouchers.month_name, vouchers.voucher_number, vouchers.voucher_type, vouchers.total_amount, vouchers.paid_amount, vouchers.voucher_status FROM vouchers INNER JOIN student_info ON vouchers.student_ref_id = student_info.student_id WHERE vouchers.year= $year AND vouchers.month_name = '$month' AND vouchers.voucher_type = 'Monthly Fee' AND vouchers.voucher_status = 'Paid'");
-            foreach ($query->result_array() as $row) {
-                $stu_data[] = $row;
-            }
-            return $stu_data;
+        foreach ($query->result_array() as $row) {
+            $stu_data[] = $row;
+        }
+        return $stu_data;
     } 
 // get all advance fee records for students in table 
     public function advanceFeeInfo(){
@@ -832,10 +1086,10 @@ public function student_chalan1(){
         $year = date("Y");
         $stu_data = array();
         $query = $this->db->query("SELECT sum(advance_fee.advance_amount) as totalAdvance,sum(advance_fee.advance_amount) - slip.dis_total as totalBalance, student_info.student_nam,student_info.class_title, student_info.section,slip.year,slip.student_id,slip.payment_status,slip.month, slip.dis_total,slip.advance,slip.balance,advance_fee.advance_year,advance_fee.advance_month,advance_fee.advance_date,advance_fee.advance_receipt_num,advance_fee.advance_amount,advance_fee.total_advance_amount, advance_fee.advance_flag FROM slip INNER JOIN student_info ON slip.student_id = student_info.student_id LEFT JOIN advance_fee ON slip.student_id = advance_fee.student_id WHERE slip.year = $year AND slip.month = '$month' AND slip.balance != 0 GROUP BY student_info.student_id");
-            foreach ($query->result_array() as $row) {
-                $stu_data[] = $row;
-            }
-            return $stu_data;
+        foreach ($query->result_array() as $row) {
+            $stu_data[] = $row;
+        }
+        return $stu_data;
     }
     // totalAdvance
     public function totalAdvance(){ 

@@ -288,7 +288,7 @@
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="details">
-                            <div class="number" id="">
+                            <div class="number" id="overAllTotal">
                                 <?php echo $overAllTotal = $totalRegAmount + $totalAdmissionAmount + $totalAnnualFund + $totalTutionFee; ?>
                             </div>
                             <div class="desc" style="font-size: 100% !important;">
@@ -304,7 +304,7 @@
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="details">
-                            <div class="number" id="">
+                            <div class="number" id="overAllPaid">
                                 <?php echo $paid_total = $paidRegAmount + $totalAdmissionAmountPaid + $totalAnnualFundPaid + $totalTutionFeePaid; ?>
                             </div>
                             <div class="desc" style="font-size: 100% !important;">
@@ -320,7 +320,7 @@
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="details">
-                            <div class="number" id="">
+                            <div class="number" id="sessionHit">
                                 <?php echo $overAllTotal - $paid_total; ?>
                             </div>
                             <div class="desc" style="font-size: 100% !important;">
@@ -842,18 +842,30 @@ function TillData(){
 
             //if received a response from the server
             success: function( datas, textStatus, jqXHR) {  
-                alert(datas.tution_fee_sum); 
+                alert(datas.paidAmount); 
+                
+
                 $("#totalStudent").html(datas.totalStudent); 
                 $("#totalRegAmount").html(datas.totalRegAmount); 
                 $("#paidAmount").html(datas.paidAmount); 
+
                 $("#totalAdmissionAmount").html(datas.admissionFeeTotal);  
                 $("#paidAdmissionAmount").html(datas.registerAdmissionFee);
+
                 $("#totalAnnualFund").html(datas.annualTotal); 
                 $("#totalAnnualFundPaid").html(datas.annualFund); 
 
                 $("#totalTutionFee").html(datas.tution_fee_sum); 
+                $("#totalTutionFeePaid").html(datas.totalTutionFeePaid); 
 
-                // $("#withOutDiscounted").html(parseInt(datas.totalStudent) - parseInt(datas.discountedStudent));
+                var total = (parseInt(datas.totalRegAmount) + parseInt(datas.admissionFeeTotal) + parseInt(datas.annualTotal) + parseInt(datas.tution_fee_sum));
+                var paid = (parseInt(datas.paidAmount) + parseInt(datas.registerAdmissionFee) + parseInt(datas.annualFund) + parseInt(datas.totalTutionFeePaid));
+
+                $("#overAllTotal").html(total);
+                $("#overAllPaid").html(paid);
+                $("#sessionHit").html(parseInt(total) - parseInt(paid));
+                
+
             },
         }); 
 } 

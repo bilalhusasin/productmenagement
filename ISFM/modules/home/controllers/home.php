@@ -3064,6 +3064,24 @@ public function ajaxRecoveryReport(){
            /// $data['tution_fee_sum'] = $sum;
         } 
          $data['tution_fee_sum'] =$sum;
+
+
+        // paid tution fee total
+         $sum = 0; 
+        $query1 = $this->db->query("SELECT student_info.student_id as student_id FROM registration LEFT OUTER JOIN student_info ON registration.reg_number = student_info.registration_number WHERE registration.reg_date >= '$startYear-03-01' AND registration.reg_date < '$endYear-03-01' AND registration.class_id BETWEEN $classIdstart AND $classIdend");
+        foreach ($query1->result_array() as $row) {
+            $student_id = $row['student_id'];
+               if (empty($student_id)){
+                    continue;
+                } 
+            $query = $this->db->query("SELECT sum(dis_tution_fee) as dis_tution_fee FROM `slip` where student_id = $student_id AND payment_status = 'Paid' and ( (year = $startYear and MONTH(slip.date) >='03' ) or (year = $endYear and MONTH(slip.date) <'03' ) )");
+            
+            foreach ($query->result_array() as $row) {
+                $tution_fee = $row['dis_tution_fee'];  
+            }
+            $sum = $sum + $tution_fee;
+        } 
+        $data['totalTutionFeePaid'] =$sum;
          
         echo json_encode($data);
     }

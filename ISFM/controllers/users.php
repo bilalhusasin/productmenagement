@@ -2434,6 +2434,7 @@ class Users extends CI_Controller {
         // $data['stu'] = $this->common->getAllData('registration');
         $query=$this->db->query("SELECT * FROM registration WHERE status='Paid' AND (result_status='' OR result_status='fail')"); 
         $data['stu']=$query->result_array();
+
         $query=$this->db->query("SELECT * FROM fee_discount WHERE status='Active' AND session_discount='$year'");      
         $data['fee_dis']=$query->result_array();
         $this->load->view('temp/header');
@@ -2472,7 +2473,7 @@ class Users extends CI_Controller {
                 } 
                 $reason=$this->input->post("dis_reason_$x", TRUE);  
                 $query=$this->db->query("SELECT * FROM fee_discount WHERE id='$reason'"); 
-                $data=$query->result_array(); 
+                $data=$query->result_array();  
                 $dis_id = "";
                 $dis_reason = "";
                 $admission_dis=0;
@@ -2484,8 +2485,13 @@ class Users extends CI_Controller {
                     $tution_dis=$row['tution_discount'];  
                 }    
                 $class_id = $this->input->post("class_id_$x", TRUE);  
+                if(empty($class_id)){
+                    continue;
+                }
+
                 $query1=$this->db->query("SELECT * FROM class_fee_structure WHERE class_id=$class_id"); 
-                $data1=$query1->result_array();
+                $data1=$query1->result_array(); 
+
                 foreach($data1 as $row1){ 
                     $tution_fee=$row1['tution_fee'];
                     $ac_charges=$row1['ac_charges'];    
@@ -2626,7 +2632,7 @@ class Users extends CI_Controller {
                     }/* else if($status =="fail"){
                        $this->db->insert('register_pass', $fail_data);
                    } */
-                }    
+                }     
                 redirect('users/pass_student', 'refresh');
             }  
          }

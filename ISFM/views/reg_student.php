@@ -52,37 +52,16 @@ $userId = $user->id; ?>
                         <table class="table table-striped table-bordered table-hover" id="sample_1">
                             <thead>
                                 <tr>
-                                    <th>
-                                        Sr.No
-                                    </th>
-                                    <th>
-                                        Class Name
-                                    </th>
-                                    <th>
-                                        <?php echo lang('stu_clas_Photo'); ?>
-                                    </th>
-                                    <th>
-                                        <?php echo lang('stu_clas_Student_Name'); ?>
-                                    </th> 
-                                    <th>
-                                        Father Name
-                                    </th>
-                                    <th>
-                                        Registration Number
-                                    </th>
-                                    <th>
-                                        Registration Status
-                                    </th>
-                                    <th>
-                                        Student Discount
-                                    </th> 
-                                    <th>
-                                        Result Status
-                                    </th>
-                                    
-                                    <th>
-                                        <?php echo lang('stu_clas_Actions'); ?>
-                                    </th>
+                                    <th> Sr.No </th>
+                                    <th> Class Name </th>
+                                    <th> <?php echo lang('stu_clas_Photo'); ?></th>
+                                    <th><?php echo lang('stu_clas_Student_Name'); ?></th> 
+                                    <th>Father Name</th>
+                                    <th>Registration Number</th>
+                                    <th>Registration Status</th>
+                                    <th>Student Discount</th> 
+                                    <th>Result Status</th>
+                                    <th><?php echo lang('stu_clas_Actions'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>

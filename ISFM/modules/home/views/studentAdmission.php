@@ -272,6 +272,7 @@
             </div> -->
         <?php //} 
         if ($this->common->user_access('das_grab_chart', $userId)) { ?>
+
             <div class="row no-print">
                 <div class="col-md-12 col-sm-12">
                     <!-- BEGIN PORTLET-->
@@ -432,6 +433,33 @@
 <script type="text/javascript" src="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <script src="assets/admin/pages/scripts/table-advanced.js"></script>
+<!--  -->
+<script src="assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
+
+<script src="assets/global/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+
+<script src="assets/global/plugins/jquery.pulsate.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
+<script src="assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="assets/admin/pages/scripts/index.js" type="text/javascript"></script>
+<script src="assets/admin/pages/scripts/tasks.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
 function classSection(str) {
     var xmlhttp;
@@ -522,11 +550,11 @@ function TillData(){
 var canvas = document.getElementById('myChart');
 var data = {
     labels: [
-<?php
-foreach ($date_wise_students as $cap) {
-    echo "'" . $cap['month'] . "', ";
-}
-?>
+            <?php
+            foreach ($date_wise_students as $cap) {
+                echo "'" . $cap['month'] . "', ";
+            }
+            ?>
     ],
     datasets: [
         {
@@ -537,30 +565,23 @@ foreach ($date_wise_students as $cap) {
             hoverBackgroundColor: "rgba(255,99,132,0.4)",
             hoverBorderColor: "rgba(255,99,132,1)",
             data: [
-<?php
-foreach ($date_wise_students as $cap) {
-    echo $cap['ss'] .",";
-}
-?>
+                <?php
+                foreach ($date_wise_students as $cap) {
+                    echo $cap['ss'] .",";
+                }
+                ?>
             ],
         }
-
-
-
-
     ]
 };
 var option = {
-animation: {
-                duration:5000
-}
-
+    animation: {
+        duration:5000
+    }
 };
-
-
 var myBarChart = Chart.Bar(canvas,{
     data:data,
-  options:option
+    options:option
 });
 
 </script>

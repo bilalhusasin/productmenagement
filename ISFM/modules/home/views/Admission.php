@@ -223,6 +223,9 @@ $(document).ready(function ()
                     <!-- END PORTLET-->
                 </div>
             </div>
+
+
+
             <div class="clearfix">
             </div>
         <?php } ?>
@@ -308,78 +311,38 @@ $(document).ready(function ()
                                         <thead>
                                             <tr>
                                                 
-                                                <th>
-                                                  Admission Date
-                                                </th>
-                                                <th>
-                                                   Student ID
-                                                </th>
-                                                
-                                                <th>
-                                                    Student Name
-                                                </th>
-                                                <th>
-                                                    Father Name
-                                                </th>
-                                                <th>
-                                                    Class
-                                                </th>
-                                                <th>
-                                                   Section
-                                                </th>
-                                                 <th>
-                                                   Discount Reason
-                                                </th>
-                                                <th>
-                                                   Admission Discount %
-                                                </th>
-                                                <th>
-                                                   Admission Fee
-                                                </th>
-                                                <th>
-                                                   Annual Fee
-                                                </th>
-                                                <th>
-                                                   Total Fee
-                                                </th>
-                                                <th>
-                                                   Net Total
-                                                </th>
+                                                <th> Admission Date</th>
+                                                <th> Student ID</th>
+                                                <th> Student Name</th>
+                                                <th> Father Name</th>
+                                                <th> Class</th>
+                                                <th> Section</th>
+                                                <th> Discount Reason</th>
+                                                <th> Admission Discount %</th>
+                                                <th> Admission Fee</th>
+                                                <th> Annual Fee</th>
+                                                <th> Total Fee</th>
+                                                <th> Net Total</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            
+                                        <tbody>  
                                         </tbody>
-
-<tfoot><tr>
-                                                
-                                                <th>Admission Date
-                                                </th>
-                                                <th>Student ID
-                                                </th>
-                                                
-                                                <th>Student Name
-                                                </th>
-                                                <th>Father Name
-                                                </th>
-                                                <th>Class
-                                                </th>
-                                                <th>Section
-                                                </th>
-                                                 <th>Discount Reason
-                                                </th>
-                                                <th>Admission Discount %
-                                                </th>
-                                                <th>Admission Fee
-                                                </th>
-                                                <th>Annual Fee
-                                                </th>
-                                                <th>Total Fee
-                                                </th>
-                                                <th>Net Total
-                                                </th>
-                                                
-                                            </tr></tfoot>
+                                        <tfoot>
+                                            <tr> 
+                                                <th>Admission Date</th>
+                                                <th>Student ID</th> 
+                                                <th>Student Name</th>
+                                                <th>Father Name</th>
+                                                <th>Class</th>
+                                                <th>Section</th>
+                                                <th>Discount Reason</th>
+                                                <th>Admission Discount %</th>
+                                                <th>Admission Fee</th>
+                                                <th>Annual Fee</th>
+                                                <th>Total Fee</th>
+                                                <th>Net Total</th> 
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -393,27 +356,11 @@ $(document).ready(function ()
                     </div>
                 </div>
             <?php }?>
-                
             <?php  if ($this->common->user_access('das_employ_attend', $userId)) { ?>
-
-                
-
-                
             <?php } ?>
             <?php if ($this->common->user_access('das_notice', $userId)) { ?>  
-                
             <?php } ?>
-        </div>
-        <div class="clearfix"></div>
-        <div class="row ">
-            <div class="col-md-12 col-sm-12">
-                <!-- BEGIN PORTLET-->
-                
-                <!-- END PORTLET-->
-            </div>
-
-        </div>
-        <!-- END DASHBOARD STATS -->
+        </div> 
     </div>
 </div>
 <!-- END CONTENT -->
@@ -452,11 +399,11 @@ $(document).ready(function ()
 var canvas = document.getElementById('myChart');
 var data = {
     labels: [
-<?php
-foreach ($date_wise_students as $cap) {
-    echo "'" . $cap['month'] . "', ";
-}
-?>
+            <?php
+            foreach ($date_wise_students as $cap) {
+                echo "'" . $cap['month'] . "', ";
+            }
+            ?>
     ],
     datasets: [
         {
@@ -467,30 +414,24 @@ foreach ($date_wise_students as $cap) {
             hoverBackgroundColor: "rgba(255,99,132,0.4)",
             hoverBorderColor: "rgba(255,99,132,1)",
             data: [
-<?php
-foreach ($date_wise_students as $cap) {
-    echo $cap['ss'] .",";
-}
-?>
+                <?php
+                foreach ($date_wise_students as $cap) {
+                    echo $cap['ss'] .",";
+                }
+                ?>
             ],
         }
-
-
-
-
     ]
 };
 var option = {
-animation: {
-                duration:5000
-}
-
+    animation: {
+        duration:5000
+    }
 };
-
 
 var myBarChart = Chart.Bar(canvas,{
     data:data,
-  options:option
+    options:option
 });
 
 </script>

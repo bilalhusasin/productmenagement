@@ -648,7 +648,7 @@ public function studentAdmission() {
     //$data['massage'] = $this->common->getWhere('massage', 'receiver_id', $id);
     
      
-    //$data['date_wise_students'] = $this->homeModel->atten_chart_students_admision();
+    $data['date_wise_students'] = $this->homeModel->atten_chart_students_admision();
      
     $this->load->view('temp/header', $data);
     $this->load->view('studentAdmission', $data);

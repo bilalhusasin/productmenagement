@@ -643,11 +643,7 @@ public function studentAdmission() {
 
     // get current year student info 
     $data['stdInfo'] = $this->common->student_Admission();
-
-
     //$data['massage'] = $this->common->getWhere('massage', 'receiver_id', $id);
-    
-     
     $data['date_wise_students'] = $this->homeModel->atten_chart_students_admision();
      
     $this->load->view('temp/header', $data);
@@ -683,7 +679,7 @@ public function ajaxStudentAdmission(){
                 <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
             </div>
             <div class="col-md-9 text-center">  
-                <h4 >Student Information Report</h4>
+                <h4 >Student Admission Report</h4>
             </div> 
             <div class="portlet ">
                   
@@ -705,7 +701,7 @@ public function ajaxStudentAdmission(){
             <div class="portlet purple box">
                 <div class="portlet-title no-print">
                     <div class="caption">
-                        <i class="fa fa-cogs"></i>Student Registration information
+                        <i class="fa fa-cogs"></i>Student Admission information
                     </div>
                     <div class="tools">
                         <a class="collapse" href="javascript:;">
@@ -827,6 +823,28 @@ public function ajaxStudentAdmissionTillData(){
     }
     echo json_encode($data);
 }  
+public function ajaxStudentAdmissionGraphData(){
+    $classId = $this->input->post('className');  
+    $classSession = $this->input->post('classSession'); 
+    $classSection = $this->input->post('classSection');
+    $month = $this->input->post('month');
+    // echo $classSession;
+
+// this query return graph data 
+
+    $query = $this->db->query("SELECT SUM(register_pass.total) as ss, MONTH(register_pass.reg_date) as month FROM student_info INNER JOIN register_pass ON student_info.registration_number = register_pass.reg_number WHERE student_info.year = $classSession AND register_pass.year = $classSession group by MONTH(register_pass.reg_date)");
+ //    foreach ($query->result() as $row) {
+ //        $data['graphData'] = $row->ss;
+ //    }
+ // echo $data['graphData'];
+    foreach ($query->result() as $row) {
+        $data['graphData'] = $row->ss;
+    }
+    
+    $out = array_values($data);
+    echo json_encode($out);
+}
+
 public function discount_reason() {
 $user = $this->ion_auth->user()->row();
 $id = $user->id;
@@ -1366,7 +1384,7 @@ public function studentChalanReport(){
                     <img src="assets/admin/layout/img/smlogo.png" alt="logo" width="150px"> 
                 </div>
                 <div class="col-md-9 text-center">  
-                    <h4 >Royalty Fee Payable Report</h4>
+                    <h4 >Advance Fee Payment Report</h4>
                 </div> 
                 <div class="portlet ">
                       
@@ -1389,7 +1407,7 @@ public function studentChalanReport(){
                 <div class="portlet purple box">
                     <div class="portlet-title no-print">
                         <div class="caption">
-                            <i class="fa fa-cogs"></i>Royalty Fee Payable Report
+                            <i class="fa fa-cogs"></i>Advance Fee Payment Report
                         </div>
                         <div class="tools">
                             <a class="collapse" href="javascript:;"> </a>

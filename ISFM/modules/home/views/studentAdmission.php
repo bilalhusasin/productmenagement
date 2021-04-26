@@ -272,16 +272,18 @@
             </div> -->
         <?php //} 
         if ($this->common->user_access('das_grab_chart', $userId)) { ?>
-
+<!-- echo "<pre>"; print_r($date_wise_students); echo "</pre>"; -->
             <div class="row no-print">
                 <div class="col-md-12 col-sm-12">
                     <!-- BEGIN PORTLET-->
+                    <div id="graph_data">fhfhsfhksdjh</div>
                     <div class="portlet green box">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-bullhorn"></i><?php echo ('Monthly Collections'); ?>
                             </div>
                         </div>
+
                         <div class="portlet-body">
                             <canvas id="myChart"></canvas>
                             <div id="site_activities_content" class="display-none">
@@ -460,6 +462,7 @@
 <!-- END PAGE LEVEL SCRIPTS -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
 <script>
 function classSection(str) {
     var xmlhttp;
@@ -511,6 +514,7 @@ function filterSearch(str) {
         xmlhttp.open("GET", "index.php/home/ajaxStudentAdmission?className=" + className + "&classSession=" + classSession + "&classSection=" + classSection + "&month=" + month, true);
         xmlhttp.send(); 
         TillData();
+        graphData();
     }
      
 }
@@ -542,6 +546,59 @@ function TillData(){
             },
         }); 
 } 
+function graphData(){  
+    var className= document.getElementById("className").value;  
+    var classSession = document.getElementById("classSession").value; 
+    var classSection = document.getElementById("classSection").value;
+    var month =  document.getElementById("month").value;
+    //alert(className + classSession);
+      
+        // var xmlhttp;
+        // if (str.length === 0) {
+        //     document.getElementById("graph_data").innerHTML = "";
+        //     return;
+        // }
+        // if (window.XMLHttpRequest) {
+        //     // code for IE7+, Firefox, Chrome, Opera, Safari
+        //     xmlhttp = new XMLHttpRequest();
+        // } else {
+        //     // code for IE6, IE5
+        //     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        // }
+        //     xmlhttp.onreadystatechange = function() {
+        //         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        //             document.getElementById("graph_data").innerHTML = xmlhttp.responseText;
+        //         }
+        //     };
+        // xmlhttp.open("GET", "index.php/home/ajaxStudentAdmissionGraphData?className=" + className + "&classSession=" + classSession + "&classSection=" + classSection + "&month=" + month, true);
+        // xmlhttp.send(); 
+         
+     
+    
+    //alert(className);
+       $.ajax({
+            type: "POST",
+            url: "index.php/home/ajaxStudentAdmissionGraphData",
+            data: {
+                "className":className, 
+                "classSession":classSession,
+                "classSection":classSection,
+                "month":month, 
+            },
+            dataType: "json",
+
+            //if received a response from the server
+            success: function( datas, textStatus, jqXHR) {  
+                alert(datas.data);
+                // var graphdata = datas.graphData; 
+                // var obj = JSON.parse(datas.graphData);
+                // var date_wise_students = [];
+                // date_wise_students.push(obj.date_wise_students);  
+                // alert(date_wise_students);  
+            },
+        }); 
+} 
+
 </script>
 
 <script>

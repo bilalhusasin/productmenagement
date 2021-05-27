@@ -7,34 +7,8 @@
 $userId = $user->id; ?>
 <!-- BEGIN CONTENT -->
 <div class="page-content-wrapper">
-    <div class="page-content">
-        <!-- BEGIN PAGE HEADER-->
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
-                <h3 class="page-title">
-                <?php echo lang('hrm_einfo'); ?> <small></small>
-                </h3>
-                <ul class="page-breadcrumb breadcrumb">
-                    <li>
-                        <i class="fa fa-home"></i>
-                        <?php echo lang('home'); ?>
-                    </li>
-                    <li>
-                        <?php echo lang('header_hrm'); ?>
-                    </li>
-                    <li>
-                        <?php echo lang('header_employ_manage'); ?>
-                    </li>
-                    <li>
-                        <?php echo lang('header_employ_list'); ?>
-                    </li>
-                    <li id="result" class="pull-right topClock"></li>
-                </ul>
-                <!-- END PAGE TITLE & BREADCRUMB-->
-            </div>
-        </div>
-        <!-- END PAGE HEADER-->
+    <div class="page-content"> 
+         
         <!-- BEGIN PAGE CONTENT-->
         <div class="row">
             <div class="col-md-12">
@@ -52,28 +26,16 @@ $userId = $user->id; ?>
                             <thead>
                                 <tr>
                                     <th>
-                                        <?php echo lang('srno'); ?>
+                                        SR#
+                                    </th> 
+                                    <th>
+                                        Employee's Name
+                                    </th>  
+                                    <th>
+                                       status
                                     </th>
                                     <th>
-                                        <?php echo lang('hrm_photos'); ?>
-                                    </th>
-                                    <th>
-                                        <?php echo lang('hrm_tn'); ?>
-                                    </th>
-                                    <th>
-                                        <?php echo lang('hrm_ut'); ?>
-                                    </th>
-                                    <th>
-                                        <?php echo lang('hrm_address'); ?>
-                                    </th>
-                                    <th>
-                                        Working Hours
-                                    </th>
-                                    <th>
-                                        <?php echo lang('hrm_stat'); ?>
-                                    </th>
-                                    <th>
-                                        <?php echo lang('hrm_act'); ?>
+                                        Action
                                     </th>
                                 </tr>
                             </thead>
@@ -85,36 +47,10 @@ $userId = $user->id; ?>
                                 <tr>
                                     <td>
                                         <?php echo $i; ?>
-                                    </td>
-                                    <td>
-                                        <div class="tableImage">
-                                            <img src="assets/uploads/<?php echo $row['users_photo']; ?>" alt="">
-                                        </div>
-                                    </td>
+                                    </td> 
                                     <td>
                                         <?php echo $row['full_name']; ?>
-                                    </td>
-                                    <td class="text-capitalize">
-                                        <?php
-                                        $grup_id = $row['group_id'];
-                                        echo $this->common->group_title($grup_id);
-                                        /*if ($grup_id == '1') {
-                                        echo 'Admin';
-                                        }elseif ($grup_id == '4') {
-                                        echo 'Teacher';
-                                        }elseif ($grup_id == '6') {
-                                        echo 'Accountant';
-                                        }elseif ($grup_id == '11') {
-                                        echo 'Janitorial';
-                                        }*/
-                                        ?>
-                                    </td>
-                                    <td >
-                                        <?php echo $row['present_address']; ?>
-                                    </td>
-                                    <td>
-                                        <span class="label label-sm label-success"></span><?php echo $row['working_hour']; ?>
-                                    </td>
+                                    </td>   
                                     <td>
                                         <?php
                                         if($row['status']=='Deactive'){
@@ -124,11 +60,8 @@ $userId = $user->id; ?>
                                         }?>
                                     </td>
                                     <td>
-                                        <a class="btn btn-xs green" href="index.php/users/allUserInafoDetails?id=<?php echo $row['id']; ?>&uid=<?php echo $row['user_id']; ?>&gid=<?php echo $row['group_id'];?>&photo=<?php echo $row['users_photo']; ?>" title="User Details"> <i class="fa fa-file-text-o"></i></a>
-                                        <?php // if ($this->ion_auth->is_admin()) { ?>
-                                        <a class="btn btn-xs default" href="index.php/users/edit_user?id=<?php echo $row['id']; ?>&uid=<?php echo $row['user_id'];?>&gid=<?php echo $row['group_id'];?>" title="User Edit Details"> <i class="fa fa-pencil-square"></i>  </a>
-                                        <a class="btn btn-xs red" href="index.php/users/teacherDelete?id=<?php echo $row['id']; ?>&uid=<?php echo $row['user_id']; ?>" onClick="javascript:return confirm('Are you sure you want to delete this teacher?')" title="User Delete Details"> <i class="fa fa-trash-o"></i> </a>
-                                        <?php // } ?>
+                                        <a class="btn btn-xs green" href="index.php/users/allUserInafoDetails?id=<?php echo $row['id']; ?>&uid=<?php echo $row['user_id']; ?>&gid=<?php echo $row['group_id'];?>" title="User Details"> <i class="fa fa-file-text-o"></i></a>
+                                        
                                     </td>
                                 </tr>
                                 <?php

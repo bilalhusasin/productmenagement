@@ -34,7 +34,7 @@ $db['default']['username'] = 'root';
 
 $db['default']['password'] = '';
 
-$db['default']['database'] = 'foretell_lab1';
+$db['default']['database'] = 'product_curd';
 
 $db['default']['dbdriver'] = 'mysqli';
 

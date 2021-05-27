@@ -1,7 +1,7 @@
 <!-- Start FOOTER -->
 <div class="page-footer">
     <div class="page-footer-inner footerInLineCss">
-        <?php echo date("Y");?> &copy; <a href="https://bftech.uk" target="_blank" style="color:#fff;">BFTech.</a> All Rights Reserved.
+        <?php echo date("Y");?> &copy; <a href="#" target="_blank" style="color:#fff;"> </a> All Rights Reserved.
     </div>
     <div class="page-footer-tools">
         <span class="go-top">

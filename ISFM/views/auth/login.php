@@ -3,11 +3,11 @@
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8"/>
-        <title><?php echo lang('system_title'); ?></title>
+        <title>login</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
         <meta content="" name="description"/>
-        <meta content="Shahzad Ahmad" name="author"/>
+        <meta content="" name="author"/>
         <base href="<?php echo $this->config->base_url(); ?>">
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
@@ -29,15 +29,13 @@
         <link href="assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
         <link href="assets/admin/layout/css/formValidation.css" rel="stylesheet" type="text/css"/>
         <!-- END THEME STYLES --> 
-        <link id="favicon" rel="shortcut icon" href="assets/admin/layout/img/foretell.png" type="image/png"/>
+        <link id="favicon" rel="shortcut icon" href=" " type=""/>
     </head>
     <!-- BEGIN BODY -->
     <body class="login">
         <!-- BEGIN LOGO -->
         <div class="logo">
-            <a href="index.php">
-                <img src="assets/admin/layout/img/foretell.png" alt="logo" width="220" style="130" class="logo-default"/>
-            </a>
+             
         </div>
         <!-- END LOGO -->
         <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
@@ -73,24 +71,20 @@
                 </div>
             </div>
             <div class="form-actions">
-                <label class="checkbox">
-                    <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"'); ?>
-                    <?php echo lang('login_remember_label'); ?></label>
+                 
                 <button id="submit" type="submit" name="submit" class="btn green pull-right">
                     <?php echo lang('login_submit_btn'); ?> <i class="m-icon-swapright m-icon-white"></i>
                 </button>
             </div>
             <div class="forget-password">
-                <h4><?php echo lang('login_forgot_password'); ?> <a href="index.php/auth/forgot_password" id="forget-password"><?php echo lang('login_forgot_password_a'); ?> </a></h4>
+                 
             </div>
             <?php echo form_close(); ?>
             <!-- END LOGIN FORM -->
         </div>
         <!-- END LOGIN -->
         <!-- BEGIN COPYRIGHT -->
-        <div class="copyright">
-            <?php echo date("Y");?> &copy; <a href="https://bftech.uk/" target="_blank" style="color:#fff;">BFTech.</a> All Rights Reserved.
-        </div>
+         
         <!-- END COPYRIGHT -->
         <!--Start form validation script-->
         <script src="assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>

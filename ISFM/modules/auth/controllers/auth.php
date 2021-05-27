@@ -22,7 +22,7 @@ class Auth extends CI_Controller
             redirect('auth/login', 'refresh');
         } elseif (!$this->ion_auth->is_admin()) { //remove this elseif if you want to enable this for non-admins
             //redirect them to the home page because they must be an administrator to view this
-            redirect('home/index', 'refresh');
+            redirect('products/addCategory', 'refresh');
         } else {
             //set the flash data error message if there is one
             $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
@@ -34,7 +34,7 @@ class Auth extends CI_Controller
             }
 
             //$this->_render_page('auth/index', $this->data);
-            redirect('home/index', 'refresh');
+            redirect('products/addCategory', 'refresh');
         }
         }
 
@@ -57,7 +57,7 @@ class Auth extends CI_Controller
                 //if the login is successful
                 //redirect them back to the home page
                 $this->session->set_flashdata('message', $this->ion_auth->messages());
-                redirect('home/index', 'refresh');
+                redirect('products/addCategory', 'refresh');
             } else {
                 //if the login was un-successful
                 //redirect them back to the login page
